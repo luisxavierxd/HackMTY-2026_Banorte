@@ -29,6 +29,15 @@
   }
 }
 
+@media (min-width: 880px) {
+  /* A juego con la card del sidebar: también flota, con sus propias
+   * esquinas redondeadas, en vez de quedar a ras de los bordes. */
+  .bn-app {
+    border-radius: var(--bn-radius-control);
+    box-shadow: 0 8px 24px rgba(36, 28, 26, 0.08);
+  }
+}
+
 /* Card en escritorio, drawer deslizable en móvil — perfil que da contexto
  * al agente (ver shell/ProfileSidebar.tsx). */
 .bn-sidebar__scrim {
@@ -74,15 +83,35 @@
 }
 
 @media (min-width: 880px) {
+  /* En escritorio deja de ser un drawer a ras de pantalla y se ve como lo
+   * que se pidió: una card flotante — separada del borde, con esquinas
+   * redondeadas y sombra propia, no pegada a los bordes de la ventana. */
+  .bn-shell {
+    /* align-items sigue en "stretch" (default): .bn-app depende de eso para
+     * llenar el alto completo con su height:100%. Solo el sidebar se saca
+     * del stretch con align-self, para poder verse como una card de alto
+     * de contenido en vez de una columna a todo lo alto. */
+    gap: var(--bn-space-4);
+    padding: var(--bn-space-4);
+    background: var(--bn-bg);
+  }
   .bn-sidebar__scrim {
     display: none;
   }
   .bn-sidebar {
     position: static;
+    top: auto;
+    left: auto;
     transform: none;
     transition: none;
+    align-self: flex-start;
     width: 280px;
+    height: auto;
+    max-height: 100%;
     flex-shrink: 0;
+    border: 1px solid var(--bn-line);
+    border-radius: var(--bn-radius-control);
+    box-shadow: 0 8px 24px rgba(36, 28, 26, 0.08);
   }
   .bn-topbar__sidebar-toggle {
     display: none;
