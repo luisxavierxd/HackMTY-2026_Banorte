@@ -1,0 +1,284 @@
+{
+  "type": "surface",
+  "title": "¿Qué es el CAT?",
+  "summary": "La tasa es 28.9%, pero el CAT es 39.8% porque incluye la comisión de apertura ($1,000) y el seguro ($150/mes = $1,800 total). El CAT es el costo REAL anualizado de todo junto.",
+  "a2ui": [
+    {
+      "createSurface": {
+        "surfaceId": "main",
+        "catalogId": "fin-catalog"
+      }
+    },
+    {
+      "updateDataModel": {
+        "surfaceId": "main",
+        "path": "/",
+        "value": {
+          "datos": {
+            "explicar_cat": {
+              "concepto": "cat",
+              "parametros": {
+                "monto": 100000.0,
+                "plazo_meses": 12,
+                "tasa_anual": 0.289,
+                "comision_apertura": 0.01,
+                "seguro_mensual": 150.0
+              },
+              "serie": [
+                {
+                  "mes": 1,
+                  "pago_base": 9694.68,
+                  "interes": 2408.33,
+                  "capital": 7286.35,
+                  "seguro": 150.0,
+                  "pago_total": 9844.68,
+                  "saldo": 92713.65
+                },
+                {
+                  "mes": 2,
+                  "pago_base": 9694.68,
+                  "interes": 2232.85,
+                  "capital": 7461.83,
+                  "seguro": 150.0,
+                  "pago_total": 9844.68,
+                  "saldo": 85251.82
+                },
+                {
+                  "mes": 3,
+                  "pago_base": 9694.68,
+                  "interes": 2053.15,
+                  "capital": 7641.54,
+                  "seguro": 150.0,
+                  "pago_total": 9844.68,
+                  "saldo": 77610.28
+                },
+                {
+                  "mes": 4,
+                  "pago_base": 9694.68,
+                  "interes": 1869.11,
+                  "capital": 7825.57,
+                  "seguro": 150.0,
+                  "pago_total": 9844.68,
+                  "saldo": 69784.71
+                },
+                {
+                  "mes": 5,
+                  "pago_base": 9694.68,
+                  "interes": 1680.65,
+                  "capital": 8014.04,
+                  "seguro": 150.0,
+                  "pago_total": 9844.68,
+                  "saldo": 61770.67
+                },
+                {
+                  "mes": 6,
+                  "pago_base": 9694.68,
+                  "interes": 1487.64,
+                  "capital": 8207.04,
+                  "seguro": 150.0,
+                  "pago_total": 9844.68,
+                  "saldo": 53563.63
+                },
+                {
+                  "mes": 7,
+                  "pago_base": 9694.68,
+                  "interes": 1289.99,
+                  "capital": 8404.69,
+                  "seguro": 150.0,
+                  "pago_total": 9844.68,
+                  "saldo": 45158.94
+                },
+                {
+                  "mes": 8,
+                  "pago_base": 9694.68,
+                  "interes": 1087.58,
+                  "capital": 8607.11,
+                  "seguro": 150.0,
+                  "pago_total": 9844.68,
+                  "saldo": 36551.83
+                },
+                {
+                  "mes": 9,
+                  "pago_base": 9694.68,
+                  "interes": 880.29,
+                  "capital": 8814.39,
+                  "seguro": 150.0,
+                  "pago_total": 9844.68,
+                  "saldo": 27737.44
+                },
+                {
+                  "mes": 10,
+                  "pago_base": 9694.68,
+                  "interes": 668.01,
+                  "capital": 9026.67,
+                  "seguro": 150.0,
+                  "pago_total": 9844.68,
+                  "saldo": 18710.76
+                },
+                {
+                  "mes": 11,
+                  "pago_base": 9694.68,
+                  "interes": 450.62,
+                  "capital": 9244.07,
+                  "seguro": 150.0,
+                  "pago_total": 9844.68,
+                  "saldo": 9466.7
+                },
+                {
+                  "mes": 12,
+                  "pago_base": 9694.68,
+                  "interes": 227.99,
+                  "capital": 9466.7,
+                  "seguro": 150.0,
+                  "pago_total": 9844.68,
+                  "saldo": 0
+                }
+              ],
+              "desglose_costo": {
+                "capital": 100000.0,
+                "intereses": 16336.22,
+                "comision_apertura": 1000.0,
+                "seguros": 1800.0,
+                "costo_total": 119136.22
+              },
+              "resumen": {
+                "tasa_anual": 0.289,
+                "cat_aproximado": 0.3977,
+                "diferencia": 0.1087,
+                "neto_recibido": 99000.0
+              },
+              "explicacion": "La tasa es 28.9%, pero el CAT es 39.8% porque incluye la comisión de apertura ($1,000) y el seguro ($150/mes = $1,800 total). El CAT es el costo REAL anualizado de todo junto."
+            }
+          }
+        }
+      }
+    },
+    {
+      "updateComponents": {
+        "surfaceId": "main",
+        "components": [
+          {
+            "id": "root",
+            "component": "Column",
+            "props": {
+              "children": [
+                "row",
+                "chart",
+                "table",
+                "btn"
+              ],
+              "gap": "md"
+            }
+          },
+          {
+            "id": "row",
+            "component": "Row",
+            "props": {
+              "children": [
+                "m1",
+                "m2"
+              ],
+              "align": "between"
+            }
+          },
+          {
+            "id": "m1",
+            "component": "MetricCard",
+            "props": {
+              "label": "Tasa anual",
+              "value": "28.9%",
+              "tone": "neutral"
+            }
+          },
+          {
+            "id": "m2",
+            "component": "MetricCard",
+            "props": {
+              "label": "CAT",
+              "value": "39.8%",
+              "tone": "danger"
+            }
+          },
+          {
+            "id": "chart",
+            "component": "BarChart",
+            "props": {
+              "title": "Desglose del costo total",
+              "series": [
+                {
+                  "label": "Capital",
+                  "value": 100000.0
+                },
+                {
+                  "label": "Intereses",
+                  "value": 16336.22
+                },
+                {
+                  "label": "Comisión",
+                  "value": 1000.0
+                },
+                {
+                  "label": "Seguros",
+                  "value": 1800.0
+                }
+              ],
+              "format": "currency",
+              "highlight": "Intereses"
+            }
+          },
+          {
+            "id": "table",
+            "component": "DataTable",
+            "props": {
+              "columns": [
+                {
+                  "key": "mes",
+                  "label": "Mes"
+                },
+                {
+                  "key": "pago_total",
+                  "label": "Pago",
+                  "format": "currency"
+                },
+                {
+                  "key": "interes",
+                  "label": "Interés",
+                  "format": "currency"
+                },
+                {
+                  "key": "capital",
+                  "label": "Capital",
+                  "format": "currency"
+                },
+                {
+                  "key": "saldo",
+                  "label": "Saldo",
+                  "format": "currency"
+                }
+              ],
+              "rows": {
+                "path": "/datos/explicar_cat/serie"
+              },
+              "maxRows": 6
+            }
+          },
+          {
+            "id": "btn",
+            "component": "ActionButton",
+            "props": {
+              "text": "Comparar otro crédito",
+              "action": {
+                "event": {
+                  "name": "comparar_credito",
+                  "params": {}
+                }
+              },
+              "variant": "secondary"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": []
+}

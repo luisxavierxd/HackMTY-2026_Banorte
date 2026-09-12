@@ -1,0 +1,47 @@
+:root {
+  /* ---- Banorte palette ---- */
+  --bn-bg: #f6f4f3; /* app canvas */
+  --bn-surface: #ffffff; /* cards, chart area */
+  --bn-line: #e4dedc; /* borders, grid */
+  --bn-ink: #241c1a; /* primary text */
+  --bn-mute: #6e625f; /* secondary text */
+  --bn-red: #eb0029; /* brand, action, COST */
+  --bn-red-deep: #b3001f; /* red text (AA compliant) */
+  --bn-red-wash: rgba(235, 0, 41, 0.16);
+  --bn-gray: #594948; /* secondary series */
+  --bn-gray-soft: #b6aba8; /* ghost bars, reference lines */
+  --bn-ahorro: #0b7d72; /* savings/progress (teal) */
+  --bn-ahorro-wash: rgba(11, 125, 114, 0.14);
+  --bn-alerta: #8a5200; /* warning text */
+  --bn-alerta-wash: rgba(138, 82, 0, 0.14);
+
+  /* ---- semantic tones (Badge / MetricCard) ---- */
+  --bn-tone-neutral: var(--bn-gray);
+  --bn-tone-neutral-wash: rgba(89, 73, 72, 0.1);
+  --bn-tone-success: var(--bn-ahorro);
+  --bn-tone-success-wash: var(--bn-ahorro-wash);
+  --bn-tone-warning: var(--bn-alerta);
+  --bn-tone-warning-wash: var(--bn-alerta-wash);
+  --bn-tone-danger: var(--bn-red-deep);
+  --bn-tone-danger-wash: var(--bn-red-wash);
+
+  /* ---- typography ---- */
+  --bn-font-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --bn-font-body: "Instrument Sans", system-ui, sans-serif;
+
+  /* ---- shape ---- */
+  --bn-radius-surface: 20px;
+  --bn-radius-control: 12px;
+  --bn-radius-pill: 999px;
+
+  /* ---- spacing scale ---- */
+  --bn-space-1: 4px;
+  --bn-space-2: 8px;
+  --bn-space-3: 12px;
+  --bn-space-4: 16px;
+  --bn-space-5: 24px;
+  --bn-space-6: 32px;
+
+  /* ---- layout ---- */
+  --bn-max-width: 520px;
+}

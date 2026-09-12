@@ -1,4 +1,12 @@
-# Imagen única para harness y servidores MCP: el comando decide el rol.
+# ── etapa 1: build del frontend ──
+FROM node:20-slim AS web
+WORKDIR /web
+COPY frontend/package*.json ./
+RUN npm ci
+COPY frontend/ ./
+RUN npm run build
+
+# ── etapa 2: imagen de producción ──
 FROM python:3.12-slim AS base
 ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 PIP_NO_CACHE_DIR=1
 WORKDIR /app
@@ -27,6 +35,7 @@ RUN pip install --upgrade pip && pip install \
 
 COPY src ./src
 COPY mcp_servers ./mcp_servers
+COPY --from=web /web/dist ./static
 ENV PYTHONPATH=/app/src:/app
 
 RUN useradd -m app && mkdir -p /app/data && chown -R app /app
