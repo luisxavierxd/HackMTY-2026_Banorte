@@ -145,6 +145,12 @@ async def run_turn(session_id: str, payload: dict[str, Any]):
     for path, value in (payload.get("dataModel") or {}).items():
         pointer_set(session.data_model, path, value)
 
+    # el perfil (nombre/ingreso/ahorro/inversión) declarado al entrar a la
+    # demo viaja en cada mensaje (ver ClientMessage.profile en el frontend);
+    # se conserva en la sesión para que un turno que no lo reenvíe no lo pierda.
+    if payload.get("profile"):
+        session.profile = payload["profile"]
+
     if kind == "action":
         name = payload.get("name") or payload.get("action") or "accion"
         text = action_to_prompt(name, payload.get("params") or {}, session.data_model)
@@ -157,7 +163,7 @@ async def run_turn(session_id: str, payload: dict[str, Any]):
 
     first_render = not session.rendered
     async for event in agent.run_turn(
-        session.history, text, session.domain, first_render, session.data_model
+        session.history, text, session.domain, first_render, session.data_model, session.profile
     ):
         if event["type"] == "surface":
             session.rendered = True
@@ -236,6 +242,7 @@ class TurnRequest(BaseModel):
     name: str | None = None
     params: dict = Field(default_factory=dict)
     dataModel: dict = Field(default_factory=dict)
+    profile: dict = Field(default_factory=dict)
 
 
 @app.post("/v1/turn")

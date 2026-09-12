@@ -133,13 +133,14 @@ class Agent:
         domain: str,
         first_render: bool,
         data_model: dict | None = None,
+        profile: dict | None = None,
     ) -> AsyncIterator[dict]:
         t0 = time.perf_counter()
         history.append(text_msg("user", user_text))
 
         specs = self._tool_specs()
         native = self.reasoner.native_tools
-        system = reasoning_system_prompt(domain)
+        system = reasoning_system_prompt(domain, profile)
         if not native:
             system += tool_manifest_prompt(specs)
 
@@ -198,7 +199,9 @@ class Agent:
         yield {"type": "thinking", "text": "Diseñando la interfaz…"}
         result: CompileResult | None = None
         plan: dict | None = None
-        async for item in self._compose_ui(user_text, final_text, trace, first_render, data_model):
+        async for item in self._compose_ui(
+            user_text, final_text, trace, first_render, data_model, profile
+        ):
             if isinstance(item, tuple):
                 result, plan = item
             else:
@@ -230,6 +233,7 @@ class Agent:
         trace: list[dict],
         first_render: bool,
         data_model: dict | None = None,
+        profile: dict | None = None,
     ) -> AsyncIterator[dict | tuple[CompileResult, dict]]:
         """Async generator: cede eventos de progreso (dict) mientras compone,
         y al final cede exactamente un `(CompileResult, plan)` — así `run_turn`
@@ -254,6 +258,9 @@ class Agent:
             # actual — visto en producción, confuso para el usuario. Ahora es
             # un campo explícito: es la fuente de verdad, no una sugerencia.
             "estado_actual_de_la_pantalla": data_model or {},
+            # Mismo perfil declarado que ve la fase de razonamiento — permite
+            # personalizar cifras de ejemplo/metas sin inventar saldos reales.
+            "perfil_usuario": profile or {},
         }
         messages = [text_msg("user", json.dumps(brief, ensure_ascii=False))]
         system = ui_system_prompt(self.s.max_components)
