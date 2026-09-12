@@ -1,7 +1,29 @@
-import type { Envelope, Surface } from "../contract/a2ui";
+import type { ComponentNode, Envelope, Surface } from "../contract/a2ui";
 import { pointerSet } from "./pointer";
 
 export type SurfaceState = Surface | null;
+
+/**
+ * El composer real (src/harness/a2ui/composer.py) emite cada componente con
+ * las props PEGADAS al nivel de arriba del nodo, no anidadas bajo "props":
+ *   {"id": "root", "component": "Column", "children": [...], "gap": "md"}
+ * Los fixtures escritos a mano (frontend/src/lab/fixtures/*.json) sí las
+ * anidan bajo "props". Aceptamos ambas formas aquí, en un solo lugar, para
+ * que el resto del renderer (registry.tsx, ChartHost.tsx, cada componente)
+ * pueda seguir asumiendo `node.props` siempre anidado.
+ *
+ * Bug real de producción: sin esto, `node.props` es `undefined` para TODO
+ * componente que venga de un turno real (nunca se detectó antes porque solo
+ * se había probado end-to-end con fixtures, que ya vienen anidados).
+ */
+function normalizeNode(raw: Record<string, unknown>): ComponentNode {
+  const { id, component, props, ...rest } = raw;
+  return {
+    id: id as string,
+    component: component as string,
+    props: (props as Record<string, unknown> | undefined) ?? rest,
+  };
+}
 
 function emptySurface(id: string): Surface {
   return { id, root: undefined, components: {}, data: {} };
@@ -39,7 +61,8 @@ function applyOne(state: SurfaceState, env: Envelope): SurfaceState {
 
   if ("updateComponents" in env) {
     const components = { ...state.components };
-    for (const node of env.updateComponents.components) {
+    for (const raw of env.updateComponents.components) {
+      const node = normalizeNode(raw as unknown as Record<string, unknown>);
       components[node.id] = node;
     }
     // El root es el primer componente de la lista recibida (contrato del backend).
