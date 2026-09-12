@@ -3,13 +3,16 @@
 # persistentes (que Railway monta como root, vacíos, al arrancar) y luego
 # baja privilegios al usuario `app` antes de lanzar el proceso real.
 #
-# Sin esto, un volumen recién montado en /home/app/.claude (credenciales del
-# CLI de Claude Code) o /app/data (estado sintético) queda ilegible para el
-# usuario `app`, y el proceso truena en el primer request en vez de en el build.
+# El CLI de Claude Code guarda su config en DOS lugares: el archivo
+# /home/app/.claude.json (directo en el home) Y la carpeta /home/app/.claude/
+# (backups, sesiones). Por eso el volumen persistente debe montarse en
+# /home/app COMPLETO, no solo en /home/app/.claude — si solo se monta el
+# subdirectorio, .claude.json queda fuera del volumen y se pierde en cada
+# restart (visto en producción: "Claude configuration file not found").
 set -e
 
-if [ -d /home/app/.claude ]; then
-  chown -R app:app /home/app/.claude
+if [ -d /home/app ]; then
+  chown -R app:app /home/app
 fi
 
 if [ -d /app/data ]; then

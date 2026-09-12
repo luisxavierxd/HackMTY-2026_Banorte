@@ -58,7 +58,10 @@ class McpManager:
                 await self._index_tools(cfg.name, client)
                 log.info("MCP '%s' conectado (%s)", cfg.name, cfg.transport)
             except Exception as exc:  # un servidor caído no tumba el harness
-                log.error("MCP '%s' no conectó: %s", cfg.name, exc)
+                # ExceptionGroup (TaskGroup) oculta la causa real con str(exc);
+                # log.exception saca el traceback completo, incluidas las
+                # sub-excepciones anidadas, para poder diagnosticar en logs.
+                log.exception("MCP '%s' no conectó: %s", cfg.name, exc)
 
     @staticmethod
     def _target(cfg: McpServerConfig) -> Any:
