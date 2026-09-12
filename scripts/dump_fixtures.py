@@ -152,7 +152,7 @@ fixtures["cat"] = _surface(
     "¿Qué es el CAT?",
     cat["explicacion"],
     [
-        {"id": "root", "component": "Column", "props": {"children": ["row", "chart", "table", "btn"], "gap": "md"}},
+        {"id": "root", "component": "Column", "props": {"children": ["row", "chart", "nota", "table", "btn"], "gap": "md"}},
         {"id": "row", "component": "Row", "props": {"children": ["m1", "m2"], "align": "between"}},
         {"id": "m1", "component": "MetricCard", "props": {
             "label": "Tasa anual", "value": f"{cat['resumen']['tasa_anual']:.1%}", "tone": "neutral",
@@ -160,16 +160,19 @@ fixtures["cat"] = _surface(
         {"id": "m2", "component": "MetricCard", "props": {
             "label": "CAT", "value": f"{cat['resumen']['cat_aproximado']:.1%}", "tone": "danger",
         }},
-        {"id": "chart", "component": "BarChart", "props": {
+        {"id": "chart", "component": "PieChart", "props": {
             "title": "Desglose del costo total",
-            "series": [
+            "slices": [
                 {"label": "Capital", "value": cat["desglose_costo"]["capital"]},
                 {"label": "Intereses", "value": cat["desglose_costo"]["intereses"]},
                 {"label": "Comisión", "value": cat["desglose_costo"]["comision_apertura"]},
                 {"label": "Seguros", "value": cat["desglose_costo"]["seguros"]},
             ],
             "format": "currency",
-            "highlight": "Intereses",
+        }},
+        {"id": "nota", "component": "Callout", "props": {
+            "text": "El CAT es una aproximación por TIR, no la metodología exacta de Banxico.",
+            "tone": "neutral",
         }},
         {"id": "table", "component": "DataTable", "props": {
             "columns": [
@@ -232,10 +235,15 @@ fixtures["regla_50_30_20"] = _surface(
             "delta": f"{r['resumen']['ahorro_como_porcentaje']:.0f}% de tu ingreso",
             "tone": "success" if r["resumen"]["ahorro_como_porcentaje"] >= 20 else "warning",
         }},
-        {"id": "chart", "component": "BarChart", "props": {
+        {"id": "chart", "component": "ComparisonBars", "props": {
             "title": "Ideal vs tu gasto real",
-            "series": [{"label": c["grupo"], "value": c["real"]} for c in r["comparacion"]],
-            "compare": [{"label": c["grupo"], "value": c["ideal"]} for c in r["comparacion"]],
+            "labelA": "Ideal",
+            "labelB": "Real",
+            "categories": [
+                {"label": c["grupo"].replace("_", " ").title(), "a": c["ideal"], "b": c["real"]}
+                for c in r["comparacion"]
+            ],
+            "toneB": "costo",
             "format": "currency",
         }},
         {"id": "list", "component": "OptionList", "props": {

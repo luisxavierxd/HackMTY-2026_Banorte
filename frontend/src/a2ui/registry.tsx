@@ -15,6 +15,8 @@ import OptionList from "./components/OptionList";
 import Slider from "./components/Slider";
 import TextField from "./components/TextField";
 import ActionButton from "./components/ActionButton";
+import Timeline from "./components/Timeline";
+import Callout from "./components/Callout";
 import UnknownComponent from "./components/UnknownComponent";
 import { CHART_ADAPTERS } from "./charts/registry";
 import ChartHost from "./charts/ChartHost";
@@ -40,8 +42,10 @@ const REGISTRY: Record<string, AnyComponent> = {
   Slider,
   TextField,
   ActionButton,
-  // Gráficas (BarChart, LineChart, ProgressRing) se enrutan a ChartHost,
-  // ver CHART_ADAPTERS más abajo en renderComponent.
+  Timeline,
+  Callout,
+  // Gráficas (BarChart, LineChart, ProgressRing, PieChart, ComparisonBars)
+  // se enrutan a ChartHost, ver CHART_ADAPTERS más abajo en renderComponent.
 };
 
 export interface SurfaceActions {

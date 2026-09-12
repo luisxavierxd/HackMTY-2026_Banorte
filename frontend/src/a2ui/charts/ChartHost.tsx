@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts/core";
 import { LineChart as ELine, BarChart as EBar, PieChart as EPie } from "echarts/charts";
-import { GridComponent, TooltipComponent, GraphicComponent, MarkLineComponent } from "echarts/components";
+import {
+  GridComponent,
+  TooltipComponent,
+  GraphicComponent,
+  MarkLineComponent,
+  LegendComponent,
+} from "echarts/components";
 import { CanvasRenderer } from "echarts/renderers";
 
 import type { ComponentNode } from "../../contract/a2ui";
@@ -14,7 +20,17 @@ import { formatNumber } from "./lib/format";
 import { registerBanorteTheme } from "./echartsTheme";
 import "./chart.css";
 
-echarts.use([ELine, EBar, EPie, GridComponent, TooltipComponent, GraphicComponent, MarkLineComponent, CanvasRenderer]);
+echarts.use([
+  ELine,
+  EBar,
+  EPie,
+  GridComponent,
+  TooltipComponent,
+  GraphicComponent,
+  MarkLineComponent,
+  LegendComponent, // PieChart y ComparisonBars usan `legend` en su option
+  CanvasRenderer,
+]);
 registerBanorteTheme();
 
 interface ChartHostProps {

@@ -271,6 +271,107 @@
   padding-right: 4px;
 }
 
+.bn-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-space-2);
+}
+.bn-timeline__title {
+  font-family: var(--bn-font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--bn-ink);
+}
+.bn-timeline__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.bn-timeline__step {
+  display: flex;
+  gap: var(--bn-space-3);
+  padding: var(--bn-space-2) 0;
+  border-left: 2px solid var(--bn-line);
+  padding-left: var(--bn-space-3);
+  margin-left: 5px;
+  position: relative;
+}
+.bn-timeline__step:last-child {
+  border-left-color: transparent;
+}
+.bn-timeline__marker {
+  position: absolute;
+  left: -6px;
+  top: 14px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--bn-gray-soft, var(--bn-line));
+}
+.bn-timeline__step--highlight .bn-timeline__marker {
+  background: var(--bn-red);
+}
+.bn-timeline__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.bn-timeline__label {
+  font-weight: 600;
+  color: var(--bn-ink);
+}
+.bn-timeline__step--highlight .bn-timeline__label {
+  color: var(--bn-red-deep);
+}
+.bn-timeline__detail {
+  font-size: 0.8125rem;
+  color: var(--bn-mute);
+}
+
+.bn-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--bn-space-2);
+  padding: var(--bn-space-3) var(--bn-space-4);
+  border-radius: var(--bn-radius-control);
+  border: 1px solid transparent;
+}
+.bn-callout__icon {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+  background: currentColor;
+}
+.bn-callout__text {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+.bn-callout.bn-tone-neutral {
+  background: var(--bn-tone-neutral-wash);
+  color: var(--bn-tone-neutral);
+}
+.bn-callout.bn-tone-success {
+  background: var(--bn-tone-success-wash);
+  color: var(--bn-tone-success);
+}
+.bn-callout.bn-tone-warning {
+  background: var(--bn-tone-warning-wash);
+  color: var(--bn-tone-warning);
+}
+.bn-callout.bn-tone-danger {
+  background: var(--bn-tone-danger-wash);
+  color: var(--bn-tone-danger);
+}
+.bn-callout__text {
+  color: var(--bn-ink);
+}
+
 .bn-chart-placeholder {
   border: 1px dashed var(--bn-line);
   border-radius: var(--bn-radius-control);

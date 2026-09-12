@@ -26,7 +26,11 @@ interface LabProps {
 
 export default function Lab({ renderSurface }: LabProps) {
   const [fixtures] = useState(loadFixtures);
-  const [active, setActive] = useState(0);
+  const [active, setActive] = useState(() => {
+    const wanted = new URLSearchParams(window.location.search).get("fixture");
+    const idx = wanted ? loadFixtures().findIndex((f) => f.name === wanted.replace(/_/g, " ")) : -1;
+    return idx >= 0 ? idx : 0;
+  });
 
   useEffect(() => {
     document.title = `Lab — ${fixtures[active]?.name ?? "GenUI"}`;

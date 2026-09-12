@@ -83,37 +83,29 @@
           },
           {
             "id": "chart",
-            "component": "BarChart",
+            "component": "ComparisonBars",
             "props": {
               "title": "Ideal vs tu gasto real",
-              "series": [
+              "labelA": "Ideal",
+              "labelB": "Real",
+              "categories": [
                 {
-                  "label": "necesidades",
-                  "value": 13310.1
+                  "label": "Necesidades",
+                  "a": 14250.0,
+                  "b": 13310.1
                 },
                 {
-                  "label": "deseos",
-                  "value": 1210.5
+                  "label": "Deseos",
+                  "a": 8550.0,
+                  "b": 1210.5
                 },
                 {
-                  "label": "ahorro_e_inversión",
-                  "value": 12139.4
+                  "label": "Ahorro E Inversión",
+                  "a": 5700.0,
+                  "b": 12139.4
                 }
               ],
-              "compare": [
-                {
-                  "label": "necesidades",
-                  "value": 14250.0
-                },
-                {
-                  "label": "deseos",
-                  "value": 8550.0
-                },
-                {
-                  "label": "ahorro_e_inversión",
-                  "value": 5700.0
-                }
-              ],
+              "toneB": "costo",
               "format": "currency"
             }
           },

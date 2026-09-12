@@ -164,6 +164,7 @@
               "children": [
                 "row",
                 "chart",
+                "nota",
                 "table",
                 "btn"
               ],
@@ -201,10 +202,10 @@
           },
           {
             "id": "chart",
-            "component": "BarChart",
+            "component": "PieChart",
             "props": {
               "title": "Desglose del costo total",
-              "series": [
+              "slices": [
                 {
                   "label": "Capital",
                   "value": 100000.0
@@ -222,8 +223,15 @@
                   "value": 1800.0
                 }
               ],
-              "format": "currency",
-              "highlight": "Intereses"
+              "format": "currency"
+            }
+          },
+          {
+            "id": "nota",
+            "component": "Callout",
+            "props": {
+              "text": "El CAT es una aproximación por TIR, no la metodología exacta de Banxico.",
+              "tone": "neutral"
             }
           },
           {

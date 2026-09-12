@@ -80,7 +80,7 @@ export default function App() {
     }
   }, []);
 
-  const { status, send } = useSocket(handleEvent);
+  const { status, send } = useSocket(handleEvent, !IS_LAB);
 
   const runAction = useCallback(
     (action: ActionRef | undefined) => {

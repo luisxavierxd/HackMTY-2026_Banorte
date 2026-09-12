@@ -68,13 +68,15 @@ def test_plan_sin_root_no_compila_y_hay_fallback():
     assert compile_plan(fallback_plan("t", "b"), "main", True).ok
 
 
-def test_line_chart_con_series_multiples_valida():
+def test_line_chart_apunta_por_path_no_copia_numeros():
+    # El LineChart real (catalog.py) referencia la serie ya cargada en /datos
+    # por path+key, en vez de traer los números copiados al plan de UI.
     comps, errors, _ = validate_components([{
         "id": "lc", "component": "LineChart",
         "props": {
             "title": "Interés compuesto",
             "series": [
-                {"label": "saldo", "points": [{"x": 1, "y": 100}, {"x": 2, "y": 110}]},
+                {"label": "saldo", "path": "/datos/explicar_interes_compuesto/serie", "key": "saldo"},
             ],
         },
     }])
@@ -96,13 +98,13 @@ def test_comparison_bars_requiere_categories():
     assert "categories" not in comps[0]  # el nodo se arma igual, sin la prop faltante
 
 
-def test_progress_bar_acepta_binding_en_value():
+def test_comparison_bars_toneb_default_costo():
     comps, errors, _ = validate_components([{
-        "id": "pb", "component": "ProgressBar",
-        "props": {"label": "Meta de ahorro", "value": {"path": "/ahorro/actual"}, "target": 50000},
+        "id": "cb", "component": "ComparisonBars",
+        "props": {"categories": [{"label": "necesidades", "a": 5000, "b": 4200}]},
     }])
     assert not errors
-    assert comps[0]["value"] == {"path": "/ahorro/actual"}
+    assert comps[0]["toneB"] == "costo"
 
 
 def test_json_pointer():

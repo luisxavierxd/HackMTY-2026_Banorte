@@ -28,8 +28,14 @@ function wsBase(): string {
  * Conecta a /ws/{sessionId} y reconecta con backoff exponencial (0.5s -> 8s).
  * El sessionId persiste en sessionStorage para sobrevivir refresh de página.
  */
-export function useSocket(onEvent: (event: ServerEvent) => void) {
-  const [status, setStatus] = useState<SocketStatus>("connecting");
+/**
+ * `enabled=false` (ej. modo ?lab=1, que renderiza fixtures sin backend) evita
+ * abrir el socket por completo: sin esto, cada intento de reconexión fallido
+ * re-renderiza el árbol entero y hace que las gráficas de ECharts se
+ * destruyan/reinicialicen en loop (nunca llegan a pintar nada estable).
+ */
+export function useSocket(onEvent: (event: ServerEvent) => void, enabled: boolean = true) {
+  const [status, setStatus] = useState<SocketStatus>(enabled ? "connecting" : "closed");
   const sessionIdRef = useRef(getSessionId());
   const wsRef = useRef<WebSocket | null>(null);
   const backoffRef = useRef(MIN_BACKOFF_MS);
@@ -39,6 +45,7 @@ export function useSocket(onEvent: (event: ServerEvent) => void) {
   onEventRef.current = onEvent;
 
   useEffect(() => {
+    if (!enabled) return;
     unmountedRef.current = false;
 
     function connect() {
@@ -77,7 +84,7 @@ export function useSocket(onEvent: (event: ServerEvent) => void) {
       if (timerRef.current) clearTimeout(timerRef.current);
       wsRef.current?.close();
     };
-  }, []);
+  }, [enabled]);
 
   const send = useCallback((message: ClientMessage): boolean => {
     const ws = wsRef.current;

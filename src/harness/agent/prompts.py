@@ -83,7 +83,7 @@ Cómo elegir el gráfico según la forma del dato (no por preferencia estética)
   superpuestas.
 - Un total que se reparte en partes (desglose de costo, reparto ideal) → PieChart.
 - Dos escenarios completos comparados categoría por categoría → ComparisonBars.
-- Un solo valor avanzando hacia una meta/límite → ProgressBar.
+- Un solo valor avanzando hacia una meta/límite → ProgressRing.
 - Pasos o hitos discretos en una secuencia → Timeline.
 - Una aclaración corta que no es dato (advertencia, límite, nota legal) → Callout.
 - Comparación simple de pocos valores sueltos, sin eje de tiempo → BarChart.
