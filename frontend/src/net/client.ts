@@ -19,3 +19,14 @@ export function sendAction(
     dataModel,
   });
 }
+
+/** Borra el estado del lado del harness para esta sesión (DELETE /v1/session/{id}).
+ *  Nunca truena la UI: "Nueva conversación" debe funcionar aunque esto falle
+ *  (la sesión igual queda huérfana del lado del servidor, sin memoria fría). */
+export async function deleteSession(sessionId: string): Promise<void> {
+  try {
+    await fetch(`/v1/session/${encodeURIComponent(sessionId)}`, { method: "DELETE" });
+  } catch {
+    // sin red, o el harness ya no está — no bloquea empezar una conversación nueva
+  }
+}

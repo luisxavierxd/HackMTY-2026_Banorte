@@ -19,6 +19,13 @@ function getSessionId(): string {
   return id;
 }
 
+/** Borra el sessionId guardado — la próxima carga arranca una sesión nueva.
+ *  Úsalo junto con `DELETE /v1/session/{id}` (net/client.ts::deleteSession)
+ *  y una recarga de página para un "Nueva conversación" limpio de verdad. */
+export function clearStoredSession(): void {
+  sessionStorage.removeItem(SESSION_KEY);
+}
+
 function wsBase(): string {
   const proto = location.protocol === "https:" ? "wss:" : "ws:";
   return import.meta.env.VITE_WS_BASE ?? `${proto}//${location.host}`;

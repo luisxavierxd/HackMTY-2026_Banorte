@@ -38,6 +38,30 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.bn-topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--bn-space-2);
+  flex-shrink: 0;
+}
+.bn-topbar__history-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 6px 8px;
+  border-radius: var(--bn-radius-control);
+  color: var(--bn-mute);
+  font-size: 0.8125rem;
+}
+.bn-topbar__history-toggle:not(:disabled):hover {
+  color: var(--bn-ink);
+  background: var(--bn-line);
+}
+.bn-topbar__history-toggle:disabled {
+  opacity: 0.4;
+}
 .bn-topbar__refresh {
   background: none;
   border: none;
@@ -48,6 +72,33 @@
 }
 .bn-topbar__refresh:hover {
   color: var(--bn-ink);
+}
+
+.bn-transcript {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-space-2);
+  padding: var(--bn-space-3) var(--bn-space-4);
+  border-bottom: 1px solid var(--bn-line);
+  background: var(--bn-surface);
+  max-height: 40vh;
+  overflow-y: auto;
+}
+.bn-transcript__item {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--bn-ink);
+}
+.bn-transcript__item--agent {
+  color: var(--bn-mute);
+}
+.bn-transcript__role {
+  font-weight: 600;
+  margin-right: 6px;
+}
+.bn-transcript__item--user .bn-transcript__role {
+  color: var(--bn-red-deep);
 }
 
 .bn-surface-area {

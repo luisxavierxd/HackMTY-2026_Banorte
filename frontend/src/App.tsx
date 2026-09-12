@@ -7,8 +7,8 @@ import type { ServerEvent } from "./contract/events";
 import { applyEnvelopes, type SurfaceState } from "./a2ui/surfaceReducer";
 import { renderSurface } from "./a2ui/registry";
 import { pointerSet } from "./a2ui/pointer";
-import { useSocket } from "./net/useSocket";
-import { sendAction, sendUserMessage } from "./net/client";
+import { useSocket, clearStoredSession } from "./net/useSocket";
+import { sendAction, sendUserMessage, deleteSession } from "./net/client";
 
 import Composer from "./shell/Composer";
 import Trace, { type TraceStatus } from "./shell/Trace";
@@ -34,6 +34,27 @@ function RefreshIcon() {
   );
 }
 
+function ChevronIcon({ open }: { open: boolean }) {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+      style={{ transform: open ? "rotate(180deg)" : undefined, transition: "transform 150ms" }}
+    >
+      <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+interface TranscriptEntry {
+  role: "user" | "agent";
+  text: string;
+  ts: number;
+}
+
 export default function App() {
   const [surface, setSurface] = useState<SurfaceState>(null);
   const [turnId, setTurnId] = useState(0); // fuerza reset del ErrorBoundary en cada surface nueva
@@ -42,6 +63,17 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [overrides, setOverrides] = useState<Record<string, unknown>>({});
+
+  // Historial de la conversación: se pierde al recargar (vive solo en
+  // memoria, no en sessionStorage) — es para no perder de vista lo que ya
+  // se preguntó/respondió mientras la pantalla sigue cambiando, no un log
+  // persistente. Colapsado por default para no estorbar.
+  const [transcript, setTranscript] = useState<TranscriptEntry[]>([]);
+  const [transcriptOpen, setTranscriptOpen] = useState(false);
+  const addTranscript = useCallback((role: TranscriptEntry["role"], text: string) => {
+    if (!text) return;
+    setTranscript((prev) => [...prev, { role, text, ts: Date.now() }]);
+  }, []);
 
   // El CLI de Claude Code puede llamarse hasta 2 veces por turno (razonar +
   // componer UI), cada una con timeout de hasta CLI_TIMEOUT_S (180s por
@@ -87,6 +119,7 @@ export default function App() {
         setOverrides({});
         setBusy(false);
         setError(null);
+        addTranscript("agent", event.summary || event.title || "");
         break;
       case "turn_end":
         setTrace({ kind: "done", latencyMs: event.latency_ms, provider: event.provider, model: event.model });
@@ -105,28 +138,42 @@ export default function App() {
       default:
         break;
     }
-  }, []);
+  }, [addTranscript]);
 
-  const { status, send } = useSocket(handleEvent, !IS_LAB);
+  const { status, sessionId, send } = useSocket(handleEvent, !IS_LAB);
 
   const runAction = useCallback(
-    (action: ActionRef | undefined) => {
+    (action: ActionRef | undefined, label?: string) => {
       if (!action) return;
       setBusy(true);
       setError(null);
+      addTranscript("user", label || action.event.name.replace(/_/g, " "));
       sendAction(send, action, overrides);
     },
-    [send, overrides]
+    [send, overrides, addTranscript]
   );
 
   const handleSend = useCallback(
     (text: string) => {
       setBusy(true);
       setError(null);
+      addTranscript("user", text);
       sendUserMessage(send, text);
     },
-    [send]
+    [send, addTranscript]
   );
+
+  const startNewConversation = useCallback(() => {
+    // Recarga completa a propósito: useSocket abre el WS una sola vez al
+    // montar, con el sessionId de ese momento — no hay forma limpia de
+    // "reconectar con otro id" sin recargar. deleteSession limpia el estado
+    // viejo del harness; clearStoredSession hace que la próxima carga saque
+    // un sessionId nuevo. Ninguna de las dos debe bloquear la recarga.
+    void deleteSession(sessionId).finally(() => {
+      clearStoredSession();
+      location.reload();
+    });
+  }, [sessionId]);
 
   // Vista efectiva: data model del servidor + ediciones locales optimistas
   // (Slider/TextField/OptionList) todavía no confirmadas por el agente.
@@ -174,15 +221,38 @@ export default function App() {
     <div className="bn-app">
       <header className="bn-topbar">
         <span className="bn-topbar__title">{title || "Banorte"}</span>
-        <button
-          type="button"
-          className="bn-topbar__refresh"
-          aria-label="Reiniciar conversación"
-          onClick={() => location.reload()}
-        >
-          <RefreshIcon />
-        </button>
+        <div className="bn-topbar__actions">
+          <button
+            type="button"
+            className="bn-topbar__history-toggle"
+            aria-expanded={transcriptOpen}
+            disabled={transcript.length === 0}
+            onClick={() => setTranscriptOpen((v) => !v)}
+          >
+            Conversación <ChevronIcon open={transcriptOpen} />
+          </button>
+          <button
+            type="button"
+            className="bn-topbar__refresh"
+            aria-label="Nueva conversación"
+            title="Nueva conversación"
+            onClick={startNewConversation}
+          >
+            <RefreshIcon />
+          </button>
+        </div>
       </header>
+
+      {transcriptOpen && transcript.length > 0 && (
+        <div className="bn-transcript" role="log">
+          {transcript.map((entry, i) => (
+            <p key={i} className={`bn-transcript__item bn-transcript__item--${entry.role}`}>
+              <span className="bn-transcript__role">{entry.role === "user" ? "Tú" : "Asistente"}</span>
+              {entry.text}
+            </p>
+          ))}
+        </div>
+      )}
 
       <main className="bn-surface-area">
         <SurfaceErrorBoundary

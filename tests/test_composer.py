@@ -47,13 +47,16 @@ def test_componente_alucinado_se_descarta_y_se_reporta():
 
 def test_referencia_rota_se_poda_sin_romper_el_render():
     plan = {**PLAN_OK, "components": [
-        {"id": "root", "component": "Column", "props": {"children": ["kpi", "fantasma"]}},
+        {"id": "root", "component": "Column", "props": {"children": ["kpi", "fantasma", "cta"]}},
         {"id": "kpi", "component": "MetricCard", "props": {"label": "Saldo", "value": "1"}},
+        {"id": "cta", "component": "ActionButton", "props": {
+            "text": "Continuar", "action": {"event": {"name": "continuar", "params": {}}},
+        }},
     ]}
     r = compile_plan(plan, "main", first_render=True)
     assert r.ok
     root = next(c for c in r.components if c["id"] == "root")
-    assert root["children"] == ["kpi"]
+    assert root["children"] == ["kpi", "cta"]
 
 
 def test_enum_invalido_cae_al_default():
@@ -79,6 +82,38 @@ def test_slider_no_acepta_action_soltar_el_mouse_no_debe_cerrar_el_ciclo():
     }])
     assert "action" not in comps[0]
     assert any("action" in e and "desconocida" in e for e in errors)
+
+
+def test_option_list_no_acepta_action_elegir_no_es_confirmar():
+    # Mismo bug, otra vez, con OptionList: elegir una opción con un tap
+    # disparaba el turno de inmediato aunque hubiera un ActionButton de
+    # confirmación aparte en la misma pantalla.
+    comps, errors, _ = validate_components([{
+        "id": "o", "component": "OptionList",
+        "props": {
+            "options": [{"id": "a", "label": "A"}],
+            "value": {"path": "/x"},
+            "action": {"event": {"name": "no_deberia_llegar", "params": {}}},
+        },
+    }])
+    assert "action" not in comps[0]
+    assert any("action" in e and "desconocida" in e for e in errors)
+
+
+def test_plan_sin_action_button_no_compila():
+    # Obligatorio: solo un ActionButton puede cerrar el ciclo. Un plan con
+    # controles pero sin ActionButton se rechaza (fuerza reparación en
+    # _compose_ui, y en última instancia cae al fallback_plan).
+    plan = {
+        "root": "root",
+        "components": [
+            {"id": "root", "component": "Column", "props": {"children": ["kpi"]}},
+            {"id": "kpi", "component": "MetricCard", "props": {"label": "Saldo", "value": "1"}},
+        ],
+    }
+    r = compile_plan(plan, "main", first_render=True)
+    assert not r.ok
+    assert any("ActionButton" in e for e in r.errors)
 
 
 def test_plan_sin_root_no_compila_y_hay_fallback():

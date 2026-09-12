@@ -180,7 +180,10 @@ COMPONENTS: dict[str, dict[str, Any]] = {
     # ---------- interactivos ----------
     "OptionList": {
         "doc": "Lista de opciones seleccionables (planes, plazos, portafolios). "
-               "Escribe la opción elegida en value.path del data model.",
+               "Escribe la opción elegida en value.path del data model. NUNCA "
+               "dispara una acción por sí sola (no tiene prop 'action') —"
+               " elegir una opción no es lo mismo que confirmarla. "
+               "Acompáñala SIEMPRE de un ActionButton aparte.",
         "props": {
             "options": {
                 "type": "objectList",
@@ -188,7 +191,6 @@ COMPONENTS: dict[str, dict[str, Any]] = {
                 "keys": ["id", "label", "caption", "value", "highlight"],
             },
             "value": {"type": "binding", "required": True},
-            "action": {"type": "action"},
         },
     },
     "Slider": {

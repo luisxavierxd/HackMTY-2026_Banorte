@@ -14,7 +14,7 @@ export default function ActionButton({ props, ctx }: A2UIComponentProps<ActionBu
 
   function handleClick() {
     if (props.confirm && !window.confirm(props.confirm)) return;
-    ctx.runAction(props.action);
+    ctx.runAction(props.action, props.text);
   }
 
   return (

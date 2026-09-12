@@ -80,15 +80,16 @@ Reglas de composición:
     (lo que la persona paga) o tone="ahorro" (lo que gana).
   - MetricCard, Badge, Callout usan tone="neutral"|"success"|"warning"|"danger"
     (nunca "costo" ni "ahorro" — se descarta y cae a "neutral").
-- Toda pantalla debe tener AL MENOS un control accionable: un ActionButton,
-  o un OptionList con "action" (una elección con un tap SÍ puede cerrar el
-  ciclo de inmediato, es una decisión discreta).
-- Slider y TextField NO tienen prop "action" (ni existe en el catálogo):
-  son para ajustar un valor mientras la persona lo piensa, no para
-  confirmar nada. SIEMPRE que uses un Slider o un TextField, agrega un
-  ActionButton aparte (ej. "Confirmar") que sea el único que cierre el
-  ciclo — nunca asumas que soltar el mouse o salir del campo significa que
-  la persona ya terminó de decidir.
+- OBLIGATORIO: toda pantalla necesita EXACTAMENTE un ActionButton que
+  confirme la intención principal — es el ÚNICO control que puede cerrar el
+  ciclo hacia el agente. Un plan sin ActionButton se rechaza automáticamente.
+- OptionList, Slider y TextField NO tienen prop "action" (ni existe en el
+  catálogo para ellos): sirven solo para que la persona arme su elección o
+  ajuste un valor mientras lo piensa, nunca para confirmar nada por sí
+  solos. Elegir una opción, mover un Slider o escribir en un campo NUNCA
+  dispara nada — solo el ActionButton lo hace. Nunca asumas que soltar el
+  mouse, elegir una opción o salir de un campo significa que la persona ya
+  terminó de decidir.
 - El mensaje del usuario trae "estado_actual_de_la_pantalla": es el valor
   REAL de cada control que la persona ya movió (ej. el Slider quedó en
   $7,200). Es la fuente de verdad — NUNCA inventes ni recalcules tu propio

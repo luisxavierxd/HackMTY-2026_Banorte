@@ -13,7 +13,10 @@ import type { ActionRef } from "../contract/a2ui";
 export interface RenderCtx {
   data: unknown;
   setLocal: (path: string, value: unknown) => void;
-  runAction: (action: ActionRef | undefined) => void;
+  /** `label` es el texto visible del control que disparó la acción (ej. el
+   *  texto del ActionButton) — sirve para mostrarlo en el historial de la
+   *  conversación sin adivinar a partir del nombre técnico del evento. */
+  runAction: (action: ActionRef | undefined, label?: string) => void;
   renderChild: (id: string | undefined) => ReactNode;
   renderChildren: (ids: string[] | undefined) => ReactNode;
 }

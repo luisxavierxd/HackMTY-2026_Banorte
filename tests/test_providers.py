@@ -351,7 +351,13 @@ async def test_compose_ui_datos_reales_ganan_sobre_lo_que_declare_el_modelo():
             plan = {
                 "title": "t", "summary": "s", "root": "root",
                 "data": {"datos": {"nombre_que_no_deberia_ganar": {"x": 1}}},
-                "components": [{"id": "root", "component": "Text", "props": {"text": "hola"}}],
+                "components": [
+                    {"id": "root", "component": "Column", "props": {"children": ["t", "cta"]}},
+                    {"id": "t", "component": "Text", "props": {"text": "hola"}},
+                    {"id": "cta", "component": "ActionButton", "props": {
+                        "text": "Ok", "action": {"event": {"name": "ok", "params": {}}},
+                    }},
+                ],
             }
             return Completion(text=json.dumps(plan), provider="stub", model="stub")
 

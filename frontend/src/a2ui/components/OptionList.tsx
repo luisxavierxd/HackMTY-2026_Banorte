@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import type { A2UIComponentProps } from "../types";
-import { isBindingRef, type ActionRef, type Binding } from "../../contract/a2ui";
+import { isBindingRef, type Binding } from "../../contract/a2ui";
 import { resolveBinding } from "../resolve";
 
 interface Option {
@@ -11,10 +11,12 @@ interface Option {
   highlight?: boolean;
 }
 
+// OptionList nunca dispara una acción por sí sola (no existe en el
+// catálogo: catalog.py) — elegir una opción no es lo mismo que
+// confirmarla. Siempre va acompañada de un ActionButton aparte.
 interface OptionListProps {
   options?: Option[];
   value?: Binding<unknown>;
-  action?: ActionRef;
 }
 
 export default function OptionList({ props, ctx }: A2UIComponentProps<OptionListProps>) {
@@ -24,7 +26,6 @@ export default function OptionList({ props, ctx }: A2UIComponentProps<OptionList
 
   function choose(opt: Option) {
     if (path) ctx.setLocal(path, opt.value ?? opt.id);
-    ctx.runAction(props.action);
   }
 
   if (options.length === 0) {

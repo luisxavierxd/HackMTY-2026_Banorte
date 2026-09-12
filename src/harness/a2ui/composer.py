@@ -130,6 +130,18 @@ def compile_plan(plan: dict, surface_id: str, first_render: bool) -> CompileResu
         errors.append("plan sin root renderizable")
         return CompileResult(ok=False, errors=errors, dropped=dropped)
 
+    # Obligatorio: solo un ActionButton puede cerrar el ciclo hacia el agente.
+    # OptionList/Slider/TextField ya NO tienen prop "action" (ver catalog.py) —
+    # sin este control con la persona nunca puede confirmar nada. Si el LLM lo
+    # omite, esto fuerza el intento de reparación en _compose_ui y, si insiste,
+    # cae al fallback_plan (que siempre trae un ActionButton).
+    if not any(c["component"] == "ActionButton" for c in components):
+        errors.append(
+            "el plan no incluye ningún ActionButton — toda pantalla necesita "
+            "un botón de confirmación explícito, ningún otro control puede cerrar el ciclo"
+        )
+        return CompileResult(ok=False, errors=errors, dropped=dropped)
+
     # A2UI v0.9: el root es el primer componente de la lista.
     components.sort(key=lambda c: 0 if c["id"] == root else 1)
 
