@@ -45,7 +45,7 @@ validador, mismos envelopes A2UI. Con los CLIs el modelo solo *decide* qué
 herramienta llamar; **ejecutarla sigue siendo del harness**, así que la traza y la
 auditoría no cambian.
 
-Con Docker (harness + 2 servidores MCP por HTTP):
+Con Docker (harness + MCP educación financiera por HTTP):
 
 ```bash
 docker compose up --build
@@ -55,8 +55,8 @@ Verificar:
 
 ```bash
 curl localhost:8080/readyz                      # MCP + proveedor y modelo activos
-python scripts/smoke_turn.py "Quiero pagar menos intereses de mi tarjeta"
-make test                                       # 17 tests, sin red
+python scripts/smoke_turn.py "¿Qué es el interés compuesto?"
+make test                                       # 65 tests, sin red
 ```
 
 ---
@@ -107,9 +107,10 @@ src/harness/
   session/     estado (memoria | Redis)
   app.py       FastAPI: WS, SSE, catálogo, health
 mcp_servers/
-  credito/     precalificación, simulación, amortización, aplicar plan (acción real)
-  banca/       cuentas, movimientos, gasto por categoría, transferir
-  common/      almacén sintético persistente
+  credito/               precalificación, simulación, amortización, aplicar plan (acción real)
+  banca/                 cuentas, movimientos, gasto por categoría, transferir
+  educacion_financiera/  interés compuesto, pago mínimo vs fijo, meta ahorro, CAT, inflación, regla 50/30/20
+  common/                almacén sintético persistente
 ```
 
 ## Agregar un dominio (inversiones, pagos, seguros, educación financiera)

@@ -1,36 +1,27 @@
-# Demo:        docker compose up --build          (harness + 2 MCP por HTTP)
+# Demo:        docker compose up --build          (harness + MCP educacion por HTTP)
 # Escalado:    docker compose --profile scale up --scale harness=3
+# Railway:     cada servicio se crea por separado (ver notes/DEPLOY_RAILWAY.md)
 services:
-  mcp-credito:
+  mcp-educacion:
     build: .
-    command: python mcp_servers/credito/server.py --http 8081
+    command: python mcp_servers/educacion_financiera/server.py --http 8083
     environment:
       GENUI_DB: /data/state.json
     volumes: [genui-data:/data]
-    expose: ["8081"]
-
-  mcp-banca:
-    build: .
-    command: python mcp_servers/banca/server.py --http
-    environment:
-      GENUI_DB: /data/state.json
-    volumes: [genui-data:/data]
-    expose: ["8082"]
+    expose: ["8083"]
 
   harness:
     build: .
-    depends_on: [mcp-credito, mcp-banca]
+    depends_on: [mcp-educacion]
     env_file: [.env]
     environment:
-      # El proveedor se fija aquí o en .env; el contenedor no lo negocia en runtime.
       LLM_PROVIDER: ${LLM_PROVIDER:-gemini}
       MCP_SERVERS: >-
         {"servers":[
-          {"name":"credito","transport":"http","url":"http://mcp-credito:8081/mcp"},
-          {"name":"banca","transport":"http","url":"http://mcp-banca:8082/mcp"}]}
+          {"name":"educacion_financiera","transport":"http","url":"http://mcp-educacion:8083/mcp"}]}
       SESSION_BACKEND: ${SESSION_BACKEND:-memory}
       REDIS_URL: redis://redis:6379/0
-    ports: ["8080:8080"]
+    ports: ["${PORT:-8080}:${PORT:-8080}"]
 
   redis:
     image: redis:7-alpine

@@ -1,4 +1,4 @@
-.PHONY: install dev demo demo-anthropic demo-code demo-agy test docker deploy-check reset providers
+.PHONY: install dev demo demo-anthropic demo-code demo-agy test docker deploy-check reset providers railway-check
 UVICORN = PYTHONPATH=src .venv/bin/python -m uvicorn harness.app:app --port 8080
 
 install:         ; pip install -e ".[dev,redis]"
@@ -15,4 +15,5 @@ test:            ; PYTHONPATH=src pytest -q
 docker:          ; docker compose up --build
 reset:           ; rm -f data/state.json && echo "estado sintetico reiniciado"
 deploy-check:    ; curl -fsS localhost:8080/readyz | python -m json.tool
+railway-check:   ; curl -fsS $${RAILWAY_URL:-localhost:8080}/readyz | python -m json.tool
 providers:       ; PYTHONPATH=src python -c "from harness.config import PROVIDER_PROFILES as P, DEFAULT_PROFILE as D; [print(('*' if k==D else ' '), k, '->', v['reasoning']['provider'], '/', v['ui']['provider'], '| requiere:', v['needs'] or 'nada') for k,v in P.items()]"

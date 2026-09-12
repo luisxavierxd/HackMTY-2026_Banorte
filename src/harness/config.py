@@ -106,7 +106,7 @@ class Settings:
     max_history_turns: int = field(default_factory=lambda: int(_env("MAX_HISTORY_TURNS", "24")))
 
     # --- producto ---
-    domain: str = field(default_factory=lambda: _env("DOMAIN", "credito"))
+    domain: str = field(default_factory=lambda: _env("DOMAIN", "educacion_financiera"))
     surface_id: str = field(default_factory=lambda: _env("SURFACE_ID", "main"))
 
     # --- infra ---
@@ -168,15 +168,9 @@ def load_mcp_servers() -> list[McpServerConfig]:
 
     return [
         McpServerConfig(
-            name="credito",
+            name="educacion_financiera",
             transport="stdio",
             command=sys.executable,
-            args=[str(ROOT / "mcp_servers" / "credito" / "server.py")],
-        ),
-        McpServerConfig(
-            name="banca",
-            transport="stdio",
-            command=sys.executable,
-            args=[str(ROOT / "mcp_servers" / "banca" / "server.py")],
+            args=[str(ROOT / "mcp_servers" / "educacion_financiera" / "server.py")],
         ),
     ]

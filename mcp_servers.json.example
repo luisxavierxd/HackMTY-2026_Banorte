@@ -1,6 +1,5 @@
 {
   "servers": [
-    { "name": "credito", "transport": "http", "url": "http://mcp-credito:8081/mcp" },
-    { "name": "banca",   "transport": "http", "url": "http://mcp-banca:8082/mcp" }
+    { "name": "educacion_financiera", "transport": "http", "url": "http://mcp-educacion:8083/mcp" }
   ]
 }
