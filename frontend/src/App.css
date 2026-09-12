@@ -1,14 +1,16 @@
 /* Shell de la app: superficie generada arriba, chat como barra delgada abajo. */
 
 .bn-app {
-  min-height: 100vh;
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   max-width: var(--bn-max-width);
   margin: 0 auto;
   background: var(--bn-bg);
   position: relative;
+  /* Aisla el scroll interno: la página detrás no se mueve en iOS */
+  overflow: hidden;
 }
 
 @media (min-width: 540px) {
@@ -22,26 +24,32 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--bn-space-3) var(--bn-space-4);
+  /* Padding superior respeta el notch/island de iOS y Android */
+  padding: max(var(--bn-space-3), env(safe-area-inset-top, var(--bn-space-3))) var(--bn-space-4) var(--bn-space-3);
+  min-height: 56px;
   border-bottom: 1px solid var(--bn-line);
   position: sticky;
   top: 0;
   background: var(--bn-bg);
   z-index: 5;
+  flex-shrink: 0;
+  /* Banda de color de marca a la izquierda */
+  box-shadow: inset 3px 0 0 var(--bn-red);
 }
 .bn-topbar__title {
   font-family: var(--bn-font-display);
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: 700;
+  font-size: 1.0625rem;
   color: var(--bn-ink);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  padding-left: var(--bn-space-2);
 }
 .bn-topbar__actions {
   display: flex;
   align-items: center;
-  gap: var(--bn-space-2);
+  gap: var(--bn-space-1);
   flex-shrink: 0;
 }
 .bn-topbar__history-toggle {
@@ -50,7 +58,9 @@
   gap: 4px;
   background: none;
   border: none;
-  padding: 6px 8px;
+  /* Touch target mínimo 44px de altura */
+  min-height: 44px;
+  padding: 0 var(--bn-space-2);
   border-radius: var(--bn-radius-control);
   color: var(--bn-mute);
   font-size: 0.8125rem;
@@ -65,24 +75,38 @@
 .bn-topbar__refresh {
   background: none;
   border: none;
-  padding: 6px;
+  /* Touch target cuadrado mínimo 44×44px */
+  min-width: 44px;
+  min-height: 44px;
   border-radius: var(--bn-radius-control);
   color: var(--bn-mute);
   display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .bn-topbar__refresh:hover {
   color: var(--bn-ink);
+  background: var(--bn-line);
 }
 
+/* El transcript se superpone sobre el contenido como un drawer nativo.
+   No empuja la surface-area hacia abajo: ahorra espacio en pantallas pequeñas. */
 .bn-transcript {
+  position: absolute;
+  top: 56px; /* altura del topbar; se ajusta con JS si safe-area > 0 */
+  left: 0;
+  right: 0;
+  z-index: 4;
   display: flex;
   flex-direction: column;
   gap: var(--bn-space-2);
   padding: var(--bn-space-3) var(--bn-space-4);
   border-bottom: 1px solid var(--bn-line);
   background: var(--bn-surface);
-  max-height: 40vh;
+  max-height: 45vh;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: 0 8px 24px rgba(36, 28, 26, 0.1);
 }
 .bn-transcript__item {
   margin: 0;
@@ -124,6 +148,9 @@
 .bn-surface-area {
   flex: 1 1 auto;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Aisla el scroll: el swipe en iOS no salta a la página raíz */
+  overscroll-behavior: contain;
   /* espacio de sobra abajo: el thumb de un Slider (input range nativo) es
      más alto que su track y queda pegado/clipado visualmente contra la
      barra de traza si el último componente es un Slider */
@@ -139,11 +166,22 @@
   flex-direction: column;
   gap: var(--bn-space-3);
   text-align: left;
+  /* Deja aire en el tercio superior para que visualmente se lea centrada */
+  padding-top: var(--bn-space-6);
+}
+.bn-empty__eyebrow {
+  display: block;
+  width: 32px;
+  height: 3px;
+  background: var(--bn-red);
+  border-radius: var(--bn-radius-pill);
+  margin-bottom: var(--bn-space-2);
 }
 .bn-empty__title {
   font-family: var(--bn-font-display);
-  font-size: 1.5rem;
+  font-size: 1.625rem;
   font-weight: 700;
+  line-height: 1.15;
   color: var(--bn-ink);
   margin: 0;
 }
@@ -151,24 +189,36 @@
   color: var(--bn-mute);
   font-size: 0.95rem;
   margin: 0;
+  max-width: 34ch;
 }
 .bn-empty__chips {
   display: flex;
   flex-direction: column;
   gap: var(--bn-space-2);
-  margin-top: var(--bn-space-3);
+  margin-top: var(--bn-space-4);
 }
+/* El chip es el call-to-action principal del estado vacío: debe ser cómodo
+   de tocar y leer como una acción concreta, no una etiqueta. */
 .bn-chip {
   text-align: left;
   border: 1px solid var(--bn-line);
   border-radius: var(--bn-radius-control);
-  padding: 12px 16px;
+  /* min-height de 52px para táctil cómodo */
+  min-height: 52px;
+  padding: 14px 16px;
   background: var(--bn-surface);
   color: var(--bn-ink);
-  font-size: 0.9rem;
+  font-size: 0.9375rem;
+  line-height: 1.35;
+  display: flex;
+  align-items: center;
 }
 .bn-chip:hover {
   border-color: var(--bn-gray-soft);
+  background: var(--bn-bg);
+}
+.bn-chip:active {
+  background: var(--bn-line);
 }
 
 .bn-loading {
@@ -199,6 +249,7 @@
   border-radius: var(--bn-radius-control);
   border: 1px solid var(--bn-alerta);
   font-size: 0.875rem;
+  flex-shrink: 0;
 }
 .bn-error__msg {
   flex: 1 1 auto;
@@ -223,6 +274,7 @@
   color: var(--bn-mute);
   font-size: 0.8125rem;
   min-height: 20px;
+  flex-shrink: 0;
 }
 .bn-trace__dot {
   width: 6px;
@@ -244,11 +296,13 @@
   background: transparent;
   border: none;
   border-top: 1px solid var(--bn-line);
-  padding: 8px var(--bn-space-4);
+  padding: 10px var(--bn-space-4);
   font-size: 0.8125rem;
   color: var(--bn-red-deep);
   text-align: left;
   cursor: pointer;
+  flex-shrink: 0;
+  min-height: 44px;
 }
 .bn-trace-cancel:hover {
   text-decoration: underline;
@@ -271,8 +325,13 @@
   align-items: center;
   gap: var(--bn-space-2);
   padding: var(--bn-space-3) var(--bn-space-4);
+  /* El padding inferior crece con el home indicator de iOS/Android */
+  padding-bottom: max(var(--bn-space-3), calc(env(safe-area-inset-bottom, 0px) + var(--bn-space-2)));
   border-top: 1px solid var(--bn-line);
   background: var(--bn-bg);
+  /* Nunca queda detrás del teclado en PWA: el compositor es parte del flujo
+     flex y se empuja arriba al reducirse el viewport con dvh */
+  flex-shrink: 0;
 }
 .bn-composer__input {
   flex: 1 1 auto;
@@ -283,6 +342,8 @@
   font-size: 1rem;
   background: var(--bn-surface);
   color: var(--bn-ink);
+  /* Evita el zoom automático en iOS al enfocar un input < 16px */
+  font-size: max(1rem, 16px);
 }
 .bn-composer__input:disabled {
   opacity: 0.6;
@@ -298,9 +359,13 @@
   align-items: center;
   justify-content: center;
   border: none;
+  transition: background 0.12s ease;
 }
 .bn-composer__send:disabled {
   background: var(--bn-gray-soft);
+}
+.bn-composer__send:not(:disabled):active {
+  background: var(--bn-red-deep);
 }
 
 /* Pantalla de código de acceso — reemplaza el popup nativo de Basic Auth

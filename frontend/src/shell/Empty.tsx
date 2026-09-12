@@ -12,6 +12,7 @@ const SUGGESTIONS = [
 export default function Empty({ onSuggestion }: EmptyProps) {
   return (
     <div className="bn-empty">
+      <span className="bn-empty__eyebrow" aria-hidden="true" />
       <h1 className="bn-empty__title">Hola, soy tu asistente financiero</h1>
       <p className="bn-empty__body">
         Pregúntame sobre tus finanzas y te muestro la información al instante.
