@@ -64,7 +64,9 @@ def test_cli_construye_argv_de_claude_code():
     argv = p._argv("hola", "eres un agente")
     assert argv[0] == "claude" and "-p" in argv
     assert argv[argv.index("--output-format") + 1] == "json"
-    assert "--bare" in argv
+    # --bare NO debe usarse aquí: le dice al CLI que ignore las credenciales
+    # OAuth (login de la suscripción), que es justo lo que este perfil necesita.
+    assert "--bare" not in argv
     assert argv[argv.index("--append-system-prompt") + 1] == "eres un agente"
 
 

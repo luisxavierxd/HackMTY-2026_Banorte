@@ -47,7 +47,12 @@ class CliAgentProvider:
             "system_flag": "--append-system-prompt",
             "model_flag": "--model",
             "mcp_flag": "--mcp-config",
-            "extra": ["--bare"],  # sin CLAUDE.md, hooks ni plugins: turnos baratos
+            # OJO: NO agregar --bare aquí. --bare hace que el CLI ignore las
+            # credenciales OAuth / keychain (ver docs de Claude Code) — con
+            # el perfil claude_code el punto es usar la sesión ya logueada
+            # (suscripción, sin API key), así que --bare rompe la autenticación
+            # por completo (falla con "salió con 1" y sin mensaje útil).
+            "extra": [],
             "text_keys": ["result", "structured_output", "text"],
         },
         "antigravity": {
@@ -176,7 +181,13 @@ class CliAgentProvider:
             raise RuntimeError(f"{self.binary} excedió {self.timeout_s}s") from None
 
         if proc.returncode != 0:
-            raise RuntimeError(f"{self.binary} salió con {proc.returncode}: {err.decode()[:400]}")
+            # El error real a veces sale por stdout (ej. flag inválido para
+            # esta versión del CLI) y stderr queda vacío — mostrar ambos.
+            detail = err.decode(errors="replace")[:800] or out.decode(errors="replace")[:800]
+            raise RuntimeError(
+                f"{self.binary} salió con {proc.returncode} "
+                f"(argv={self._argv('<prompt omitido>', '<system omitido>')}): {detail}"
+            )
 
         return Completion(
             text=self._extract(out.decode()),
