@@ -11,9 +11,8 @@ import {
 import { CanvasRenderer } from "echarts/renderers";
 
 import type { ComponentNode } from "../../contract/a2ui";
-import { isBindingRef, type Binding } from "../../contract/a2ui";
 import type { RenderCtx } from "../types";
-import { resolveBinding } from "../resolve";
+import { resolveDeep } from "../resolve";
 import { CHART_ADAPTERS } from "./registry";
 import type { FormatKind, Theme } from "./types";
 import { formatNumber } from "./lib/format";
@@ -39,15 +38,15 @@ interface ChartHostProps {
   ctx: RenderCtx;
 }
 
-/** Resuelve bindings de nivel superior (p.ej. ProgressRing.value/.caption).
- *  Las listas de series (BarChart/LineChart) son literales del catálogo y
- *  se resuelven adentro de cada adapter vía lib/series.ts. */
+/** Resuelve bindings en TODO el árbol de props (no solo nivel superior):
+ *  ProgressRing.value/.caption son bindings de primer nivel, pero
+ *  ComparisonBars.categories[].a/.b, PieChart.slices[].value, etc. son
+ *  bindings anidados dentro de un arreglo — sin recursión se quedan como
+ *  `{"path":...}` literal y las barras/segmentos salen vacíos. Las listas
+ *  de series de LineChart usan su propio mecanismo (path apunta a un
+ *  arreglo completo, ver lib/series.ts) y no se ven afectadas por esto. */
 function resolveTopLevelProps(props: Record<string, unknown>, data: unknown): Record<string, unknown> {
-  const out: Record<string, unknown> = {};
-  for (const [key, value] of Object.entries(props)) {
-    out[key] = isBindingRef(value) ? resolveBinding(value as Binding, data) : value;
-  }
-  return out;
+  return resolveDeep(props, data);
 }
 
 function readTheme(el: HTMLElement): Theme {
@@ -113,7 +112,18 @@ export default function ChartHost({ node, data }: ChartHostProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [adapter, node.component, JSON.stringify(props), data, width, isEmpty]);
 
-  useEffect(() => () => chartRef.current?.dispose(), []);
+  useEffect(
+    () => () => {
+      // Sin poner chartRef.current en null aquí, el doble mount/unmount de
+      // StrictMode (solo en dev) deja la ref apuntando a una instancia YA
+      // destruida; el siguiente montaje la ve "no nula" y nunca vuelve a
+      // llamar echarts.init — el gráfico queda en blanco para siempre en
+      // dev, aunque en build de producción (sin StrictMode) nunca pasa.
+      chartRef.current?.dispose();
+      chartRef.current = null;
+    },
+    []
+  );
 
   if (!adapter) {
     return (

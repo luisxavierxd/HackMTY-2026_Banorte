@@ -1,7 +1,8 @@
 import type { UserProfile } from "../net/profile";
 
-function formatMoney(n: number): string {
-  return n.toLocaleString("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 });
+function formatMoney(n: number | undefined): string {
+  // `?? 0`: perfiles guardados antes de agregar gastosMensuales no lo traen.
+  return (n ?? 0).toLocaleString("es-MX", { style: "currency", currency: "MXN", maximumFractionDigits: 0 });
 }
 
 /** Card en escritorio, barra lateral deslizable en móvil (ver App.css
@@ -38,6 +39,10 @@ export default function ProfileSidebar({
             <div>
               <dt>Invertido</dt>
               <dd>{formatMoney(profile.inversion)}</dd>
+            </div>
+            <div>
+              <dt>Gastos mensuales</dt>
+              <dd>{formatMoney(profile.gastosMensuales)}</dd>
             </div>
           </dl>
           <button type="button" className="bn-sidebar__logout" onClick={onLogout}>

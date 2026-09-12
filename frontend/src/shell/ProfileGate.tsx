@@ -11,6 +11,7 @@ export default function ProfileGate({ onSubmit }: { onSubmit: () => void }) {
   const [ingresoMensual, setIngresoMensual] = useState("");
   const [ahorro, setAhorro] = useState("");
   const [inversion, setInversion] = useState("");
+  const [gastosMensuales, setGastosMensuales] = useState("");
   const [accepted, setAccepted] = useState(false);
   const [showPrivacy, setShowPrivacy] = useState(false);
 
@@ -24,6 +25,7 @@ export default function ProfileGate({ onSubmit }: { onSubmit: () => void }) {
       ingresoMensual: Number(ingresoMensual) || 0,
       ahorro: Number(ahorro) || 0,
       inversion: Number(inversion) || 0,
+      gastosMensuales: Number(gastosMensuales) || 0,
     };
     setProfile(profile);
     onSubmit();
@@ -72,7 +74,7 @@ export default function ProfileGate({ onSubmit }: { onSubmit: () => void }) {
           />
         </label>
         <label className="bn-field">
-          <span>Cantidad ahorrada</span>
+          <span>Cantidad ahorrada (saldo total hoy, no lo que ahorras al mes)</span>
           <input
             type="number"
             inputMode="decimal"
@@ -83,7 +85,7 @@ export default function ProfileGate({ onSubmit }: { onSubmit: () => void }) {
           />
         </label>
         <label className="bn-field">
-          <span>Cantidad invertida</span>
+          <span>Cantidad invertida (saldo total hoy)</span>
           <input
             type="number"
             inputMode="decimal"
@@ -91,6 +93,17 @@ export default function ProfileGate({ onSubmit }: { onSubmit: () => void }) {
             placeholder="$0"
             value={inversion}
             onChange={(event) => setInversion(event.target.value)}
+          />
+        </label>
+        <label className="bn-field">
+          <span>Gastos mensuales aproximados</span>
+          <input
+            type="number"
+            inputMode="decimal"
+            min="0"
+            placeholder="$0"
+            value={gastosMensuales}
+            onChange={(event) => setGastosMensuales(event.target.value)}
           />
         </label>
         <label className="bn-checkbox">

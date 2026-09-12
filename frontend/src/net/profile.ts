@@ -8,8 +8,13 @@ import { getCookie, setCookie, deleteCookie } from "./cookies";
 export interface UserProfile {
   nombre: string;
   ingresoMensual: number;
+  /** Saldo YA ahorrado a hoy (stock), no cuánto ahorra al mes. */
   ahorro: number;
+  /** Monto YA invertido a hoy (stock), no una aportación mensual. */
   inversion: number;
+  /** Gasto fijo mensual aproximado — para que el agente no lo confunda con
+   *  el gasto real que calculan las herramientas de simulación. */
+  gastosMensuales: number;
   [key: string]: unknown;
 }
 

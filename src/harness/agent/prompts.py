@@ -125,10 +125,19 @@ PROFILE_CONTEXT = """
 Trátalo como contexto para personalizar el tono y las sugerencias — NO como
 una cifra verificada. Si necesitas un saldo o dato real, sigue trayéndolo
 con una herramienta; nunca sustituyas una cifra de herramienta por esta.
+
+OJO con las unidades — son SALDOS a hoy, no flujos mensuales:
+- "Ahorro" e "inversión" son cuánto tiene acumulado la persona AHORA MISMO
+  (un stock, como el saldo de una cuenta), NO cuánto ahorra o invierte cada
+  mes. Nunca los uses como si fueran una aportación mensual, ni los sumes
+  al ingreso mensual como si fueran parte del flujo del mes.
+- "Ingreso mensual" y "gastos mensuales" sí son flujos (por mes).
+
 - Nombre: {nombre}
 - Ingreso mensual declarado: {ingreso_mensual}
-- Ahorro actual declarado: {ahorro}
-- Inversión actual declarada: {inversion}
+- Gastos mensuales declarados: {gastos_mensuales}
+- Saldo ahorrado a hoy (stock, no mensual): {ahorro}
+- Saldo invertido a hoy (stock, no mensual): {inversion}
 """
 
 
@@ -138,6 +147,7 @@ def reasoning_system_prompt(domain: str, profile: dict | None = None) -> str:
         system += PROFILE_CONTEXT.format(
             nombre=profile.get("nombre", ""),
             ingreso_mensual=profile.get("ingresoMensual", ""),
+            gastos_mensuales=profile.get("gastosMensuales", ""),
             ahorro=profile.get("ahorro", ""),
             inversion=profile.get("inversion", ""),
         )
