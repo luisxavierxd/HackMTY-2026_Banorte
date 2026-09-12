@@ -1,0 +1,19 @@
+# --- documentación interna y contexto de agentes (no se publica) ---
+documentacion/
+.claude/
+CLAUDE.md
+AGENTS.md
+
+# --- python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# --- estado y secretos ---
+.env
+data/
+*.log
