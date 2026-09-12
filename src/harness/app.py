@@ -179,6 +179,8 @@ async def _drain_turn(ws: WebSocket, session_id: str, payload: dict) -> None:
             await ws.send_json({"type": "heartbeat"})
             continue
         await ws.send_json(event)
+        if event.get("type") in ("surface", "turn_end", "error"):
+            log.info("ws send OK: %s (sesión %s)", event["type"], session_id)
 
 
 @app.websocket("/ws/{session_id}")

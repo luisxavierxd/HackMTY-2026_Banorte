@@ -198,6 +198,7 @@ class Agent:
                 result, plan = item
             else:
                 yield item
+        log.info("run_turn: cediendo evento surface (título=%r)", plan.get("title", ""))
         yield {
             "type": "surface",
             "title": plan.get("title", ""),
@@ -205,6 +206,7 @@ class Agent:
             "a2ui": result.messages,
             "warnings": result.errors,
         }
+        log.info("run_turn: surface cedido, cerrando turno")
         history.append(text_msg("assistant", f"[UI generada] {plan.get('title', '')}"))
         yield {
             "type": "turn_end",
@@ -256,6 +258,10 @@ class Agent:
                 plan = extract_json(completion.text)
                 plan["data"] = {"datos": auto, **(plan.get("data") or {})}
                 result = compile_plan(plan, self.s.surface_id, first_render)
+                log.info(
+                    "compose_ui intento %s: ok=%s componentes=%s errores=%s",
+                    attempt + 1, result.ok, len(result.components), result.errors[:3],
+                )
                 if result.ok:
                     yield (result, plan)
                     return
