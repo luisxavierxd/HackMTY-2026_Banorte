@@ -29,6 +29,7 @@ import json
 import logging
 import shutil
 from collections.abc import Awaitable, Callable
+from contextlib import suppress
 from typing import Any
 
 from .base import Completion, Message, ToolSpec
@@ -193,10 +194,19 @@ class CliAgentProvider:
         de esperar a que termine (`communicate()`). Permite emitir progreso real
         turno a turno; nunca se usa para antigravity ni para las APIs."""
         proc = await asyncio.create_subprocess_exec(
-            *argv, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
+            *argv,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
+            # default de asyncio es 64 KiB por línea: el plan de UI completo
+            # (con series de hasta 600 puntos, ver riesgos conocidos del
+            # frontend) va embebido en una sola línea NDJSON y puede excederlo.
+            limit=1024 * 1024,
         )
         stderr_task = asyncio.ensure_future(proc.stderr.read())
         final_text = ""
+        is_error = False
+        saw_result = False
+        reaped = False
         try:
             while True:
                 raw = await proc.stdout.readline()
@@ -214,18 +224,48 @@ class CliAgentProvider:
                 log.info("cli stream[%s]: %s", self.name, line[:500])
                 if ev.get("type") == "result":
                     final_text = self._text_from_payload(ev)
+                    is_error = bool(ev.get("is_error"))
+                    saw_result = True
+                    # No sigas esperando más líneas: ya tenemos lo que
+                    # necesitamos. Si el proceso tarda en salir del todo
+                    # después de imprimir "result" (teardown, telemetría),
+                    # seguir bloqueado en readline() se ve exactamente como
+                    # "no pasa nada" del lado del usuario — visto en producción.
+                    break
                 elif on_event is not None:
                     progress = self._humanize_stream_event(ev)
                     if progress:
                         await on_event(progress)
+
+            if saw_result:
+                # Ya tenemos lo que importa: regresa YA, sin esperar a que el
+                # proceso salga del todo — el `result` de la CLI trae su propio
+                # `is_error`, así que ni siquiera necesitamos el returncode del
+                # SO. Se reapea aparte para no dejar zombies, sin bloquear.
+                reaped = True
+                asyncio.ensure_future(self._reap(proc, stderr_task))
+                return (1 if is_error else 0), final_text, b""
+
+            log.warning("cli stream[%s]: terminó sin evento 'result'", self.name)
             returncode = await proc.wait()
             stderr = await stderr_task
             return returncode, final_text, stderr
         finally:
-            if proc.returncode is None:  # timeout/cancelación: no dejar zombies
-                proc.kill()
+            if not reaped:
+                if proc.returncode is None:  # timeout/cancelación: no dejar zombies
+                    proc.kill()
+                if not stderr_task.done():
+                    stderr_task.cancel()
+
+    @staticmethod
+    async def _reap(proc: asyncio.subprocess.Process, stderr_task: asyncio.Task) -> None:
+        """Termina de esperar al proceso en segundo plano, sin bloquear al
+        turno que ya tiene su resultado."""
+        with suppress(Exception):
+            await proc.wait()
+        with suppress(Exception):
             if not stderr_task.done():
-                stderr_task.cancel()
+                await stderr_task
 
     # ------------------------------------------------------------------ #
     async def complete(

@@ -136,12 +136,15 @@ class _FakeProc:
     """Doble mínimo de asyncio.subprocess.Process para probar _run_streaming
     sin lanzar un proceso de verdad (multiplataforma, sin red)."""
 
-    def __init__(self, lines: list[bytes]):
+    def __init__(self, lines: list[bytes], wait_delay_s: float = 0):
         self.stdout = _FakeStdout(lines)
         self.stderr = _FakeStderr()
         self.returncode: int | None = None
+        self._wait_delay_s = wait_delay_s
 
     async def wait(self) -> int:
+        if self._wait_delay_s:
+            await asyncio.sleep(self._wait_delay_s)
         self.returncode = 0
         return 0
 
@@ -176,6 +179,42 @@ async def test_run_streaming_llama_on_event_y_extrae_result(monkeypatch):
     assert events[0]["text"] == "Conectando con el modelo…"
     assert events[1]["text"] == "Generando la respuesta…"
     assert "Pensando tu meta de ahorro" not in events[1]["text"]  # nunca texto crudo al usuario
+
+
+async def test_run_streaming_no_espera_a_que_el_proceso_salga_del_todo(monkeypatch):
+    # Bug real visto en producción: el CLI imprime "result" pero tarda en
+    # cerrar stdout/salir de verdad (teardown, telemetría) — _run_streaming
+    # NO debe bloquearse esperando eso, o el turno se ve "colgado" sin razón
+    # aunque el resultado ya esté listo.
+    lines = [b'{"type":"result","result":"listo","is_error":false}\n']
+    fake_proc = _FakeProc(lines, wait_delay_s=5)  # más lento que cualquier timeout de este test
+
+    async def fake_create_subprocess_exec(*_args, **_kwargs):
+        return fake_proc
+
+    monkeypatch.setattr(asyncio, "create_subprocess_exec", fake_create_subprocess_exec)
+    p = CliAgentProvider("claude_code")
+
+    returncode, text, err = await asyncio.wait_for(p._run_streaming(["claude"], None), timeout=1)
+
+    assert returncode == 0
+    assert text == "listo"
+    assert err == b""  # no esperamos stderr tampoco: se reapea aparte
+
+
+async def test_run_streaming_result_con_is_error_regresa_returncode_1(monkeypatch):
+    lines = [b'{"type":"result","result":"algo fallo","is_error":true}\n']
+    fake_proc = _FakeProc(lines)
+
+    async def fake_create_subprocess_exec(*_args, **_kwargs):
+        return fake_proc
+
+    monkeypatch.setattr(asyncio, "create_subprocess_exec", fake_create_subprocess_exec)
+    p = CliAgentProvider("claude_code")
+
+    returncode, text, _err = await p._run_streaming(["claude"], None)
+    assert returncode == 1
+    assert text == "algo fallo"
 
 
 async def test_run_streaming_sin_on_event_no_truena(monkeypatch):
