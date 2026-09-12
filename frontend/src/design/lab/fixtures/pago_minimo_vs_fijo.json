@@ -1,0 +1,233 @@
+{
+  "type": "surface",
+  "title": "Pago mínimo vs pago fijo",
+  "summary": "Pagando $3,680/mes en vez de solo el mínimo ($1,840), liquidas 7 meses antes y ahorras $2,191 en intereses.",
+  "a2ui": [
+    {
+      "createSurface": {
+        "surfaceId": "main",
+        "catalogId": "fin-catalog"
+      }
+    },
+    {
+      "updateDataModel": {
+        "surfaceId": "main",
+        "path": "/",
+        "value": {
+          "datos": {
+            "comparar_pago_minimo_vs_fijo": {
+              "concepto": "pago_minimo_vs_fijo",
+              "saldo_inicial": 18400.0,
+              "escenarios": {
+                "pago_minimo": {
+                  "pago_mensual": 1840.0,
+                  "meses_para_liquidar": 13,
+                  "costo_total": 22603.93,
+                  "serie": [
+                    {
+                      "mes": 1,
+                      "saldo": 17156.47,
+                      "pagado_acumulado": 1840.0
+                    },
+                    {
+                      "mes": 2,
+                      "saldo": 15872.62,
+                      "pagado_acumulado": 3680.0
+                    },
+                    {
+                      "mes": 3,
+                      "saldo": 14547.16,
+                      "pagado_acumulado": 5520.0
+                    },
+                    {
+                      "mes": 4,
+                      "saldo": 13178.73,
+                      "pagado_acumulado": 7360.0
+                    },
+                    {
+                      "mes": 5,
+                      "saldo": 11765.94,
+                      "pagado_acumulado": 9200.0
+                    },
+                    {
+                      "mes": 6,
+                      "saldo": 10307.35,
+                      "pagado_acumulado": 11040.0
+                    },
+                    {
+                      "mes": 7,
+                      "saldo": 8801.48,
+                      "pagado_acumulado": 12880.0
+                    },
+                    {
+                      "mes": 8,
+                      "saldo": 7246.8,
+                      "pagado_acumulado": 14720.0
+                    },
+                    {
+                      "mes": 9,
+                      "saldo": 5641.71,
+                      "pagado_acumulado": 16560.0
+                    },
+                    {
+                      "mes": 10,
+                      "saldo": 3984.6,
+                      "pagado_acumulado": 18400.0
+                    },
+                    {
+                      "mes": 11,
+                      "saldo": 2273.77,
+                      "pagado_acumulado": 20240.0
+                    },
+                    {
+                      "mes": 12,
+                      "saldo": 507.48,
+                      "pagado_acumulado": 22080.0
+                    },
+                    {
+                      "mes": 13,
+                      "saldo": 0.0,
+                      "pagado_acumulado": 22603.93
+                    }
+                  ]
+                },
+                "pago_fijo": {
+                  "pago_mensual": 3680.0,
+                  "meses_para_liquidar": 6,
+                  "costo_total": 20413.03,
+                  "serie": [
+                    {
+                      "mes": 1,
+                      "saldo": 15316.47,
+                      "pagado_acumulado": 3680.0
+                    },
+                    {
+                      "mes": 2,
+                      "saldo": 12132.98,
+                      "pagado_acumulado": 7360.0
+                    },
+                    {
+                      "mes": 3,
+                      "saldo": 8846.29,
+                      "pagado_acumulado": 11040.0
+                    },
+                    {
+                      "mes": 4,
+                      "saldo": 5453.05,
+                      "pagado_acumulado": 14720.0
+                    },
+                    {
+                      "mes": 5,
+                      "saldo": 1949.82,
+                      "pagado_acumulado": 18400.0
+                    },
+                    {
+                      "mes": 6,
+                      "saldo": 0.0,
+                      "pagado_acumulado": 20413.03
+                    }
+                  ]
+                }
+              },
+              "resumen": {
+                "ahorro": 2190.9,
+                "meses_menos": 7
+              },
+              "explicacion": "Pagando $3,680/mes en vez de solo el mínimo ($1,840), liquidas 7 meses antes y ahorras $2,191 en intereses."
+            }
+          }
+        }
+      }
+    },
+    {
+      "updateComponents": {
+        "surfaceId": "main",
+        "components": [
+          {
+            "id": "root",
+            "component": "Column",
+            "props": {
+              "children": [
+                "row",
+                "chart",
+                "btn"
+              ],
+              "gap": "md"
+            }
+          },
+          {
+            "id": "row",
+            "component": "Row",
+            "props": {
+              "children": [
+                "m1",
+                "m2"
+              ],
+              "align": "between"
+            }
+          },
+          {
+            "id": "m1",
+            "component": "MetricCard",
+            "props": {
+              "label": "Pagando mínimo",
+              "value": "13 meses",
+              "tone": "danger"
+            }
+          },
+          {
+            "id": "m2",
+            "component": "MetricCard",
+            "props": {
+              "label": "Pagando fijo",
+              "value": "6 meses",
+              "tone": "success"
+            }
+          },
+          {
+            "id": "chart",
+            "component": "LineChart",
+            "props": {
+              "title": "Saldo de tu deuda",
+              "series": [
+                {
+                  "label": "Pago mínimo",
+                  "path": "/datos/comparar_pago_minimo_vs_fijo/escenarios/pago_minimo/serie",
+                  "key": "saldo",
+                  "tone": "costo",
+                  "emphasis": true
+                },
+                {
+                  "label": "Pago fijo $3,680",
+                  "path": "/datos/comparar_pago_minimo_vs_fijo/escenarios/pago_fijo/serie",
+                  "key": "saldo",
+                  "tone": "ahorro"
+                }
+              ],
+              "xKey": "mes",
+              "xLabel": "meses",
+              "format": "currency"
+            }
+          },
+          {
+            "id": "btn",
+            "component": "ActionButton",
+            "props": {
+              "text": "Aplicar pago fijo",
+              "action": {
+                "event": {
+                  "name": "aplicar_plan_pago",
+                  "params": {
+                    "tipo": "fijo"
+                  }
+                }
+              },
+              "confirm": "¿Quieres aplicar el plan de pago fijo?"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": []
+}

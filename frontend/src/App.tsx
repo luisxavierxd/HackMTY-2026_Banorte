@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import "./design/base.css";
 import "./App.css";
+import "./mascot/mascot.css";
+import MascotAsistente, { type MascotAsistenteRef } from "./mascot/MascotAsistente";
 
 import type { ActionRef, Envelope } from "./contract/a2ui";
 import type { ServerEvent } from "./contract/events";
@@ -74,6 +76,11 @@ interface TranscriptEntry {
 }
 
 export default function App() {
+  // ------------------------------------------------------------------
+  // Mascota — ref para controlarla desde cualquier parte de la lógica
+  // ------------------------------------------------------------------
+  const mascotRef = useRef<MascotAsistenteRef>(null);
+
   const [surface, setSurface] = useState<SurfaceState>(null);
   // Espejo síncrono de `surface`, para poder calcular el siguiente estado
   // dentro de handleEvent (mensajes del WS llegan uno a la vez, nunca en
@@ -269,6 +276,71 @@ export default function App() {
     return out;
   }, [surface, overrides]);
 
+  // ------------------------------------------------------------------
+  // Mascota — reacciones a cambios de estado de la app
+  // ------------------------------------------------------------------
+
+  // Saludo en ProfileGate: cuando el perfil aún no está capturado
+  useEffect(() => {
+    if (!profile && !needsAccessKey && mascotRef.current) {
+      mascotRef.current.setPose({ cara: "normal", bigote: "normal", manoIzquierda: "normal", manoDerecha: "enseñando" });
+      // Pequeño delay para que el DOM ya esté pintado
+      const t = setTimeout(() => {
+        mascotRef.current?.hablar("¡Hola! Soy Bancho 👋 Cuéntame de ti para darte el mejor consejo financiero.");
+      }, 600);
+      return () => clearTimeout(t);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile, needsAccessKey]);
+
+  // Saludo en pantalla vacía: perfil listo, sin conversación aún
+  useEffect(() => {
+    if (profile && !surface && status === "open" && mascotRef.current) {
+      mascotRef.current.setPose({ cara: "normal", bigote: "normal", manoIzquierda: "normal", manoDerecha: "apuntando" });
+      const t = setTimeout(() => {
+        mascotRef.current?.hablar("¿En qué te ayudo hoy? Puedo revisar tus ahorros, deudas o metas 💡");
+      }, 800);
+      return () => clearTimeout(t);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile, status]);
+
+  // Estado "pensando": cuando el agente está procesando
+  useEffect(() => {
+    if (!mascotRef.current) return;
+    if (busy) {
+      mascotRef.current.setPose({ cara: "pensativo", bigote: "ninguno", manoIzquierda: "ninguna", manoDerecha: "ninguna" });
+      mascotRef.current.setCargando(true);
+      mascotRef.current.hablar("Déjame revisar eso…");
+    } else {
+      mascotRef.current.setCargando(false);
+    }
+  }, [busy]);
+
+  // Nueva respuesta del agente llegó
+  useEffect(() => {
+    if (!surface || !mascotRef.current) return;
+    const m = mascotRef.current;
+    m.setCargando(false);
+    m.setPose({ cara: "normal", bigote: "normal", manoIzquierda: "normal", manoDerecha: "pulgarArriba" });
+    // Usa el title del turno si hay, si no un mensaje genérico
+    const texto = title
+      ? `¡Listo! ${title}`
+      : "¡Aquí está tu información! ¿Tienes alguna duda?";
+    m.hablar(texto.length > 80 ? texto.slice(0, 80) + "…" : texto);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [surface]);
+
+  // Error
+  useEffect(() => {
+    if (!error || !mascotRef.current) return;
+    mascotRef.current.setCargando(false);
+    mascotRef.current.setPose({ cara: "preocupado", bigote: "ninguno", manoIzquierda: "ninguna", manoDerecha: "ninguna" });
+    mascotRef.current.hablar("Ups, algo salió mal. ¿Lo intentamos de nuevo?");
+  }, [error]);
+
+  // ------------------------------------------------------------------
+
   // Galería offline de fixtures (?lab=1): reusa registry.tsx sin backend.
   const renderFixtureSurface = useCallback(
     (fixture: { a2ui?: Envelope[] }): ReactNode => {
@@ -297,21 +369,47 @@ export default function App() {
     body = <Empty onSuggestion={handleSend} />;
   }
 
+  // La mascota acompaña al usuario en TODAS las pantallas — se renderiza
+  // siempre como overlay fijo; solo el contenido principal cambia.
+  const mascotaOverlay = (
+    <div className="bn-mascot-overlay">
+      <MascotAsistente
+        ref={mascotRef}
+        size={160}
+        caraInicial="normal"
+        bigoteInicial="normal"
+        manoIzquierdaInicial="normal"
+        manoDerechaInicial="enseñando"
+      />
+    </div>
+  );
+
   if (needsAccessKey) {
     // Recarga completa a propósito: useSocket abre el WS una sola vez al
     // montar (mismo patrón que startNewConversation) — no hay forma limpia
     // de "reconectar con la key nueva" sin recargar.
-    return <AccessGate wrongKey={hadWrongKey} onSubmit={() => location.reload()} />;
+    return (
+      <>
+        <AccessGate wrongKey={hadWrongKey} onSubmit={() => location.reload()} />
+        {mascotaOverlay}
+      </>
+    );
   }
 
   if (!profile) {
     // Segundo paso del mismo "login": no hace falta recargar, el perfil se
     // lee fresco en cada mensaje (net/useSocket.ts) — basta con actualizar
     // el estado local para pasar a la app.
-    return <ProfileGate onSubmit={() => setProfileState(getProfile())} />;
+    return (
+      <>
+        <ProfileGate onSubmit={() => setProfileState(getProfile())} />
+        {mascotaOverlay}
+      </>
+    );
   }
 
   return (
+    <>
     <div className="bn-shell">
       <ProfileSidebar
         profile={profile}
@@ -402,5 +500,7 @@ export default function App() {
       <Composer onSend={handleSend} disabled={busy || status !== "open"} />
       </div>
     </div>
+    {mascotaOverlay}
+    </>
   );
 }
