@@ -13,10 +13,11 @@ El frontend solo necesita: leer el catálogo, abrir el WS, mandar
 
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 import uuid
-from contextlib import asynccontextmanager
+from contextlib import asynccontextmanager, suppress
 from typing import Any
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
@@ -158,6 +159,28 @@ async def run_turn(session_id: str, payload: dict[str, Any]):
 # --------------------------------------------------------------------------- #
 # transportes
 # --------------------------------------------------------------------------- #
+
+#: si un turno pasa más de esto sin producir un evento (normal con el CLI de
+#: Claude Code: 10-40s), se manda un heartbeat. Sin esto, proxies como el de
+#: Railway cierran el WS por inactividad a la mitad de un turno largo — la
+#: respuesta se genera bien del lado del harness pero se pierde en el aire
+#: porque el cliente ya reconectó con un socket nuevo (visto en producción).
+HEARTBEAT_S = 15
+
+
+async def _drain_turn(ws: WebSocket, session_id: str, payload: dict) -> None:
+    agen = run_turn(session_id, payload).__aiter__()
+    while True:
+        try:
+            event = await asyncio.wait_for(agen.__anext__(), timeout=HEARTBEAT_S)
+        except StopAsyncIteration:
+            return
+        except asyncio.TimeoutError:
+            await ws.send_json({"type": "heartbeat"})
+            continue
+        await ws.send_json(event)
+
+
 @app.websocket("/ws/{session_id}")
 async def ws_endpoint(ws: WebSocket, session_id: str):
     await ws.accept()
@@ -166,11 +189,13 @@ async def ws_endpoint(ws: WebSocket, session_id: str):
         while True:
             payload = await ws.receive_json()
             try:
-                async for event in run_turn(session_id, payload):
-                    await ws.send_json(event)
+                await _drain_turn(ws, session_id, payload)
             except Exception as exc:  # un turno roto no cierra la conexión
                 log.exception("turno falló")
-                await ws.send_json({"type": "error", "message": str(exc)})
+                # El socket puede haber muerto a medio turno (proxy, red);
+                # si el aviso de error también falla, no vuelvas a tronar.
+                with suppress(Exception):
+                    await ws.send_json({"type": "error", "message": str(exc)})
     except WebSocketDisconnect:
         log.info("sesión %s desconectada", session_id)
 
@@ -187,7 +212,15 @@ class TurnRequest(BaseModel):
 @app.post("/v1/turn")
 async def turn_sse(req: TurnRequest) -> StreamingResponse:
     async def stream():
-        async for event in run_turn(req.session_id, req.model_dump()):
+        agen = run_turn(req.session_id, req.model_dump()).__aiter__()
+        while True:
+            try:
+                event = await asyncio.wait_for(agen.__anext__(), timeout=HEARTBEAT_S)
+            except StopAsyncIteration:
+                break
+            except asyncio.TimeoutError:
+                yield 'data: {"type": "heartbeat"}\n\n'  # mismo motivo que en /ws: no morir por idle timeout
+                continue
             yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
         yield "data: [DONE]\n\n"
 

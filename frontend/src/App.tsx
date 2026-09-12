@@ -15,6 +15,7 @@ import Trace, { type TraceStatus } from "./shell/Trace";
 import Empty from "./shell/Empty";
 import ErrorBanner from "./shell/Error";
 import Loading from "./shell/Loading";
+import SurfaceErrorBoundary from "./shell/SurfaceErrorBoundary";
 import Lab from "./lab/Lab";
 
 const IS_LAB = new URLSearchParams(location.search).get("lab") === "1";
@@ -35,6 +36,7 @@ function RefreshIcon() {
 
 export default function App() {
   const [surface, setSurface] = useState<SurfaceState>(null);
+  const [turnId, setTurnId] = useState(0); // fuerza reset del ErrorBoundary en cada surface nueva
   const [title, setTitle] = useState("");
   const [trace, setTrace] = useState<TraceStatus>({ kind: "idle" });
   const [error, setError] = useState<string | null>(null);
@@ -56,6 +58,7 @@ export default function App() {
         break;
       case "surface":
         setSurface((prev) => applyEnvelopes(prev, event.a2ui));
+        setTurnId((n) => n + 1);
         setTitle(event.title || "");
         setOverrides({});
         setBusy(false);
@@ -157,7 +160,18 @@ export default function App() {
         </button>
       </header>
 
-      <main className="bn-surface-area">{body}</main>
+      <main className="bn-surface-area">
+        <SurfaceErrorBoundary
+          key={turnId}
+          onReset={() => {
+            setSurface(null);
+            setTitle("");
+            setOverrides({});
+          }}
+        >
+          {body}
+        </SurfaceErrorBoundary>
+      </main>
 
       {error && <ErrorBanner message={error} onRetry={() => setError(null)} />}
 
