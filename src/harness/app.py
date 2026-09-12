@@ -147,7 +147,9 @@ async def run_turn(session_id: str, payload: dict[str, Any]):
             return
 
     first_render = not session.rendered
-    async for event in agent.run_turn(session.history, text, session.domain, first_render):
+    async for event in agent.run_turn(
+        session.history, text, session.domain, first_render, session.data_model
+    ):
         if event["type"] == "surface":
             session.rendered = True
         yield event

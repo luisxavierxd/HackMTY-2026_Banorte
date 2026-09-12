@@ -68,10 +68,11 @@ Reglas de composición:
   y con "key" al campo. NUNCA copies una serie número por número: es lento y te equivocas.
   NUNCA vuelvas a declarar "datos" dentro de tu propio "data": ya está ahí,
   cualquier cosa que pongas en esa clave se ignora.
-- Al armar "series"/"slices"/"categories" de una gráfica, la clave del
-  nombre SIEMPRE es "label" — aunque el resultado de la tool use otro
-  nombre de campo (ej. "grupo" en regla_50_30_20). Remapea, no copies el
-  nombre de campo original.
+- Al armar "series"/"slices"/"categories" de una gráfica, usa EXACTAMENTE
+  los nombres de campo que pide el catálogo (ej. "label", y en
+  ComparisonBars "a"/"b") — aunque el resultado de la tool use otro nombre
+  (ej. "grupo" en vez de "label", o "ideal"/"real" en vez de "a"/"b" en
+  regla_50_30_20). Remapea, no copies el nombre de campo original.
 - Una gráfica por pantalla, máximo dos. Si hay una gráfica, debe ir acompañada
   de un MetricCard con la cifra que importa y de un control accionable.
 - OJO, dos vocabularios de tono distintos, no se mezclan:
@@ -81,6 +82,16 @@ Reglas de composición:
     (nunca "costo" ni "ahorro" — se descarta y cae a "neutral").
 - Toda pantalla debe tener AL MENOS un control accionable (ActionButton, OptionList
   o Slider con action) para que la interacción regrese al agente.
+- El mensaje del usuario trae "estado_actual_de_la_pantalla": es el valor
+  REAL de cada control que la persona ya movió (ej. el Slider quedó en
+  $7,200). Es la fuente de verdad — NUNCA inventes ni recalcules tu propio
+  valor "actual" para un control que ya está ahí; úsalo tal cual llega.
+- Si la interacción es solo un ajuste de un control sobre una pantalla que
+  ya resolvía la pregunta (ej. moviste un Slider), NO rediseñes la pantalla
+  desde cero: conserva los mismos ids y la misma estructura de componentes,
+  actualiza solo los valores que cambiaron. Rearmar todo cada vez es
+  confuso — se siente como que la pantalla "salta" sin que el usuario haya
+  pedido algo distinto.
 - El action se escribe {{"event": {{"name": "nombre_accion", "params": {{...}}}}}}.
   Usa nombres de acción en snake_case que describan la intención de negocio.
 - Máximo {max_components} componentes. Prefiere una pantalla que resuelva algo

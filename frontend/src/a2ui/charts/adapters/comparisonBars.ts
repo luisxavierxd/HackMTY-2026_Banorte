@@ -1,12 +1,12 @@
 import type { ChartAdapter, ChartTone, EChartsOption, FormatKind } from "../types";
 import { toneColor } from "../lib/tone";
 import { animationConfig } from "../lib/motion";
-import { pickLabel } from "../lib/labels";
+import { pickLabel, pickNumber } from "../lib/labels";
 
 interface ComparisonCategory {
   label?: string;
-  a: number;
-  b: number;
+  a?: number;
+  b?: number;
 }
 
 export interface ComparisonBarsProps {
@@ -66,7 +66,9 @@ export const comparisonBars: ChartAdapter<ComparisonBarsProps> = {
         {
           name: props.labelA ?? "Escenario A",
           type: "bar",
-          data: props.categories.map((c) => c.a),
+          data: props.categories.map((c) =>
+            pickNumber(c as unknown as Record<string, unknown>, ["a", "valueA", "ideal", "value_a"])
+          ),
           barMaxWidth: 22,
           itemStyle: { color: ctx.t.graySoft, borderRadius: [4, 4, 0, 0] },
           ...anim,
@@ -74,7 +76,9 @@ export const comparisonBars: ChartAdapter<ComparisonBarsProps> = {
         {
           name: props.labelB ?? "Escenario B",
           type: "bar",
-          data: props.categories.map((c) => c.b),
+          data: props.categories.map((c) =>
+            pickNumber(c as unknown as Record<string, unknown>, ["b", "valueB", "real", "value_b"])
+          ),
           barMaxWidth: 22,
           itemStyle: { color: colorB, borderRadius: [4, 4, 0, 0] },
           ...anim,

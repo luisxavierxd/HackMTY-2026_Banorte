@@ -127,7 +127,12 @@ class Agent:
 
     # ------------------------------------------------------------------ #
     async def run_turn(
-        self, history: list[dict], user_text: str, domain: str, first_render: bool
+        self,
+        history: list[dict],
+        user_text: str,
+        domain: str,
+        first_render: bool,
+        data_model: dict | None = None,
     ) -> AsyncIterator[dict]:
         t0 = time.perf_counter()
         history.append(text_msg("user", user_text))
@@ -193,7 +198,7 @@ class Agent:
         yield {"type": "thinking", "text": "Diseñando la interfaz…"}
         result: CompileResult | None = None
         plan: dict | None = None
-        async for item in self._compose_ui(user_text, final_text, trace, first_render):
+        async for item in self._compose_ui(user_text, final_text, trace, first_render, data_model):
             if isinstance(item, tuple):
                 result, plan = item
             else:
@@ -219,7 +224,12 @@ class Agent:
 
     # ------------------------------------------------------------------ #
     async def _compose_ui(
-        self, user_text: str, agent_text: str, trace: list[dict], first_render: bool
+        self,
+        user_text: str,
+        agent_text: str,
+        trace: list[dict],
+        first_render: bool,
+        data_model: dict | None = None,
     ) -> AsyncIterator[dict | tuple[CompileResult, dict]]:
         """Async generator: cede eventos de progreso (dict) mientras compone,
         y al final cede exactamente un `(CompileResult, plan)` — así `run_turn`
@@ -237,6 +247,13 @@ class Agent:
             "intencion_usuario": user_text,
             "lectura_del_agente": agent_text,
             "datos_disponibles": trace[-self.s.max_trace_items :],
+            # Valor REAL actual de cada control ya renderizado (ej. lo que el
+            # usuario dejó en un Slider). Antes esto solo viajaba enterrado en
+            # el texto de "intencion_usuario" cuando la acción venía de la UI,
+            # y el modelo a veces lo ignoraba e "inventaba" su propio valor
+            # actual — visto en producción, confuso para el usuario. Ahora es
+            # un campo explícito: es la fuente de verdad, no una sugerencia.
+            "estado_actual_de_la_pantalla": data_model or {},
         }
         messages = [text_msg("user", json.dumps(brief, ensure_ascii=False))]
         system = ui_system_prompt(self.s.max_components)

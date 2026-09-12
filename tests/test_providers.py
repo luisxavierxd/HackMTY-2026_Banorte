@@ -366,6 +366,43 @@ async def test_compose_ui_datos_reales_ganan_sobre_lo_que_declare_el_modelo():
     assert plan["data"]["datos"] == {"simular_meta_ahorro": {"real": True}}
 
 
+async def test_compose_ui_manda_el_estado_actual_de_la_pantalla_al_composer():
+    # Bug real de producción: al mover un Slider, el modelo "inventaba" su
+    # propio valor actual en vez de usar el que la persona ya dejó — porque
+    # ese valor solo viajaba enterrado en texto libre, nunca como un campo
+    # explícito que el composer viera con claridad.
+    from harness.agent.loop import Agent
+    from harness.config import Settings
+
+    seen_briefs: list[dict] = []
+
+    class _StubComposer:
+        native_tools = True
+        name = "stub"
+        model = "stub"
+
+        async def complete(self, *, messages, **_kwargs):
+            seen_briefs.append(json.loads(messages[0]["content"][0]["text"]))
+            plan = {
+                "title": "t", "summary": "s", "root": "root",
+                "components": [{"id": "root", "component": "Text", "props": {"text": "hola"}}],
+            }
+            return Completion(text=json.dumps(plan), provider="stub", model="stub")
+
+    agent = Agent.__new__(Agent)
+    agent.s = Settings(profile="fake")
+    agent.composer = _StubComposer()
+
+    data_model = {"plan": {"limite_deseos": 7200}}
+    items = [
+        item
+        async for item in agent._compose_ui("hola", "final", [], True, data_model)
+    ]
+    assert items  # se compiló algo
+
+    assert seen_briefs[0]["estado_actual_de_la_pantalla"] == data_model
+
+
 async def test_fake_llama_una_tool_y_luego_compone():
     p = FakeProvider()
     first = await p.complete(system="", messages=[text_msg("user", "hola")], tools=[SPEC])
