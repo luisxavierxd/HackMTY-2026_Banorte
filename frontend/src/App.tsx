@@ -9,7 +9,9 @@ import { renderSurface } from "./a2ui/registry";
 import { pointerSet } from "./a2ui/pointer";
 import { useSocket, clearStoredSession } from "./net/useSocket";
 import { sendAction, sendUserMessage, deleteSession } from "./net/client";
+import { getAccessKey, clearAccessKey } from "./net/accessKey";
 
+import AccessGate from "./shell/AccessGate";
 import Composer from "./shell/Composer";
 import Trace, { type TraceStatus } from "./shell/Trace";
 import Empty from "./shell/Empty";
@@ -156,7 +158,19 @@ export default function App() {
     }
   }, [addTranscript]);
 
-  const { status, sessionId, send } = useSocket(handleEvent, !IS_LAB);
+  // Código de acceso: gate a nivel de app (no HTTP Basic Auth, ver
+  // net/accessKey.ts) — si el harness rechaza la key (o no hay una puesta),
+  // el WS se cierra con el código 4401 y se muestra AccessGate en vez de
+  // reintentar la conexión en loop con la misma key mala.
+  const [needsAccessKey, setNeedsAccessKey] = useState(false);
+  const [hadWrongKey, setHadWrongKey] = useState(false);
+  const handleAuthError = useCallback(() => {
+    setHadWrongKey(Boolean(getAccessKey()));
+    clearAccessKey();
+    setNeedsAccessKey(true);
+  }, []);
+
+  const { status, sessionId, send } = useSocket(handleEvent, !IS_LAB, handleAuthError);
 
   const runAction = useCallback(
     (action: ActionRef | undefined, label?: string) => {
@@ -252,6 +266,13 @@ export default function App() {
     body = <Loading />;
   } else {
     body = <Empty onSuggestion={handleSend} />;
+  }
+
+  if (needsAccessKey) {
+    // Recarga completa a propósito: useSocket abre el WS una sola vez al
+    // montar (mismo patrón que startNewConversation) — no hay forma limpia
+    // de "reconectar con la key nueva" sin recargar.
+    return <AccessGate wrongKey={hadWrongKey} onSubmit={() => location.reload()} />;
   }
 
   return (

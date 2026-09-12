@@ -28,6 +28,7 @@ from pydantic import BaseModel, Field
 from .a2ui.catalog import CATALOG_ID, catalog_document
 from .a2ui.messages import pointer_set
 from .agent.loop import Agent
+from .auth import AccessKeyMiddleware
 from .config import Settings, load_mcp_servers
 from .mcpx.manager import McpManager
 from .session.store import build_store
@@ -69,6 +70,14 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# Código de acceso sobre /v1/turn, /v1/session y el WS — protege la cuota
+# del CLI/API en una demo pública de hackatón. No-op si APP_KEY no está
+# puesta (default en dev local). NO es HTTP Basic Auth a propósito: el
+# popup nativo del navegador no porta bien a un WebView de app móvil —
+# ver auth.py. Estáticos y metadata (/healthz, /readyz, /a2ui/*) quedan
+# públicos porque no cuestan cuota.
+_auth_settings = Settings()
+app.add_middleware(AccessKeyMiddleware, key=_auth_settings.app_key)
 
 
 # --------------------------------------------------------------------------- #

@@ -117,6 +117,13 @@ class Settings:
     redis_url: str = field(default_factory=lambda: _env("REDIS_URL", ""))
     session_ttl_s: int = field(default_factory=lambda: int(_env("SESSION_TTL_S", "3600")))
 
+    # --- acceso a la demo (código compartido, protege cuota del CLI/API) ---
+    # Vacío = auth deshabilitada (default para dev local). Puesto en Railway,
+    # protege /v1/turn, /v1/session y el WebSocket — ver auth.py. A propósito
+    # NO es HTTP Basic Auth: el popup nativo del navegador no porta bien a un
+    # WebView de app móvil, así que el gate vive en la propia app (frontend).
+    app_key: str = field(default_factory=lambda: _env("APP_KEY"))
+
     # ------------------------------------------------------------------ #
     @property
     def _profile(self) -> dict[str, Any]:

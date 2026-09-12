@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { ClientMessage, ServerEvent } from "../contract/events";
+import { getAccessKey } from "./accessKey";
+
+//: código que AccessKeyMiddleware manda al cerrar el WS por código de acceso
+//: inválido/faltante (ver src/harness/auth.py) — distinto de un cierre normal.
+export const WS_CLOSE_BAD_ACCESS_KEY = 4401;
 
 export type SocketStatus = "connecting" | "open" | "closed";
 
@@ -41,15 +46,21 @@ function wsBase(): string {
  * re-renderiza el árbol entero y hace que las gráficas de ECharts se
  * destruyan/reinicialicen en loop (nunca llegan a pintar nada estable).
  */
-export function useSocket(onEvent: (event: ServerEvent) => void, enabled: boolean = true) {
+export function useSocket(
+  onEvent: (event: ServerEvent) => void,
+  enabled: boolean = true,
+  onAuthError?: () => void
+) {
   const [status, setStatus] = useState<SocketStatus>(enabled ? "connecting" : "closed");
   const sessionIdRef = useRef(getSessionId());
   const wsRef = useRef<WebSocket | null>(null);
   const backoffRef = useRef(MIN_BACKOFF_MS);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const onEventRef = useRef(onEvent);
+  const onAuthErrorRef = useRef(onAuthError);
   const unmountedRef = useRef(false);
   onEventRef.current = onEvent;
+  onAuthErrorRef.current = onAuthError;
 
   useEffect(() => {
     if (!enabled) return;
@@ -57,7 +68,9 @@ export function useSocket(onEvent: (event: ServerEvent) => void, enabled: boolea
 
     function connect() {
       setStatus("connecting");
-      const ws = new WebSocket(`${wsBase()}/ws/${sessionIdRef.current}`);
+      const key = getAccessKey();
+      const qs = key ? `?key=${encodeURIComponent(key)}` : "";
+      const ws = new WebSocket(`${wsBase()}/ws/${sessionIdRef.current}${qs}`);
       wsRef.current = ws;
 
       ws.onopen = () => {
@@ -72,9 +85,13 @@ export function useSocket(onEvent: (event: ServerEvent) => void, enabled: boolea
           console.warn("[ws] mensaje no parseable:", event.data);
         }
       };
-      ws.onclose = () => {
+      ws.onclose = (event) => {
         setStatus("closed");
         if (unmountedRef.current) return;
+        if (event.code === WS_CLOSE_BAD_ACCESS_KEY) {
+          onAuthErrorRef.current?.();
+          return; // no reintentar solo con la misma key mala en loop
+        }
         const delay = backoffRef.current;
         backoffRef.current = Math.min(backoffRef.current * 2, MAX_BACKOFF_MS);
         timerRef.current = setTimeout(connect, delay);

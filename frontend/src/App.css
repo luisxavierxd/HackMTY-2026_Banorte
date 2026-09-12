@@ -302,3 +302,58 @@
 .bn-composer__send:disabled {
   background: var(--bn-gray-soft);
 }
+
+/* Pantalla de código de acceso — reemplaza el popup nativo de Basic Auth
+ * (no porta a un WebView de app móvil), ver net/accessKey.ts. */
+.bn-access-gate {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--bn-space-4);
+  background: var(--bn-bg);
+}
+
+.bn-access-gate__card {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-space-3);
+}
+
+.bn-access-gate__card h1 {
+  font-family: var(--bn-font-display);
+  font-size: 1.25rem;
+  color: var(--bn-ink);
+  margin: 0;
+}
+
+.bn-access-gate__card p {
+  color: var(--bn-mute);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.bn-access-gate__card input {
+  padding: var(--bn-space-3);
+  border-radius: var(--bn-radius-control);
+  border: 1px solid var(--bn-line);
+  background: var(--bn-bg);
+  color: var(--bn-ink);
+  font-size: 1rem;
+}
+
+.bn-access-gate__error {
+  color: var(--bn-red) !important;
+}
+
+.bn-access-gate__card button {
+  padding: var(--bn-space-3);
+  border-radius: var(--bn-radius-control);
+  border: none;
+  background: var(--bn-red);
+  color: #ffffff;
+  font-weight: 600;
+}

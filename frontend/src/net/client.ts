@@ -1,5 +1,6 @@
 import type { ActionRef } from "../contract/a2ui";
 import type { ClientMessage } from "../contract/events";
+import { getAccessKey } from "./accessKey";
 
 type Send = (message: ClientMessage) => boolean;
 
@@ -25,7 +26,11 @@ export function sendAction(
  *  (la sesión igual queda huérfana del lado del servidor, sin memoria fría). */
 export async function deleteSession(sessionId: string): Promise<void> {
   try {
-    await fetch(`/v1/session/${encodeURIComponent(sessionId)}`, { method: "DELETE" });
+    const key = getAccessKey();
+    await fetch(`/v1/session/${encodeURIComponent(sessionId)}`, {
+      method: "DELETE",
+      headers: key ? { "X-App-Key": key } : undefined,
+    });
   } catch {
     // sin red, o el harness ya no está — no bloquea empezar una conversación nueva
   }
