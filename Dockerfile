@@ -12,6 +12,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN npm install -g @anthropic-ai/claude-code
 
+# gosu: para bajar de root a `app` en el entrypoint DESPUÉS de arreglar
+# permisos de volúmenes montados en runtime (ver entrypoint.sh).
+RUN set -eux; \
+    curl -fsSL -o /usr/local/bin/gosu \
+      "https://github.com/tianon/gosu/releases/download/1.17/gosu-$(dpkg --print-architecture)" && \
+    chmod +x /usr/local/bin/gosu && \
+    gosu --version
+
 COPY pyproject.toml ./
 RUN pip install --upgrade pip && pip install \
       "fastapi>=0.115" "uvicorn[standard]>=0.32" "pydantic>=2.9" \
@@ -22,11 +30,19 @@ COPY mcp_servers ./mcp_servers
 ENV PYTHONPATH=/app/src:/app
 
 RUN useradd -m app && mkdir -p /app/data && chown -R app /app
-USER app
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# NOTA: ya no hay `USER app` fijo aquí a propósito. El contenedor arranca
+# como root para que el entrypoint pueda arreglar permisos de volúmenes
+# montados en runtime (/home/app/.claude, /app/data) y luego bajar a `app`
+# con gosu antes de ejecutar el CMD real. Ver entrypoint.sh.
 
 # Railway inyecta PORT; fallback a 8080 para docker compose local.
 ENV PORT=8080
 EXPOSE ${PORT}
 HEALTHCHECK --interval=20s --timeout=3s --start-period=15s \
   CMD python -c "import urllib.request,os,sys; sys.exit(0 if urllib.request.urlopen(f'http://127.0.0.1:{os.environ.get(\"PORT\",8080)}/healthz',timeout=2).status==200 else 1)"
-CMD sh -c "uvicorn harness.app:app --host 0.0.0.0 --port ${PORT:-8080}"
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["sh", "-c", "uvicorn harness.app:app --host 0.0.0.0 --port ${PORT:-8080}"]

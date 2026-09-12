@@ -3,9 +3,9 @@
 
     python scripts/smoke_turn.py "Quiero pagar menos intereses de mi tarjeta"
 """
-import json, sys, urllib.request
+import json, os, sys, urllib.request
 
-BASE = "http://localhost:8080"
+BASE = os.environ.get("HARNESS_URL", "http://localhost:8080").rstrip("/")
 text = sys.argv[1] if len(sys.argv) > 1 else "Quiero pagar menos intereses de mi tarjeta"
 body = json.dumps({"session_id": "smoke", "type": "user_message", "text": text}).encode()
 req = urllib.request.Request(f"{BASE}/v1/turn", body, {"Content-Type": "application/json"})
