@@ -1,8 +1,9 @@
 import type { ChartAdapter, EChartsOption, FormatKind } from "../types";
 import { animationConfig } from "../lib/motion";
+import { pickLabel } from "../lib/labels";
 
 interface BarItem {
-  label: string;
+  label?: string;
   value: number;
 }
 
@@ -26,7 +27,7 @@ export const barChart: ChartAdapter<BarChartProps> = {
     const fmt: FormatKind = props.format ?? "number";
     const horizontal = props.orientation === "horizontal";
     const anim = animationConfig(ctx);
-    const categories = props.series.map((s) => s.label);
+    const categories = props.series.map((s, i) => pickLabel(s as unknown as Record<string, unknown>, i));
 
     const barColor = (label: string) =>
       props.highlight ? (label === props.highlight ? ctx.t.red : ctx.t.graySoft) : ctx.t.gray;
@@ -35,7 +36,10 @@ export const barChart: ChartAdapter<BarChartProps> = {
     const mainSeries = {
       name: props.title ?? "valor",
       type: "bar",
-      data: props.series.map((s) => ({ value: s.value, itemStyle: { color: barColor(s.label) } })),
+      data: props.series.map((s, i) => ({
+        value: s.value,
+        itemStyle: { color: barColor(pickLabel(s as unknown as Record<string, unknown>, i)) },
+      })),
       barMaxWidth: 22,
       barGap: props.compare?.length ? "-100%" : undefined,
       z: 2,

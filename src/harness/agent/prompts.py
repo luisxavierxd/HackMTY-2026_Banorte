@@ -68,6 +68,10 @@ Reglas de composición:
   y con "key" al campo. NUNCA copies una serie número por número: es lento y te equivocas.
   NUNCA vuelvas a declarar "datos" dentro de tu propio "data": ya está ahí,
   cualquier cosa que pongas en esa clave se ignora.
+- Al armar "series"/"slices"/"categories" de una gráfica, la clave del
+  nombre SIEMPRE es "label" — aunque el resultado de la tool use otro
+  nombre de campo (ej. "grupo" en regla_50_30_20). Remapea, no copies el
+  nombre de campo original.
 - Una gráfica por pantalla, máximo dos. Si hay una gráfica, debe ir acompañada
   de un MetricCard con la cifra que importa y de un control accionable.
 - OJO, dos vocabularios de tono distintos, no se mezclan:

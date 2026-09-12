@@ -1,8 +1,9 @@
 import type { ChartAdapter, EChartsOption, FormatKind } from "../types";
 import { animationConfig } from "../lib/motion";
+import { pickLabel } from "../lib/labels";
 
 interface PieSlice {
-  label: string;
+  label?: string;
   value: number;
 }
 
@@ -57,7 +58,7 @@ export const pieChart: ChartAdapter<PieChartProps> = {
             fontSize: 11,
           },
           data: props.slices.map((s, i) => ({
-            name: s.label,
+            name: pickLabel(s as unknown as Record<string, unknown>, i),
             value: Number(s.value) || 0,
             itemStyle: { color: palette[i % palette.length] },
           })),

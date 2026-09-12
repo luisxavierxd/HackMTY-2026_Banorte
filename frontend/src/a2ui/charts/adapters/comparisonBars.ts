@@ -1,9 +1,10 @@
 import type { ChartAdapter, ChartTone, EChartsOption, FormatKind } from "../types";
 import { toneColor } from "../lib/tone";
 import { animationConfig } from "../lib/motion";
+import { pickLabel } from "../lib/labels";
 
 interface ComparisonCategory {
-  label: string;
+  label?: string;
   a: number;
   b: number;
 }
@@ -30,7 +31,7 @@ export const comparisonBars: ChartAdapter<ComparisonBarsProps> = {
     const fmt: FormatKind = props.format ?? "currency";
     const anim = animationConfig(ctx);
     const colorB = toneColor(props.toneB ?? "costo", ctx.t);
-    const categories = props.categories.map((c) => c.label);
+    const categories = props.categories.map((c, i) => pickLabel(c as unknown as Record<string, unknown>, i));
 
     return {
       grid: { left: 8, right: 20, top: 20, bottom: 28, containLabel: true },
