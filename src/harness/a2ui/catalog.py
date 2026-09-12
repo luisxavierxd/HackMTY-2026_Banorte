@@ -95,6 +95,86 @@ COMPONENTS: dict[str, dict[str, Any]] = {
             "format": {"type": "enum", "values": ["currency", "percent", "number"], "default": "number"},
         },
     },
+    "LineChart": {
+        "doc": "Curva en el tiempo (mes/año en X). Úsalo cuando los datos son una "
+               "'serie' que crece o decrece (interés compuesto, inflación, meta de "
+               "ahorro con/sin rendimiento). Varias 'series' se dibujan superpuestas "
+               "para comparar dos escenarios en la misma gráfica.",
+        "props": {
+            "title": {"type": "string"},
+            "xLabel": {"type": "string", "default": "mes"},
+            "series": {
+                "type": "objectList", "required": True,
+                "keys": ["label", "points"],  # points: [{"x":1,"y":123.4}, ...]
+            },
+            "format": {"type": "enum", "values": ["currency", "percent", "number"], "default": "currency"},
+        },
+    },
+    "PieChart": {
+        "doc": "Composición de un total en partes (ej. desglose del CAT: capital, "
+               "intereses, comisión, seguros; o el reparto ideal 50/30/20). No la "
+               "uses para series en el tiempo, para eso es LineChart.",
+        "props": {
+            "title": {"type": "string"},
+            "slices": {"type": "objectList", "required": True, "keys": ["label", "value"]},
+            "format": {"type": "enum", "values": ["currency", "percent", "number"], "default": "currency"},
+        },
+    },
+    "ComparisonBars": {
+        "doc": "Compara DOS escenarios lado a lado, categoría por categoría (ej. "
+               "pago mínimo vs. pago fijo; gasto ideal vs. gasto real de la regla "
+               "50/30/20). Si solo hay un valor por categoría, usa BarChart.",
+        "props": {
+            "title": {"type": "string"},
+            "labelA": {"type": "string", "default": "Escenario A"},
+            "labelB": {"type": "string", "default": "Escenario B"},
+            "categories": {
+                "type": "objectList", "required": True,
+                "keys": ["label", "a", "b"],
+            },
+            "format": {"type": "enum", "values": ["currency", "percent", "number"], "default": "currency"},
+        },
+    },
+    "ProgressBar": {
+        "doc": "Avance de un valor hacia una meta (ej. cuánto llevas ahorrado de tu "
+               "meta, o qué tanto de tu presupuesto ideal ya gastaste). No es para "
+               "comparar dos escenarios completos, para eso es ComparisonBars.",
+        "props": {
+            "label": {"type": "string", "required": True},
+            "value": {"type": "binding", "required": True},
+            "target": {"type": "number", "required": True},
+            "format": {"type": "enum", "values": ["currency", "percent", "number"], "default": "currency"},
+            "tone": {
+                "type": "enum",
+                "values": ["neutral", "success", "warning", "danger"],
+                "default": "neutral",
+            },
+        },
+    },
+    "Timeline": {
+        "doc": "Secuencia de pasos o hitos (ej. 'mes 12: llevas pagado X', 'mes 24: "
+               "liquidas'). Úsalo para explicar un proceso paso a paso, no para "
+               "graficar una curva continua (eso es LineChart).",
+        "props": {
+            "title": {"type": "string"},
+            "steps": {
+                "type": "objectList", "required": True,
+                "keys": ["label", "detail", "highlight"],
+            },
+        },
+    },
+    "Callout": {
+        "doc": "Nota destacada corta (aclaración, advertencia, dato legal). Ej. "
+               "'el CAT es una aproximación' o 'esto no es asesoría financiera'.",
+        "props": {
+            "text": {"type": "binding", "required": True},
+            "tone": {
+                "type": "enum",
+                "values": ["info", "success", "warning", "danger"],
+                "default": "info",
+            },
+        },
+    },
     # ---------- interactivos ----------
     "OptionList": {
         "doc": "Lista de opciones seleccionables (planes, plazos, portafolios). "

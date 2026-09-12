@@ -68,6 +68,43 @@ def test_plan_sin_root_no_compila_y_hay_fallback():
     assert compile_plan(fallback_plan("t", "b"), "main", True).ok
 
 
+def test_line_chart_con_series_multiples_valida():
+    comps, errors, _ = validate_components([{
+        "id": "lc", "component": "LineChart",
+        "props": {
+            "title": "Interés compuesto",
+            "series": [
+                {"label": "saldo", "points": [{"x": 1, "y": 100}, {"x": 2, "y": 110}]},
+            ],
+        },
+    }])
+    assert not errors
+    assert comps[0]["format"] == "currency"  # default
+
+
+def test_pie_chart_valida_slices():
+    comps, errors, _ = validate_components([{
+        "id": "pc", "component": "PieChart",
+        "props": {"slices": [{"label": "capital", "value": 100000}, {"label": "intereses", "value": 15000}]},
+    }])
+    assert not errors and comps[0]["component"] == "PieChart"
+
+
+def test_comparison_bars_requiere_categories():
+    comps, errors, _ = validate_components([{"id": "cb", "component": "ComparisonBars", "props": {}}])
+    assert any("categories" in e and "falta prop requerida" in e for e in errors)
+    assert "categories" not in comps[0]  # el nodo se arma igual, sin la prop faltante
+
+
+def test_progress_bar_acepta_binding_en_value():
+    comps, errors, _ = validate_components([{
+        "id": "pb", "component": "ProgressBar",
+        "props": {"label": "Meta de ahorro", "value": {"path": "/ahorro/actual"}, "target": 50000},
+    }])
+    assert not errors
+    assert comps[0]["value"] == {"path": "/ahorro/actual"}
+
+
 def test_json_pointer():
     doc = {}
     pointer_set(doc, "/plan/selected", "18m")

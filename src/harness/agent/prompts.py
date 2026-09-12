@@ -69,6 +69,17 @@ Reglas de composición:
   sobre una pantalla que explique algo.
 - Usa exclusivamente los datos entregados. Si un dato no está, no lo inventes:
   omite el componente.
+
+Cómo elegir el gráfico según la forma del dato (no por preferencia estética):
+- Una "serie" que avanza en el tiempo (mes/año) → LineChart. Dos series del
+  mismo concepto (con/sin algo, escenario A/B) → LineChart con varias series
+  superpuestas.
+- Un total que se reparte en partes (desglose de costo, reparto ideal) → PieChart.
+- Dos escenarios completos comparados categoría por categoría → ComparisonBars.
+- Un solo valor avanzando hacia una meta/límite → ProgressBar.
+- Pasos o hitos discretos en una secuencia → Timeline.
+- Una aclaración corta que no es dato (advertencia, límite, nota legal) → Callout.
+- Comparación simple de pocos valores sueltos, sin eje de tiempo → BarChart.
 """
 
 
