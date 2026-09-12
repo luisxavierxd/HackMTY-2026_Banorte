@@ -169,15 +169,31 @@ HEARTBEAT_S = 15
 
 
 async def _drain_turn(ws: WebSocket, session_id: str, payload: dict) -> None:
+    """Consume run_turn mandando un heartbeat si tarda, SIN cancelar el paso
+    en curso.
+
+    OJO — bug real que costó varias corridas de producción: `asyncio.wait_for`
+    sobre `agen.__anext__()` CANCELA esa llamada si se pasa del timeout. Una
+    corrutina/generador cancelado a medias no se puede "reintentar" — la
+    siguiente llamada a `__anext__()` regresa `StopAsyncIteration` de inmediato,
+    como si ya hubiera terminado, sin ningún error. Con el CLI, la fase de
+    componer UI casi siempre tarda más de HEARTBEAT_S, así que el heartbeat
+    mataba el turno en silencio cada vez — el navegador se quedaba esperando
+    para siempre sin ningún error que ver. Confirmado con un repro aislado
+    (ver notes/APRENDIZAJES_HARNESS.md). Por eso aquí se usa `asyncio.wait`
+    (no `wait_for`) sobre una Task persistente que nunca se cancela."""
     agen = run_turn(session_id, payload).__aiter__()
     while True:
+        next_task = asyncio.ensure_future(agen.__anext__())
+        while True:
+            done, _pending = await asyncio.wait({next_task}, timeout=HEARTBEAT_S)
+            if next_task in done:
+                break
+            await ws.send_json({"type": "heartbeat"})
         try:
-            event = await asyncio.wait_for(agen.__anext__(), timeout=HEARTBEAT_S)
+            event = next_task.result()
         except StopAsyncIteration:
             return
-        except asyncio.TimeoutError:
-            await ws.send_json({"type": "heartbeat"})
-            continue
         await ws.send_json(event)
         if event.get("type") in ("surface", "turn_end", "error"):
             log.info("ws send OK: %s (sesión %s)", event["type"], session_id)
@@ -214,15 +230,21 @@ class TurnRequest(BaseModel):
 @app.post("/v1/turn")
 async def turn_sse(req: TurnRequest) -> StreamingResponse:
     async def stream():
+        # Mismo patrón que _drain_turn: asyncio.wait (no wait_for) sobre una
+        # Task persistente — wait_for CANCELARÍA __anext__() al pasar el
+        # timeout, matando el generador en silencio (ver notes/APRENDIZAJES_HARNESS.md).
         agen = run_turn(req.session_id, req.model_dump()).__aiter__()
         while True:
+            next_task = asyncio.ensure_future(agen.__anext__())
+            while True:
+                done, _pending = await asyncio.wait({next_task}, timeout=HEARTBEAT_S)
+                if next_task in done:
+                    break
+                yield 'data: {"type": "heartbeat"}\n\n'  # no morir por idle timeout del proxy
             try:
-                event = await asyncio.wait_for(agen.__anext__(), timeout=HEARTBEAT_S)
+                event = next_task.result()
             except StopAsyncIteration:
                 break
-            except asyncio.TimeoutError:
-                yield 'data: {"type": "heartbeat"}\n\n'  # mismo motivo que en /ws: no morir por idle timeout
-                continue
             yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
         yield "data: [DONE]\n\n"
 
