@@ -120,8 +120,28 @@ Cómo elegir el gráfico según la forma del dato (no por preferencia estética)
 """
 
 
-def reasoning_system_prompt(domain: str) -> str:
-    return REASONING_SYSTEM.format(domain=domain)
+PROFILE_CONTEXT = """
+## Contexto del usuario (perfil que declaró al entrar a la demo)
+Trátalo como contexto para personalizar el tono y las sugerencias — NO como
+una cifra verificada. Si necesitas un saldo o dato real, sigue trayéndolo
+con una herramienta; nunca sustituyas una cifra de herramienta por esta.
+- Nombre: {nombre}
+- Ingreso mensual declarado: {ingreso_mensual}
+- Ahorro actual declarado: {ahorro}
+- Inversión actual declarada: {inversion}
+"""
+
+
+def reasoning_system_prompt(domain: str, profile: dict | None = None) -> str:
+    system = REASONING_SYSTEM.format(domain=domain)
+    if profile and profile.get("nombre"):
+        system += PROFILE_CONTEXT.format(
+            nombre=profile.get("nombre", ""),
+            ingreso_mensual=profile.get("ingresoMensual", ""),
+            ahorro=profile.get("ahorro", ""),
+            inversion=profile.get("inversion", ""),
+        )
+    return system
 
 
 def tool_manifest_prompt(tools) -> str:

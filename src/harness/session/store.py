@@ -20,6 +20,11 @@ class Session:
     domain: str
     history: list[dict] = field(default_factory=list)
     data_model: dict = field(default_factory=dict)
+    # Perfil declarado por la persona al entrar a la demo (nombre, ingreso
+    # mensual, ahorro, inversión) — lo manda el cliente en cada mensaje (ver
+    # ClientMessage.profile en el frontend) y aquí se conserva para que el
+    # agente lo use como contexto incluso si un turno no lo reenvía.
+    profile: dict = field(default_factory=dict)
     rendered: bool = False
     created_at: float = field(default_factory=time.time)
 
@@ -30,6 +35,7 @@ class Session:
                 "domain": self.domain,
                 "history": self.history,
                 "data_model": self.data_model,
+                "profile": self.profile,
                 "rendered": self.rendered,
                 "created_at": self.created_at,
             }

@@ -68,6 +68,8 @@ export type ServerEvent =
 export interface UserMessage {
   type: "user_message";
   text: string;
+  /** Adjuntado por useSocket antes de mandar — nunca se pone a mano. */
+  profile?: Record<string, unknown>;
 }
 
 export interface ActionMessage {
@@ -75,6 +77,8 @@ export interface ActionMessage {
   name: string;
   params: Record<string, unknown>;
   dataModel?: Record<string, unknown>;
+  /** Adjuntado por useSocket antes de mandar — nunca se pone a mano. */
+  profile?: Record<string, unknown>;
 }
 
 export type ClientMessage = UserMessage | ActionMessage;

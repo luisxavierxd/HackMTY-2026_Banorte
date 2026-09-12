@@ -409,6 +409,61 @@ async def test_compose_ui_manda_el_estado_actual_de_la_pantalla_al_composer():
     assert seen_briefs[0]["estado_actual_de_la_pantalla"] == data_model
 
 
+async def test_compose_ui_manda_el_perfil_del_usuario_al_composer():
+    # El perfil (nombre/ingreso/ahorro/inversión) que la persona declara al
+    # entrar a la demo debe llegar al composer como contexto explícito, igual
+    # que estado_actual_de_la_pantalla — así el agente puede personalizar sin
+    # inventar cifras que en realidad vienen de una herramienta.
+    from harness.agent.loop import Agent
+    from harness.config import Settings
+
+    seen_briefs: list[dict] = []
+
+    class _StubComposer:
+        native_tools = True
+        name = "stub"
+        model = "stub"
+
+        async def complete(self, *, messages, **_kwargs):
+            seen_briefs.append(json.loads(messages[0]["content"][0]["text"]))
+            plan = {
+                "title": "t", "summary": "s", "root": "root",
+                "components": [{"id": "root", "component": "Text", "props": {"text": "hola"}}],
+            }
+            return Completion(text=json.dumps(plan), provider="stub", model="stub")
+
+    agent = Agent.__new__(Agent)
+    agent.s = Settings(profile="fake")
+    agent.composer = _StubComposer()
+
+    profile = {"nombre": "Ana", "ingresoMensual": 18000, "ahorro": 5000, "inversion": 2000}
+    items = [
+        item
+        async for item in agent._compose_ui("hola", "final", [], True, None, profile)
+    ]
+    assert items
+
+    assert seen_briefs[0]["perfil_usuario"] == profile
+
+
+def test_reasoning_system_prompt_incluye_el_perfil_cuando_hay_nombre():
+    from harness.agent.prompts import reasoning_system_prompt
+
+    profile = {"nombre": "Ana", "ingresoMensual": 18000, "ahorro": 5000, "inversion": 2000}
+    system = reasoning_system_prompt("educacion_financiera", profile)
+    assert "Ana" in system
+    assert "18000" in system
+
+
+def test_reasoning_system_prompt_sin_perfil_no_agrega_seccion():
+    from harness.agent.prompts import reasoning_system_prompt
+
+    system = reasoning_system_prompt("educacion_financiera", None)
+    assert "Contexto del usuario" not in system
+    system_vacio = reasoning_system_prompt("educacion_financiera", {})
+    assert "Contexto del usuario" not in system_vacio
+
+
 async def test_fake_llama_una_tool_y_luego_compone():
     p = FakeProvider()
     first = await p.complete(system="", messages=[text_msg("user", "hola")], tools=[SPEC])

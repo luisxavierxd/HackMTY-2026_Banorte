@@ -1,8 +1,17 @@
 /* Shell de la app: superficie generada arriba, chat como barra delgada abajo. */
 
-.bn-app {
+/* Envuelve sidebar de perfil + app. En escritorio van lado a lado; en móvil
+ * el sidebar es un drawer superpuesto (ver .bn-sidebar). */
+.bn-shell {
   height: 100vh;
   height: 100dvh;
+  display: flex;
+}
+
+.bn-app {
+  height: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   max-width: var(--bn-max-width);
@@ -18,6 +27,115 @@
     border-left: 1px solid var(--bn-line);
     border-right: 1px solid var(--bn-line);
   }
+}
+
+/* Card en escritorio, drawer deslizable en móvil — perfil que da contexto
+ * al agente (ver shell/ProfileSidebar.tsx). */
+.bn-sidebar__scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 14, 12, 0.4);
+  z-index: 49;
+}
+
+.bn-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  height: 100dvh;
+  width: min(82vw, 300px);
+  background: var(--bn-surface);
+  border-right: 1px solid var(--bn-line);
+  z-index: 50;
+  transform: translateX(-100%);
+  transition: transform 220ms ease;
+  overflow-y: auto;
+}
+.bn-sidebar--open {
+  transform: translateX(0);
+}
+
+.bn-topbar__sidebar-toggle {
+  background: none;
+  border: none;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: var(--bn-radius-control);
+  color: var(--bn-mute);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.bn-topbar__sidebar-toggle:hover {
+  color: var(--bn-ink);
+  background: var(--bn-line);
+}
+
+@media (min-width: 880px) {
+  .bn-sidebar__scrim {
+    display: none;
+  }
+  .bn-sidebar {
+    position: static;
+    transform: none;
+    transition: none;
+    width: 280px;
+    flex-shrink: 0;
+  }
+  .bn-topbar__sidebar-toggle {
+    display: none;
+  }
+}
+
+.bn-sidebar__card {
+  padding: var(--bn-space-5) var(--bn-space-4);
+  padding-top: max(var(--bn-space-5), env(safe-area-inset-top, var(--bn-space-5)));
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-space-4);
+  height: 100%;
+}
+.bn-sidebar__eyebrow {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--bn-mute);
+}
+.bn-sidebar__name {
+  font-family: var(--bn-font-display);
+  font-size: 1.375rem;
+  color: var(--bn-ink);
+  margin: 0;
+}
+.bn-sidebar__stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-space-3);
+  margin: 0;
+}
+.bn-sidebar__stats dt {
+  font-size: 0.75rem;
+  color: var(--bn-mute);
+}
+.bn-sidebar__stats dd {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--bn-ink);
+}
+.bn-sidebar__logout {
+  margin-top: auto;
+  background: none;
+  border: 1px solid var(--bn-line);
+  border-radius: var(--bn-radius-control);
+  padding: var(--bn-space-3);
+  color: var(--bn-red-deep);
+  font-weight: 600;
+}
+.bn-sidebar__logout:hover {
+  background: var(--bn-line);
 }
 
 .bn-topbar {
@@ -416,4 +534,78 @@
   background: var(--bn-red);
   color: #ffffff;
   font-weight: 600;
+}
+.bn-access-gate__card button:disabled {
+  background: var(--bn-gray-soft);
+}
+
+.bn-access-gate__card--wide {
+  max-width: 520px;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+/* Campos del formulario de perfil (ProfileGate) */
+.bn-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.bn-field span {
+  font-size: 0.8125rem;
+  color: var(--bn-mute);
+}
+.bn-field input {
+  padding: var(--bn-space-3);
+  border-radius: var(--bn-radius-control);
+  border: 1px solid var(--bn-line);
+  background: var(--bn-bg);
+  color: var(--bn-ink);
+  font-size: 1rem;
+}
+
+.bn-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--bn-mute);
+}
+.bn-checkbox input {
+  margin-top: 3px;
+}
+
+/* Especificidad extra a propósito: gana sobre `.bn-access-gate__card button`
+ * (el estilo de botón rojo de acción principal), que si no se aplicaría
+ * también aquí por ser un <button> dentro de esa card. */
+button.bn-link {
+  display: inline;
+  width: auto;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--bn-red-deep);
+  text-decoration: underline;
+  font: inherit;
+  font-weight: inherit;
+  cursor: pointer;
+}
+
+/* Aviso de privacidad (PrivacyNotice) */
+.bn-privacy h2 {
+  font-family: var(--bn-font-display);
+  font-size: 1.125rem;
+  color: var(--bn-ink);
+  margin: 0 0 var(--bn-space-2);
+}
+.bn-privacy h3 {
+  font-size: 0.9375rem;
+  color: var(--bn-ink);
+  margin: var(--bn-space-3) 0 4px;
+}
+.bn-privacy p {
+  font-size: 0.85rem;
+  color: var(--bn-mute);
+  line-height: 1.5;
+  margin: 0;
 }

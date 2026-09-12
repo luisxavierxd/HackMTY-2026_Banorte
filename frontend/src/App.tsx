@@ -10,8 +10,11 @@ import { pointerSet } from "./a2ui/pointer";
 import { useSocket, clearStoredSession } from "./net/useSocket";
 import { sendAction, sendUserMessage, deleteSession } from "./net/client";
 import { getAccessKey, clearAccessKey } from "./net/accessKey";
+import { getProfile, clearProfile } from "./net/profile";
 
 import AccessGate from "./shell/AccessGate";
+import ProfileGate from "./shell/ProfileGate";
+import ProfileSidebar from "./shell/ProfileSidebar";
 import Composer from "./shell/Composer";
 import Trace, { type TraceStatus } from "./shell/Trace";
 import Empty from "./shell/Empty";
@@ -32,6 +35,15 @@ function RefreshIcon() {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+    </svg>
+  );
+}
+
+function SidebarIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="1.8" />
+      <path d="M9 4v16" stroke="currentColor" strokeWidth="1.8" />
     </svg>
   );
 }
@@ -172,6 +184,23 @@ export default function App() {
 
   const { status, sessionId, send } = useSocket(handleEvent, !IS_LAB, handleAuthError);
 
+  // Perfil que da contexto al agente (nombre/ingreso/ahorro/inversión) —
+  // segundo paso del "login" de la demo, después del código de acceso. Vive
+  // en cookie (net/profile.ts) para sobrevivir a cerrar el navegador.
+  const [profile, setProfileState] = useState(() => getProfile());
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const logoutProfile = useCallback(() => {
+    // Mismo patrón que startNewConversation: recarga completa porque
+    // useSocket abre el WS una sola vez al montar. "Salir" borra perfil Y
+    // conversación (pedido explícito: el logout es lo único que las borra).
+    void deleteSession(sessionId).finally(() => {
+      clearProfile();
+      clearStoredSession();
+      location.reload();
+    });
+  }, [sessionId]);
+
   const runAction = useCallback(
     (action: ActionRef | undefined, label?: string) => {
       if (!action) return;
@@ -275,9 +304,31 @@ export default function App() {
     return <AccessGate wrongKey={hadWrongKey} onSubmit={() => location.reload()} />;
   }
 
+  if (!profile) {
+    // Segundo paso del mismo "login": no hace falta recargar, el perfil se
+    // lee fresco en cada mensaje (net/useSocket.ts) — basta con actualizar
+    // el estado local para pasar a la app.
+    return <ProfileGate onSubmit={() => setProfileState(getProfile())} />;
+  }
+
   return (
-    <div className="bn-app">
+    <div className="bn-shell">
+      <ProfileSidebar
+        profile={profile}
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        onLogout={logoutProfile}
+      />
+      <div className="bn-app">
       <header className="bn-topbar">
+        <button
+          type="button"
+          className="bn-topbar__sidebar-toggle"
+          aria-label="Ver tu contexto"
+          onClick={() => setSidebarOpen(true)}
+        >
+          <SidebarIcon />
+        </button>
         <span className="bn-topbar__title">{title || "Banorte"}</span>
         <div className="bn-topbar__actions">
           <button
@@ -349,6 +400,7 @@ export default function App() {
         </button>
       )}
       <Composer onSend={handleSend} disabled={busy || status !== "open"} />
+      </div>
     </div>
   );
 }
