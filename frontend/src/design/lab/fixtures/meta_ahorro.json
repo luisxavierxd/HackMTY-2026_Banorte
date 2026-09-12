@@ -1,0 +1,254 @@
+{
+  "type": "surface",
+  "title": "Tu meta de ahorro",
+  "summary": "Para juntar $50,000 en 12 meses, necesitas $4,167/mes sin rendimiento, o $4,016/mes con rendimiento al 8% anual — te ahorras $151 por mes.",
+  "a2ui": [
+    {
+      "createSurface": {
+        "surfaceId": "main",
+        "catalogId": "fin-catalog"
+      }
+    },
+    {
+      "updateDataModel": {
+        "surfaceId": "main",
+        "path": "/",
+        "value": {
+          "datos": {
+            "simular_meta_ahorro": {
+              "concepto": "meta_ahorro",
+              "parametros": {
+                "meta": 50000,
+                "plazo_meses": 12,
+                "tasa_ahorro_anual": 0.08
+              },
+              "escenarios": {
+                "sin_rendimiento": {
+                  "aporte_mensual": 4166.67,
+                  "total_aportado": 50000.0,
+                  "serie": [
+                    {
+                      "mes": 1,
+                      "acumulado": 4166.67,
+                      "aportacion_mes": 4166.67
+                    },
+                    {
+                      "mes": 2,
+                      "acumulado": 8333.33,
+                      "aportacion_mes": 4166.67
+                    },
+                    {
+                      "mes": 3,
+                      "acumulado": 12500.0,
+                      "aportacion_mes": 4166.67
+                    },
+                    {
+                      "mes": 4,
+                      "acumulado": 16666.67,
+                      "aportacion_mes": 4166.67
+                    },
+                    {
+                      "mes": 5,
+                      "acumulado": 20833.33,
+                      "aportacion_mes": 4166.67
+                    },
+                    {
+                      "mes": 6,
+                      "acumulado": 25000.0,
+                      "aportacion_mes": 4166.67
+                    },
+                    {
+                      "mes": 7,
+                      "acumulado": 29166.67,
+                      "aportacion_mes": 4166.67
+                    },
+                    {
+                      "mes": 8,
+                      "acumulado": 33333.33,
+                      "aportacion_mes": 4166.67
+                    },
+                    {
+                      "mes": 9,
+                      "acumulado": 37500.0,
+                      "aportacion_mes": 4166.67
+                    },
+                    {
+                      "mes": 10,
+                      "acumulado": 41666.67,
+                      "aportacion_mes": 4166.67
+                    },
+                    {
+                      "mes": 11,
+                      "acumulado": 45833.33,
+                      "aportacion_mes": 4166.67
+                    },
+                    {
+                      "mes": 12,
+                      "acumulado": 50000.0,
+                      "aportacion_mes": 4166.67
+                    }
+                  ]
+                },
+                "con_rendimiento": {
+                  "aporte_mensual": 4016.09,
+                  "total_aportado": 48193.06,
+                  "rendimiento_ganado": 1806.94,
+                  "serie": [
+                    {
+                      "mes": 1,
+                      "acumulado": 4016.09,
+                      "aportacion_mes": 4016.09
+                    },
+                    {
+                      "mes": 2,
+                      "acumulado": 8058.95,
+                      "aportacion_mes": 4016.09
+                    },
+                    {
+                      "mes": 3,
+                      "acumulado": 12128.76,
+                      "aportacion_mes": 4016.09
+                    },
+                    {
+                      "mes": 4,
+                      "acumulado": 16225.71,
+                      "aportacion_mes": 4016.09
+                    },
+                    {
+                      "mes": 5,
+                      "acumulado": 20349.97,
+                      "aportacion_mes": 4016.09
+                    },
+                    {
+                      "mes": 6,
+                      "acumulado": 24501.73,
+                      "aportacion_mes": 4016.09
+                    },
+                    {
+                      "mes": 7,
+                      "acumulado": 28681.16,
+                      "aportacion_mes": 4016.09
+                    },
+                    {
+                      "mes": 8,
+                      "acumulado": 32888.45,
+                      "aportacion_mes": 4016.09
+                    },
+                    {
+                      "mes": 9,
+                      "acumulado": 37123.8,
+                      "aportacion_mes": 4016.09
+                    },
+                    {
+                      "mes": 10,
+                      "acumulado": 41387.38,
+                      "aportacion_mes": 4016.09
+                    },
+                    {
+                      "mes": 11,
+                      "acumulado": 45679.38,
+                      "aportacion_mes": 4016.09
+                    },
+                    {
+                      "mes": 12,
+                      "acumulado": 50000.0,
+                      "aportacion_mes": 4016.09
+                    }
+                  ]
+                }
+              },
+              "resumen": {
+                "ahorro_mensual_gracias_a_rendimiento": 150.58
+              },
+              "explicacion": "Para juntar $50,000 en 12 meses, necesitas $4,167/mes sin rendimiento, o $4,016/mes con rendimiento al 8% anual — te ahorras $151 por mes."
+            }
+          }
+        }
+      }
+    },
+    {
+      "updateComponents": {
+        "surfaceId": "main",
+        "components": [
+          {
+            "id": "root",
+            "component": "Column",
+            "props": {
+              "children": [
+                "ring",
+                "chart",
+                "slider",
+                "btn"
+              ],
+              "gap": "md"
+            }
+          },
+          {
+            "id": "ring",
+            "component": "ProgressRing",
+            "props": {
+              "label": "Meta de ahorro",
+              "value": 0,
+              "target": 50000,
+              "caption": "Aportación mensual: $4,016",
+              "tone": "ahorro"
+            }
+          },
+          {
+            "id": "chart",
+            "component": "LineChart",
+            "props": {
+              "title": "Progreso del ahorro",
+              "series": [
+                {
+                  "label": "Con rendimiento",
+                  "path": "/datos/simular_meta_ahorro/escenarios/con_rendimiento/serie",
+                  "key": "acumulado",
+                  "tone": "ahorro",
+                  "emphasis": true
+                },
+                {
+                  "label": "Sin rendimiento",
+                  "path": "/datos/simular_meta_ahorro/escenarios/sin_rendimiento/serie",
+                  "key": "acumulado",
+                  "tone": "neutral"
+                }
+              ],
+              "xKey": "mes",
+              "xLabel": "meses",
+              "format": "currency"
+            }
+          },
+          {
+            "id": "slider",
+            "component": "Slider",
+            "props": {
+              "label": "Plazo",
+              "min": 6,
+              "max": 36,
+              "step": 6,
+              "value": 12,
+              "format": "number"
+            }
+          },
+          {
+            "id": "btn",
+            "component": "ActionButton",
+            "props": {
+              "text": "Empezar a ahorrar",
+              "action": {
+                "event": {
+                  "name": "crear_meta_ahorro",
+                  "params": {
+                    "plazo": 12
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": []
+}
