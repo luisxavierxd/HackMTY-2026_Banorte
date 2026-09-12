@@ -3,6 +3,7 @@ documentacion/
 .claude/
 CLAUDE.md
 AGENTS.md
+notes/
 
 # --- python ---
 __pycache__/
