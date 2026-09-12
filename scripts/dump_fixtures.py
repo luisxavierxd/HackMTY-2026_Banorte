@@ -107,7 +107,6 @@ fixtures["pago_minimo_vs_fijo"] = _surface(
         {"id": "btn", "component": "ActionButton", "props": {
             "text": "Aplicar pago fijo",
             "action": {"event": {"name": "aplicar_plan_pago", "params": {"tipo": "fijo"}}},
-            "confirm": "¿Quieres aplicar el plan de pago fijo?",
         }},
     ],
 )

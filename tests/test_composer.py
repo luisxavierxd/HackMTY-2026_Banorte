@@ -100,6 +100,22 @@ def test_option_list_no_acepta_action_elegir_no_es_confirmar():
     assert any("action" in e and "desconocida" in e for e in errors)
 
 
+def test_action_button_no_acepta_confirm_es_redundante_y_rompe_en_movil():
+    # window.confirm() nativo encima de un botón que YA ES la confirmación
+    # es redundante, y en apps móviles/WebViews puede no mostrarse o
+    # bloquear el botón por completo (visto en producción).
+    comps, errors, _ = validate_components([{
+        "id": "b", "component": "ActionButton",
+        "props": {
+            "text": "Activar plan de ahorro",
+            "action": {"event": {"name": "activar_plan", "params": {}}},
+            "confirm": "¿Seguro?",
+        },
+    }])
+    assert "confirm" not in comps[0]
+    assert any("confirm" in e and "desconocida" in e for e in errors)
+
+
 def test_plan_sin_action_button_no_compila():
     # Obligatorio: solo un ActionButton puede cerrar el ciclo. Un plan con
     # controles pero sin ActionButton se rechaza (fuerza reparación en

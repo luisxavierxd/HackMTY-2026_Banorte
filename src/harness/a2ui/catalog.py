@@ -218,12 +218,16 @@ COMPONENTS: dict[str, dict[str, Any]] = {
         },
     },
     "ActionButton": {
-        "doc": "Dispara una acción de negocio. Es lo que cierra el ciclo hacia el agente.",
+        "doc": "Dispara una acción de negocio. Es lo que cierra el ciclo hacia el "
+               "agente — es, en sí mismo, la confirmación (ver la regla de "
+               "OptionList/Slider/TextField). NO tiene 'confirm': un diálogo nativo "
+               "de confirmación encima de un botón que ya ES la confirmación es "
+               "redundante, y en apps móviles/WebViews `window.confirm()` puede "
+               "no mostrarse o comportarse mal, bloqueando el botón por completo.",
         "props": {
             "text": {"type": "string", "required": True},
             "action": {"type": "action", "required": True},
             "variant": {"type": "enum", "values": ["primary", "secondary", "ghost"], "default": "primary"},
-            "confirm": {"type": "string"},
         },
     },
 }

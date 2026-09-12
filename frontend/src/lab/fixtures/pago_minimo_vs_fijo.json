@@ -221,8 +221,7 @@
                     "tipo": "fijo"
                   }
                 }
-              },
-              "confirm": "¿Quieres aplicar el plan de pago fijo?"
+              }
             }
           }
         ]

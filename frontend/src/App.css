@@ -100,6 +100,26 @@
 .bn-transcript__item--user .bn-transcript__role {
   color: var(--bn-red-deep);
 }
+.bn-transcript__item--clickable {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: var(--bn-radius-control);
+  padding: 6px 8px;
+  margin: -6px -8px;
+  cursor: pointer;
+}
+.bn-transcript__item--clickable:hover {
+  background: var(--bn-line);
+}
+.bn-transcript__hint {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--bn-red-deep);
+  margin-top: 2px;
+}
 
 .bn-surface-area {
   flex: 1 1 auto;

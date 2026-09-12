@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import "./design/base.css";
 import "./App.css";
 
@@ -53,10 +53,20 @@ interface TranscriptEntry {
   role: "user" | "agent";
   text: string;
   ts: number;
+  /** Solo en entradas "agent": la superficie completa de ese turno, para
+   *  poder volver a verla/seguir desde ahí (ver restoreEntry). */
+  surface?: SurfaceState;
+  title?: string;
 }
 
 export default function App() {
   const [surface, setSurface] = useState<SurfaceState>(null);
+  // Espejo síncrono de `surface`, para poder calcular el siguiente estado
+  // dentro de handleEvent (mensajes del WS llegan uno a la vez, nunca en
+  // paralelo) y guardarlo de una vez en el transcript — sin esto, la única
+  // forma de leer el `surface` "de antes" es el setState funcional, que no
+  // deja sacar el valor calculado hacia afuera para el transcript.
+  const surfaceRef = useRef<SurfaceState>(null);
   const [turnId, setTurnId] = useState(0); // fuerza reset del ErrorBoundary en cada surface nueva
   const [title, setTitle] = useState("");
   const [trace, setTrace] = useState<TraceStatus>({ kind: "idle" });
@@ -70,10 +80,13 @@ export default function App() {
   // persistente. Colapsado por default para no estorbar.
   const [transcript, setTranscript] = useState<TranscriptEntry[]>([]);
   const [transcriptOpen, setTranscriptOpen] = useState(false);
-  const addTranscript = useCallback((role: TranscriptEntry["role"], text: string) => {
-    if (!text) return;
-    setTranscript((prev) => [...prev, { role, text, ts: Date.now() }]);
-  }, []);
+  const addTranscript = useCallback(
+    (role: TranscriptEntry["role"], text: string, extra?: Pick<TranscriptEntry, "surface" | "title">) => {
+      if (!text) return;
+      setTranscript((prev) => [...prev, { role, text, ts: Date.now(), ...extra }]);
+    },
+    []
+  );
 
   // El CLI de Claude Code puede llamarse hasta 2 veces por turno (razonar +
   // componer UI), cada una con timeout de hasta CLI_TIMEOUT_S (180s por
@@ -112,15 +125,18 @@ export default function App() {
       case "thinking":
         setTrace({ kind: "thinking", text: event.text, ts: Date.now() });
         break;
-      case "surface":
-        setSurface((prev) => applyEnvelopes(prev, event.a2ui));
+      case "surface": {
+        const next = applyEnvelopes(surfaceRef.current, event.a2ui);
+        surfaceRef.current = next;
+        setSurface(next);
         setTurnId((n) => n + 1);
         setTitle(event.title || "");
         setOverrides({});
         setBusy(false);
         setError(null);
-        addTranscript("agent", event.summary || event.title || "");
+        addTranscript("agent", event.summary || event.title || "", { surface: next, title: event.title });
         break;
+      }
       case "turn_end":
         setTrace({ kind: "done", latencyMs: event.latency_ms, provider: event.provider, model: event.model });
         setBusy(false);
@@ -162,6 +178,27 @@ export default function App() {
     },
     [send, addTranscript]
   );
+
+  // Navegar el historial: muestra una pantalla de un turno anterior y deja
+  // seguir interactuando desde ahí. A propósito NO es un árbol de verdad —
+  // es un clon de esa pantalla puesto al final de la MISMA conversación
+  // lineal (el servidor solo conoce una sesión, sin ramas). La siguiente
+  // acción que se dispare manda esos datos completos como override
+  // ("/" reemplaza todo el data model del servidor, ver pointer.ts /
+  // messages.py::pointer_set) para que el agente vea exactamente esa
+  // pantalla como "lo actual", no una mezcla con la más reciente. No es lo
+  // más organizado (dijiste que estaba bien así), pero no divide la sesión.
+  const restoreEntry = useCallback((entry: TranscriptEntry) => {
+    if (!entry.surface) return;
+    surfaceRef.current = entry.surface;
+    setSurface(entry.surface);
+    setTitle(entry.title || "");
+    setOverrides(
+      entry.surface.data && typeof entry.surface.data === "object" ? { "/": entry.surface.data } : {}
+    );
+    setTurnId((n) => n + 1);
+    setTranscriptOpen(false);
+  }, []);
 
   const startNewConversation = useCallback(() => {
     // Recarga completa a propósito: useSocket abre el WS una sola vez al
@@ -245,12 +282,26 @@ export default function App() {
 
       {transcriptOpen && transcript.length > 0 && (
         <div className="bn-transcript" role="log">
-          {transcript.map((entry, i) => (
-            <p key={i} className={`bn-transcript__item bn-transcript__item--${entry.role}`}>
-              <span className="bn-transcript__role">{entry.role === "user" ? "Tú" : "Asistente"}</span>
-              {entry.text}
-            </p>
-          ))}
+          {transcript.map((entry, i) =>
+            entry.surface ? (
+              <button
+                key={i}
+                type="button"
+                className="bn-transcript__item bn-transcript__item--agent bn-transcript__item--clickable"
+                onClick={() => restoreEntry(entry)}
+                title="Ver esta pantalla y seguir desde aquí"
+              >
+                <span className="bn-transcript__role">Asistente</span>
+                {entry.text}
+                <span className="bn-transcript__hint">Ver esta pantalla ↩</span>
+              </button>
+            ) : (
+              <p key={i} className={`bn-transcript__item bn-transcript__item--${entry.role}`}>
+                <span className="bn-transcript__role">{entry.role === "user" ? "Tú" : "Asistente"}</span>
+                {entry.text}
+              </p>
+            )
+          )}
         </div>
       )}
 
@@ -258,6 +309,7 @@ export default function App() {
         <SurfaceErrorBoundary
           key={turnId}
           onReset={() => {
+            surfaceRef.current = null;
             setSurface(null);
             setTitle("");
             setOverrides({});
