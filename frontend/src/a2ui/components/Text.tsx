@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import type { JSX } from "react";
 import type { A2UIComponentProps } from "../types";
 import type { Binding } from "../../contract/a2ui";
 import { resolveBinding } from "../resolve";
