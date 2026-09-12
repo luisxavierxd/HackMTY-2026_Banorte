@@ -334,6 +334,38 @@ def test_override_de_modelo_por_env(monkeypatch):
     assert Settings().model_for("reasoning") == "gemini-2.5-pro"
 
 
+async def test_compose_ui_datos_reales_ganan_sobre_lo_que_declare_el_modelo():
+    # Bug real de producción: el modelo re-declaró su propia "datos" con
+    # claves distintas (nombre completo en vez de corto) y eso pisaba los
+    # resultados reales de las tools, dejando el LineChart apuntando a datos
+    # que ya no estaban ahí.
+    from harness.agent.loop import Agent
+    from harness.config import Settings
+
+    class _StubComposer:
+        native_tools = True
+        name = "stub"
+        model = "stub"
+
+        async def complete(self, **_kwargs):
+            plan = {
+                "title": "t", "summary": "s", "root": "root",
+                "data": {"datos": {"nombre_que_no_deberia_ganar": {"x": 1}}},
+                "components": [{"id": "root", "component": "Text", "props": {"text": "hola"}}],
+            }
+            return Completion(text=json.dumps(plan), provider="stub", model="stub")
+
+    agent = Agent.__new__(Agent)  # sin __init__: no necesita MCP real para este test
+    agent.s = Settings(profile="fake")
+    agent.composer = _StubComposer()
+
+    trace = [{"tool": "educacion_financiera__simular_meta_ahorro", "args": {}, "result": {"real": True}}]
+    items = [item async for item in agent._compose_ui("hola", "final", trace, True)]
+    _result, plan = items[-1]
+
+    assert plan["data"]["datos"] == {"simular_meta_ahorro": {"real": True}}
+
+
 async def test_fake_llama_una_tool_y_luego_compone():
     p = FakeProvider()
     first = await p.complete(system="", messages=[text_msg("user", "hola")], tools=[SPEC])

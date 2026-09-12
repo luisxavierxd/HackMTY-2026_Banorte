@@ -221,7 +221,10 @@ class CliAgentProvider:
                     continue
                 # Detalle completo SOLO en logs del servidor (Railway) — lo que
                 # ve el usuario en el chat es genérico, ver _humanize_stream_event.
-                log.info("cli stream[%s]: %s", self.name, line[:500])
+                # "result" trae el plan de UI completo — sin recortar, porque es
+                # justo lo que hace falta para diagnosticar un crash de render.
+                cap = None if ev.get("type") == "result" else 500
+                log.info("cli stream[%s]: %s", self.name, line[:cap])
                 if ev.get("type") == "result":
                     final_text = self._text_from_payload(ev)
                     is_error = bool(ev.get("is_error"))

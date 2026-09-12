@@ -62,12 +62,19 @@ Reglas de composición:
 - Un valor de prop puede ser literal ("$1,690") o un binding {{"path": "/plan/selected"}}
   que lee del objeto "data".
 - Los resultados de las herramientas YA están cargados en el data model bajo
-  /datos/<nombre_de_la_herramienta>. Para graficar, apunta con "path" a esa ruta
-  (ej. "/datos/explicar_interes_compuesto/serie") y con "key" al campo.
-  NUNCA copies una serie número por número: es lento y te equivocas.
+  /datos/<nombre_de_la_herramienta> (nombre corto, sin el prefijo del dominio:
+  "explicar_interes_compuesto", NO "educacion_financiera__explicar_interes_compuesto").
+  Para graficar, apunta con "path" a esa ruta (ej. "/datos/explicar_interes_compuesto/serie")
+  y con "key" al campo. NUNCA copies una serie número por número: es lento y te equivocas.
+  NUNCA vuelvas a declarar "datos" dentro de tu propio "data": ya está ahí,
+  cualquier cosa que pongas en esa clave se ignora.
 - Una gráfica por pantalla, máximo dos. Si hay una gráfica, debe ir acompañada
   de un MetricCard con la cifra que importa y de un control accionable.
-- Usa tone="costo" para lo que la persona paga y tone="ahorro" para lo que gana.
+- OJO, dos vocabularios de tono distintos, no se mezclan:
+  - LineChart, BarChart, ComparisonBars, ProgressRing usan tone="costo"
+    (lo que la persona paga) o tone="ahorro" (lo que gana).
+  - MetricCard, Badge, Callout usan tone="neutral"|"success"|"warning"|"danger"
+    (nunca "costo" ni "ahorro" — se descarta y cae a "neutral").
 - Toda pantalla debe tener AL MENOS un control accionable (ActionButton, OptionList
   o Slider con action) para que la interacción regrese al agente.
 - El action se escribe {{"event": {{"name": "nombre_accion", "params": {{...}}}}}}.

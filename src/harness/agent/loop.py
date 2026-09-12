@@ -256,7 +256,14 @@ class Agent:
                     else:
                         yield item
                 plan = extract_json(completion.text)
-                plan["data"] = {"datos": auto, **(plan.get("data") or {})}
+                # /datos/<tool> siempre son los resultados REALES de las tools
+                # (auto-inyectados) — si el modelo redeclara su propia "datos"
+                # (visto en producción, con las claves completas en vez de
+                # cortas), la real debe ganar sin importar el orden en que
+                # el modelo la haya escrito.
+                plan_data = plan.get("data") or {}
+                plan_data["datos"] = auto
+                plan["data"] = plan_data
                 result = compile_plan(plan, self.s.surface_id, first_render)
                 log.info(
                     "compose_ui intento %s: ok=%s componentes=%s errores=%s",
