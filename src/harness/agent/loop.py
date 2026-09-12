@@ -173,6 +173,14 @@ class Agent:
     async def _compose_ui(
         self, user_text: str, agent_text: str, trace: list[dict], first_render: bool
     ) -> tuple[CompileResult, dict]:
+        # Auto-inject tool results into data model so the UI can reference by path
+        auto: dict[str, Any] = {}
+        for item in trace:
+            short = item["tool"].split("__")[-1]
+            if short in auto:
+                short = f"{short}_{sum(k.startswith(short) for k in auto) + 1}"
+            auto[short] = item["result"]
+
         brief = {
             "intencion_usuario": user_text,
             "lectura_del_agente": agent_text,
@@ -190,6 +198,7 @@ class Agent:
                     temperature=self.s.ui_temperature,
                 )
                 plan = extract_json(completion.text)
+                plan["data"] = {"datos": auto, **(plan.get("data") or {})}
                 result = compile_plan(plan, self.s.surface_id, first_render)
                 if result.ok:
                     return result, plan

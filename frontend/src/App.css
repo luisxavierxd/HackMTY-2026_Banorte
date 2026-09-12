@@ -1,0 +1,214 @@
+/* Shell de la app: superficie generada arriba, chat como barra delgada abajo. */
+
+.bn-app {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  max-width: var(--bn-max-width);
+  margin: 0 auto;
+  background: var(--bn-bg);
+  position: relative;
+}
+
+@media (min-width: 540px) {
+  .bn-app {
+    border-left: 1px solid var(--bn-line);
+    border-right: 1px solid var(--bn-line);
+  }
+}
+
+.bn-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--bn-space-3) var(--bn-space-4);
+  border-bottom: 1px solid var(--bn-line);
+  position: sticky;
+  top: 0;
+  background: var(--bn-bg);
+  z-index: 5;
+}
+.bn-topbar__title {
+  font-family: var(--bn-font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--bn-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bn-topbar__refresh {
+  background: none;
+  border: none;
+  padding: 6px;
+  border-radius: var(--bn-radius-control);
+  color: var(--bn-mute);
+  display: flex;
+}
+.bn-topbar__refresh:hover {
+  color: var(--bn-ink);
+}
+
+.bn-surface-area {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: var(--bn-space-5) var(--bn-space-4) var(--bn-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-space-4);
+}
+
+.bn-empty {
+  margin: auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-space-3);
+  text-align: left;
+}
+.bn-empty__title {
+  font-family: var(--bn-font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--bn-ink);
+  margin: 0;
+}
+.bn-empty__body {
+  color: var(--bn-mute);
+  font-size: 0.95rem;
+  margin: 0;
+}
+.bn-empty__chips {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-space-2);
+  margin-top: var(--bn-space-3);
+}
+.bn-chip {
+  text-align: left;
+  border: 1px solid var(--bn-line);
+  border-radius: var(--bn-radius-control);
+  padding: 12px 16px;
+  background: var(--bn-surface);
+  color: var(--bn-ink);
+  font-size: 0.9rem;
+}
+.bn-chip:hover {
+  border-color: var(--bn-gray-soft);
+}
+
+.bn-loading {
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--bn-space-2);
+  color: var(--bn-mute);
+  font-size: 0.9rem;
+}
+.bn-loading__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--bn-gray-soft);
+  animation: bn-pulse 1.2s ease-in-out infinite;
+}
+
+.bn-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--bn-space-3);
+  margin: 0 var(--bn-space-4) var(--bn-space-2);
+  padding: var(--bn-space-3) var(--bn-space-4);
+  background: var(--bn-alerta-wash);
+  color: var(--bn-alerta);
+  border-radius: var(--bn-radius-control);
+  border: 1px solid var(--bn-alerta);
+  font-size: 0.875rem;
+}
+.bn-error__msg {
+  flex: 1 1 auto;
+}
+.bn-error__retry {
+  background: none;
+  border: 1px solid var(--bn-alerta);
+  color: var(--bn-alerta);
+  border-radius: var(--bn-radius-control);
+  padding: 6px 12px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.bn-trace {
+  display: flex;
+  align-items: center;
+  gap: var(--bn-space-2);
+  padding: var(--bn-space-2) var(--bn-space-4);
+  border-top: 1px solid var(--bn-line);
+  color: var(--bn-mute);
+  font-size: 0.8125rem;
+  min-height: 20px;
+}
+.bn-trace__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--bn-red);
+  animation: bn-pulse 1.2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+.bn-trace__text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@keyframes bn-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.bn-composer {
+  display: flex;
+  align-items: center;
+  gap: var(--bn-space-2);
+  padding: var(--bn-space-3) var(--bn-space-4);
+  border-top: 1px solid var(--bn-line);
+  background: var(--bn-bg);
+}
+.bn-composer__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 1px solid var(--bn-line);
+  border-radius: var(--bn-radius-pill);
+  padding: 12px 18px;
+  font-size: 1rem;
+  background: var(--bn-surface);
+  color: var(--bn-ink);
+}
+.bn-composer__input:disabled {
+  opacity: 0.6;
+}
+.bn-composer__send {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bn-red);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+.bn-composer__send:disabled {
+  background: var(--bn-gray-soft);
+}

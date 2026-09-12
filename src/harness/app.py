@@ -202,3 +202,14 @@ async def turn_sse(req: TurnRequest) -> StreamingResponse:
 async def reset(session_id: str) -> dict:
     await app.state.store.drop(session_id)
     return {"status": "deleted", "session_id": session_id}
+
+
+# ── frontend estático (se monta al final: las rutas de arriba tienen prioridad) ──
+from pathlib import Path as _Path  # noqa: E402
+from fastapi.staticfiles import StaticFiles as _StaticFiles  # noqa: E402
+
+_STATIC_DIR = _Path(__file__).resolve().parents[2] / "static"
+if (_STATIC_DIR / "index.html").exists():
+    app.mount("/", _StaticFiles(directory=_STATIC_DIR, html=True), name="web")
+else:
+    log.info("sin build de frontend en %s — solo API", _STATIC_DIR)

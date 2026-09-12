@@ -93,6 +93,37 @@ COMPONENTS: dict[str, dict[str, Any]] = {
             "title": {"type": "string"},
             "series": {"type": "objectList", "required": True, "keys": ["label", "value"]},
             "format": {"type": "enum", "values": ["currency", "percent", "number"], "default": "number"},
+            "compare": {"type": "objectList", "keys": ["label", "value"]},
+            "goal": {"type": "number"},
+            "highlight": {"type": "string"},
+            "orientation": {"type": "enum", "values": ["vertical", "horizontal"], "default": "vertical"},
+        },
+    },
+    "LineChart": {
+        "doc": "Serie en el tiempo (saldo mes a mes, poder de compra, amortización). "
+               "NO copies los números: apunta con 'path' a la serie que ya está en /datos.",
+        "props": {
+            "title": {"type": "string"},
+            "series": {
+                "type": "objectList",
+                "required": True,
+                "keys": ["label", "path", "key", "tone", "emphasis"],
+            },
+            "xKey": {"type": "string"},
+            "xLabel": {"type": "string"},
+            "format": {"type": "enum", "values": ["currency", "percent", "number"], "default": "currency"},
+            "area": {"type": "boolean", "default": True},
+            "annotateLast": {"type": "boolean", "default": True},
+        },
+    },
+    "ProgressRing": {
+        "doc": "Avance hacia una meta (ahorro, liquidación de deuda). Un número con contexto, no una gráfica.",
+        "props": {
+            "label": {"type": "string", "required": True},
+            "value": {"type": "binding", "required": True},
+            "target": {"type": "number", "required": True},
+            "caption": {"type": "binding"},
+            "tone": {"type": "enum", "values": ["neutral", "ahorro", "costo"], "default": "ahorro"},
         },
     },
     # ---------- interactivos ----------

@@ -4,6 +4,7 @@ documentacion/
 CLAUDE.md
 AGENTS.md
 notes/
+.superpowers/
 
 # --- python ---
 __pycache__/
@@ -18,3 +19,8 @@ venv/
 .env
 data/
 *.log
+
+# --- frontend (Vite/React) ---
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
