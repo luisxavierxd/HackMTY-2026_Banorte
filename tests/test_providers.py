@@ -2,13 +2,14 @@
 
 Es donde se rompe todo al cambiar de modelo, así que es donde hay que probar.
 """
+import asyncio
 import json
 
 import pytest
 
-from harness.agent.loop import extract_json, parse_prompted_calls
+from harness.agent.loop import _complete_stream, extract_json, parse_prompted_calls
 from harness.config import PROVIDER_PROFILES, Settings
-from harness.providers import FakeProvider, ToolSpec, build_provider, text_msg
+from harness.providers import Completion, FakeProvider, ToolSpec, build_provider, text_msg
 from harness.providers.anthropic_api import AnthropicProvider
 from harness.providers.cli_agent import CliAgentProvider
 from harness.providers.gemini import GeminiProvider
@@ -63,7 +64,10 @@ def test_cli_construye_argv_de_claude_code():
     p = CliAgentProvider("claude_code", model="claude-sonnet-4-6")
     argv = p._argv("hola", "eres un agente")
     assert argv[0] == "claude" and "-p" in argv
-    assert argv[argv.index("--output-format") + 1] == "json"
+    # stream-json + --verbose: deja ver progreso real del CLI en vez de
+    # bloquear a ciegas hasta que el proceso termine.
+    assert argv[argv.index("--output-format") + 1] == "stream-json"
+    assert "--verbose" in argv
     # --bare NO debe usarse aquí: le dice al CLI que ignore las credenciales
     # OAuth (login de la suscripción), que es justo lo que este perfil necesita.
     assert "--bare" not in argv
@@ -90,6 +94,144 @@ def test_cli_extrae_texto_de_json_y_de_stream_json():
 
 def test_cli_sin_function_calling_nativo():
     assert CliAgentProvider("claude_code").native_tools is False
+
+
+# --------------------- progreso en vivo (stream-json) ------------------ #
+def test_humaniza_evento_system_init():
+    ev = CliAgentProvider._humanize_stream_event({"type": "system", "subtype": "init"})
+    assert ev == {"type": "thinking", "text": "Conectando con el modelo…"}
+
+
+def test_humaniza_evento_assistant_es_generico_nunca_expone_el_texto_del_modelo():
+    # A propósito: en la fase de componer UI ese "texto" es el JSON del plan
+    # ({"title": ...) — mostrárselo al usuario se vería como código roto.
+    texto_del_modelo = '{"title": "Reestructura", "components": [{"id": "root"'
+    ev = CliAgentProvider._humanize_stream_event(
+        {"type": "assistant", "message": {"content": [{"type": "text", "text": texto_del_modelo}]}}
+    )
+    assert ev == {"type": "thinking", "text": "Generando la respuesta…"}
+    assert texto_del_modelo not in ev["text"]
+
+
+def test_humaniza_evento_ignora_lo_que_no_es_texto_util():
+    assert CliAgentProvider._humanize_stream_event({"type": "result"}) is None
+    assert CliAgentProvider._humanize_stream_event({"type": "system", "subtype": "other"}) is None
+    assert CliAgentProvider._humanize_stream_event({"type": "assistant", "message": {}}) is None
+
+
+class _FakeStdout:
+    def __init__(self, lines: list[bytes]):
+        self._lines = [*lines, b""]  # b"" = EOF
+
+    async def readline(self) -> bytes:
+        return self._lines.pop(0)
+
+
+class _FakeStderr:
+    async def read(self) -> bytes:
+        return b""
+
+
+class _FakeProc:
+    """Doble mínimo de asyncio.subprocess.Process para probar _run_streaming
+    sin lanzar un proceso de verdad (multiplataforma, sin red)."""
+
+    def __init__(self, lines: list[bytes]):
+        self.stdout = _FakeStdout(lines)
+        self.stderr = _FakeStderr()
+        self.returncode: int | None = None
+
+    async def wait(self) -> int:
+        self.returncode = 0
+        return 0
+
+    def kill(self) -> None:
+        self.returncode = -9
+
+
+async def test_run_streaming_llama_on_event_y_extrae_result(monkeypatch):
+    lines = [
+        b'{"type":"system","subtype":"init"}\n',
+        b'{"type":"assistant","message":{"content":[{"type":"text","text":"Pensando tu meta de ahorro"}]}}\n',
+        b'{"type":"result","result":"listo"}\n',
+    ]
+    fake_proc = _FakeProc(lines)
+
+    async def fake_create_subprocess_exec(*_args, **_kwargs):
+        return fake_proc
+
+    monkeypatch.setattr(asyncio, "create_subprocess_exec", fake_create_subprocess_exec)
+
+    p = CliAgentProvider("claude_code")
+    events: list[dict] = []
+
+    async def on_event(ev: dict) -> None:
+        events.append(ev)
+
+    returncode, text, err = await p._run_streaming(["claude", "-p", "x"], on_event)
+
+    assert returncode == 0
+    assert text == "listo"
+    assert err == b""
+    assert events[0]["text"] == "Conectando con el modelo…"
+    assert events[1]["text"] == "Generando la respuesta…"
+    assert "Pensando tu meta de ahorro" not in events[1]["text"]  # nunca texto crudo al usuario
+
+
+async def test_run_streaming_sin_on_event_no_truena(monkeypatch):
+    lines = [b'{"type":"assistant","message":{"content":[{"type":"text","text":"hola"}]}}\n']
+    fake_proc = _FakeProc(lines)
+
+    async def fake_create_subprocess_exec(*_args, **_kwargs):
+        return fake_proc
+
+    monkeypatch.setattr(asyncio, "create_subprocess_exec", fake_create_subprocess_exec)
+    p = CliAgentProvider("claude_code")
+    returncode, text, _err = await p._run_streaming(["claude"], None)
+    assert returncode == 0
+    assert text == ""  # no hubo evento "result"
+
+
+# ---------------- _complete_stream (agent/loop.py) ---------------------- #
+async def test_complete_stream_relay_progreso_de_proveedor_cli(monkeypatch):
+    provider = CliAgentProvider("claude_code")  # cfg["streaming"] es True
+
+    async def fake_complete(**kwargs):
+        on_event = kwargs["on_event"]
+        await on_event({"type": "thinking", "text": "paso 1"})
+        await on_event({"type": "thinking", "text": "paso 2"})
+        return Completion(text="ok", provider="claude_code", model="")
+
+    monkeypatch.setattr(provider, "complete", fake_complete)
+
+    items = [item async for item in _complete_stream(provider, system="s", messages=[])]
+
+    assert [i["text"] for i in items[:-1]] == ["paso 1", "paso 2"]
+    assert isinstance(items[-1], Completion) and items[-1].text == "ok"
+
+
+async def test_complete_stream_proveedor_sin_streaming_es_un_solo_await():
+    # fake / anthropic / gemini / antigravity: ni una vuelta de cola, cero
+    # cambio de comportamiento frente al await directo de antes del refactor.
+    items = [
+        item
+        async for item in _complete_stream(FakeProvider(), system="s", messages=[], json_mode=True)
+    ]
+    assert len(items) == 1
+    assert isinstance(items[0], Completion)
+
+
+async def test_complete_stream_antigravity_no_usa_la_cola_de_progreso(monkeypatch):
+    provider = CliAgentProvider("antigravity")  # cfg["streaming"] es False
+
+    async def fake_complete(**kwargs):
+        assert "on_event" not in kwargs  # nunca se le pasa: no soporta progreso
+        return Completion(text="ok", provider="antigravity", model="")
+
+    monkeypatch.setattr(provider, "complete", fake_complete)
+
+    items = [item async for item in _complete_stream(provider, system="s", messages=[])]
+    assert len(items) == 1 and items[0].text == "ok"
 
 
 # ------------------- tool calling por prompt (CLIs) ------------------- #

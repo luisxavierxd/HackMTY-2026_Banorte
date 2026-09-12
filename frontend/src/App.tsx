@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
 import "./design/base.css";
 import "./App.css";
 
@@ -42,6 +42,30 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [overrides, setOverrides] = useState<Record<string, unknown>>({});
+
+  // El CLI de Claude Code puede llamarse hasta 2 veces por turno (razonar +
+  // componer UI), cada una con timeout de hasta CLI_TIMEOUT_S (180s por
+  // default) — un turno puede tardar varios minutos en el peor caso. Sin
+  // esto el usuario queda atrapado viendo "sigo revisando tus números…"
+  // sin ninguna salida (visto en producción).
+  const [canCancel, setCanCancel] = useState(false);
+  useEffect(() => {
+    if (!busy) {
+      setCanCancel(false);
+      return;
+    }
+    const timer = setTimeout(() => setCanCancel(true), 45_000);
+    return () => clearTimeout(timer);
+  }, [busy]);
+
+  const cancelTurn = useCallback(() => {
+    setBusy(false);
+    setCanCancel(false);
+    setTrace({ kind: "idle" });
+    // No hay forma de cancelar el turno del lado del harness (el CLI sigue
+    // corriendo hasta su propio timeout) — esto solo le regresa el control
+    // al usuario. Si la respuesta vieja llega después, se sigue aplicando.
+  }, []);
 
   const setLocal = useCallback((path: string, value: unknown) => {
     setOverrides((prev) => ({ ...prev, [path]: value }));
@@ -176,6 +200,11 @@ export default function App() {
       {error && <ErrorBanner message={error} onRetry={() => setError(null)} />}
 
       <Trace status={trace} />
+      {canCancel && busy && (
+        <button type="button" className="bn-trace-cancel" onClick={cancelTurn}>
+          Esto está tardando más de lo normal — cancelar y reformular
+        </button>
+      )}
       <Composer onSend={handleSend} disabled={busy || status !== "open"} />
     </div>
   );

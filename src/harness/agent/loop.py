@@ -15,6 +15,7 @@ se mueve con el proveedor: es lo que hace comparables las tres versiones.
 
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 import time
@@ -25,10 +26,43 @@ from typing import Any
 from ..a2ui.composer import CompileResult, compile_plan, fallback_plan
 from ..config import Settings
 from ..mcpx.manager import McpManager
-from ..providers import LLMProvider, ToolCall, ToolSpec, build_provider, text_msg
+from ..providers import Completion, LLMProvider, ToolCall, ToolSpec, build_provider, text_msg
+from ..providers.cli_agent import CliAgentProvider
 from .prompts import reasoning_system_prompt, tool_manifest_prompt, ui_system_prompt
 
 log = logging.getLogger("harness.agent")
+
+
+async def _complete_stream(provider: LLMProvider, **kwargs: Any) -> AsyncIterator[dict | Completion]:
+    """Como `provider.complete(**kwargs)`, pero si el proveedor puede reportar
+    progreso en vivo (hoy: solo `claude_code` en modo streaming) va cediendo
+    eventos `{"type":"thinking",...}` mientras el CLI sigue trabajando, en vez
+    de bloquear a ciegas hasta que termine (turnos de 10-180s con el CLI).
+
+    Para cualquier otro proveedor (fake, anthropic, gemini, antigravity) esto
+    es un `await` normal, sin cambio de comportamiento: la condición de abajo
+    solo es True para `claude_code` con streaming activo.
+
+    El último item cedido siempre es el `Completion` final.
+    """
+    if not (isinstance(provider, CliAgentProvider) and provider.cfg.get("streaming")):
+        yield await provider.complete(**kwargs)
+        return
+
+    queue: asyncio.Queue[dict] = asyncio.Queue()
+
+    async def on_event(ev: dict) -> None:
+        await queue.put(ev)
+
+    task = asyncio.ensure_future(provider.complete(**kwargs, on_event=on_event))
+    while not task.done():
+        try:
+            yield await asyncio.wait_for(queue.get(), timeout=0.5)
+        except asyncio.TimeoutError:
+            continue
+    while not queue.empty():
+        yield queue.get_nowait()
+    yield await task  # re-lanza si complete() falló; si no, el Completion
 
 
 class AgentError(RuntimeError):
@@ -109,13 +143,19 @@ class Agent:
         usage: dict[str, Any] = {}
 
         for step in range(self.s.max_tool_steps):
-            completion = await self.reasoner.complete(
+            completion: Completion | None = None
+            async for item in _complete_stream(
+                self.reasoner,
                 system=system,
                 messages=history,
                 tools=specs if native else None,
                 json_mode=not native,
                 temperature=self.s.temperature,
-            )
+            ):
+                if isinstance(item, Completion):
+                    completion = item
+                else:
+                    yield item
             usage = completion.usage or usage
 
             if native:
@@ -151,7 +191,13 @@ class Agent:
             log.warning("presupuesto de herramientas agotado (%s)", self.s.max_tool_steps)
 
         yield {"type": "thinking", "text": "Diseñando la interfaz…"}
-        result, plan = await self._compose_ui(user_text, final_text, trace, first_render)
+        result: CompileResult | None = None
+        plan: dict | None = None
+        async for item in self._compose_ui(user_text, final_text, trace, first_render):
+            if isinstance(item, tuple):
+                result, plan = item
+            else:
+                yield item
         yield {
             "type": "surface",
             "title": plan.get("title", ""),
@@ -172,7 +218,11 @@ class Agent:
     # ------------------------------------------------------------------ #
     async def _compose_ui(
         self, user_text: str, agent_text: str, trace: list[dict], first_render: bool
-    ) -> tuple[CompileResult, dict]:
+    ) -> AsyncIterator[dict | tuple[CompileResult, dict]]:
+        """Async generator: cede eventos de progreso (dict) mientras compone,
+        y al final cede exactamente un `(CompileResult, plan)` — así `run_turn`
+        puede reenviar el progreso del CLI sin que este método deje de
+        devolver, en esencia, lo mismo que antes."""
         # Auto-inject tool results into data model so the UI can reference by path
         auto: dict[str, Any] = {}
         for item in trace:
@@ -191,17 +241,24 @@ class Agent:
 
         for attempt in range(2):  # 1 intento + 1 reparación con los errores del validador
             try:
-                completion = await self.composer.complete(
+                completion: Completion | None = None
+                async for item in _complete_stream(
+                    self.composer,
                     system=system,
                     messages=messages,
                     json_mode=True,
                     temperature=self.s.ui_temperature,
-                )
+                ):
+                    if isinstance(item, Completion):
+                        completion = item
+                    else:
+                        yield item
                 plan = extract_json(completion.text)
                 plan["data"] = {"datos": auto, **(plan.get("data") or {})}
                 result = compile_plan(plan, self.s.surface_id, first_render)
                 if result.ok:
-                    return result, plan
+                    yield (result, plan)
+                    return
                 messages.append(text_msg("assistant", completion.text))
                 messages.append(
                     text_msg(
@@ -218,4 +275,4 @@ class Agent:
             "No pude armar esa pantalla",
             agent_text or "Intenta reformular lo que necesitas.",
         )
-        return compile_plan(plan, self.s.surface_id, first_render), plan
+        yield (compile_plan(plan, self.s.surface_id, first_render), plan)

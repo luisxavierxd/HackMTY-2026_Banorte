@@ -164,6 +164,22 @@
   white-space: nowrap;
 }
 
+.bn-trace-cancel {
+  display: block;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--bn-line);
+  padding: 8px var(--bn-space-4);
+  font-size: 0.8125rem;
+  color: var(--bn-red-deep);
+  text-align: left;
+  cursor: pointer;
+}
+.bn-trace-cancel:hover {
+  text-decoration: underline;
+}
+
 @keyframes bn-pulse {
   0%,
   100% {
