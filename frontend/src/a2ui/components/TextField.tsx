@@ -15,7 +15,13 @@ export default function TextField({ props, ctx }: A2UIComponentProps<TextFieldPr
 
   function onChange(next: string) {
     if (!path) return;
-    ctx.setLocal(path, props.inputType === "number" ? Number(next) : next);
+    // Number("") === 0: enviaría 0 al agente al limpiar el campo, confundiéndolo
+    // con un valor válido. Se deja null para que el agente sepa que está vacío.
+    if (props.inputType === "number") {
+      ctx.setLocal(path, next === "" ? null : Number(next));
+    } else {
+      ctx.setLocal(path, next);
+    }
   }
 
   return (
