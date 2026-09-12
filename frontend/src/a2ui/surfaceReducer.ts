@@ -51,9 +51,13 @@ function applyOne(state: SurfaceState, env: Envelope): SurfaceState {
   }
 
   if ("updateDataModel" in env) {
+    // Clon profundo: pointerSet muta objetos anidados in-place; sin esto,
+    // el mismo objeto nested queda compartido entre la entrada nueva del
+    // data model y las entradas anteriores del transcript, corrompiendo el
+    // historial de conversación al restaurar un turno anterior.
     const base: Record<string, unknown> =
       typeof state.data === "object" && state.data !== null && !Array.isArray(state.data)
-        ? { ...(state.data as Record<string, unknown>) }
+        ? (JSON.parse(JSON.stringify(state.data)) as Record<string, unknown>)
         : {};
     const data = pointerSet(base, env.updateDataModel.path, env.updateDataModel.value);
     return { ...state, data };

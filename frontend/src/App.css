@@ -236,14 +236,7 @@
   background: var(--bn-line);
 }
 
-/* El transcript se superpone sobre el contenido como un drawer nativo.
-   No empuja la surface-area hacia abajo: ahorra espacio en pantallas pequeñas. */
 .bn-transcript {
-  position: absolute;
-  top: 56px; /* altura del topbar; se ajusta con JS si safe-area > 0 */
-  left: 0;
-  right: 0;
-  z-index: 4;
   display: flex;
   flex-direction: column;
   gap: var(--bn-space-2);
@@ -253,7 +246,9 @@
   max-height: 45vh;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  box-shadow: 0 8px 24px rgba(36, 28, 26, 0.1);
+  flex-shrink: 0;
+  /* Sombra inferior para separarlo visualmente de la superficie */
+  box-shadow: 0 8px 24px rgba(36, 28, 26, 0.08);
 }
 .bn-transcript__item {
   margin: 0;
