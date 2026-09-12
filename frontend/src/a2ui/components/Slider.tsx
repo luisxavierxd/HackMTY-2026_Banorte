@@ -1,8 +1,11 @@
 import { useState } from "react";
 import type { A2UIComponentProps } from "../types";
-import { isBindingRef, type ActionRef, type Binding, type FormatKind } from "../../contract/a2ui";
+import { isBindingRef, type Binding, type FormatKind } from "../../contract/a2ui";
 import { resolveBinding } from "../resolve";
 
+// Slider nunca dispara una acción por sí solo (no existe en el catálogo:
+// catalog.py) — soltar el mouse a medio ajustar no debe cerrar el ciclo.
+// Siempre va acompañado de un ActionButton aparte para confirmar.
 interface SliderProps {
   label: string;
   min: number;
@@ -10,7 +13,6 @@ interface SliderProps {
   step?: number;
   value?: Binding<number>;
   format?: FormatKind;
-  action?: ActionRef;
 }
 
 function formatValue(value: number, format?: FormatKind): string {
@@ -39,7 +41,6 @@ export default function Slider({ props, ctx }: A2UIComponentProps<SliderProps>) 
 
   function onCommit() {
     setDragging(null);
-    ctx.runAction(props.action);
   }
 
   return (

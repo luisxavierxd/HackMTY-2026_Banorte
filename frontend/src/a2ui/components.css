@@ -219,8 +219,14 @@
 }
 .bn-slider input[type="range"] {
   width: 100%;
+  margin: 0;
   accent-color: var(--bn-red);
-  height: 4px;
+  /* El thumb nativo (~16-20px) es más alto que el grosor del track: si el
+     input mide 4px de alto, el navegador (sobre todo Firefox) recorta el
+     círculo del thumb en vez de dejarlo desbordar. El track sigue viéndose
+     delgado, pero el elemento necesita esta altura para que el thumb quepa
+     completo sin recorte. */
+  height: 20px;
 }
 
 .bn-field {

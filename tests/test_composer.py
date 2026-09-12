@@ -63,6 +63,24 @@ def test_enum_invalido_cae_al_default():
     assert errors
 
 
+def test_slider_no_acepta_action_soltar_el_mouse_no_debe_cerrar_el_ciclo():
+    # Bug real de producción: el Slider disparaba su propia "action" al
+    # soltar el mouse, incluso cuando la pantalla ya traía un ActionButton
+    # de confirmación aparte — el usuario no alcanzaba a terminar de ajustar
+    # el valor antes de que el turno se disparara solo. "action" ya no
+    # existe en el catálogo para Slider: el composer debe descartarla como
+    # prop desconocida, nunca dejarla pasar.
+    comps, errors, _ = validate_components([{
+        "id": "s", "component": "Slider",
+        "props": {
+            "label": "Plazo", "min": 0, "max": 100, "value": 50,
+            "action": {"event": {"name": "no_deberia_llegar", "params": {}}},
+        },
+    }])
+    assert "action" not in comps[0]
+    assert any("action" in e and "desconocida" in e for e in errors)
+
+
 def test_plan_sin_root_no_compila_y_hay_fallback():
     assert not compile_plan({"components": []}, "main", True).ok
     assert compile_plan(fallback_plan("t", "b"), "main", True).ok

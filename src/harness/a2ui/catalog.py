@@ -192,7 +192,10 @@ COMPONENTS: dict[str, dict[str, Any]] = {
         },
     },
     "Slider": {
-        "doc": "Entrada numérica continua (monto, plazo, aportación).",
+        "doc": "Entrada numérica continua (monto, plazo, aportación). NUNCA "
+               "dispara una acción por sí solo (no tiene prop 'action') — "
+               "soltar el mouse a medio ajustar no debe cerrar el ciclo.  "
+               "Acompáñalo SIEMPRE de un ActionButton aparte para confirmar.",
         "props": {
             "label": {"type": "string", "required": True},
             "min": {"type": "number", "required": True},
@@ -200,11 +203,11 @@ COMPONENTS: dict[str, dict[str, Any]] = {
             "step": {"type": "number", "default": 1},
             "value": {"type": "binding", "required": True},
             "format": {"type": "enum", "values": ["currency", "percent", "number"], "default": "number"},
-            "action": {"type": "action"},
         },
     },
     "TextField": {
-        "doc": "Entrada de texto o número corta.",
+        "doc": "Entrada de texto o número corta. Tampoco tiene 'action' —"
+               " mismo motivo que Slider: acompáñalo de un ActionButton aparte.",
         "props": {
             "label": {"type": "string", "required": True},
             "value": {"type": "binding", "required": True},
