@@ -592,7 +592,7 @@ const MascotAsistente = forwardRef<MascotAsistenteRef, MascotAsistenteProps>(
           ...containerStyle,
         }}
       >
-        <div style={{ marginLeft: size * 0.08, minHeight: speech.text ? undefined : 0 }}>
+        <div className="bn-mascot-bubble" style={{ marginLeft: size * 0.08, minHeight: speech.text ? undefined : 0 }}>
           <SpeechBubble
             key={speech.nonce}
             text={speech.text}

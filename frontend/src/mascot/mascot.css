@@ -1,10 +1,11 @@
 /* ================================================================
    Mascot Overlay — Banqui flota entre pantallas
 
-   La ilusión de continuidad se logra manteniendo el mismo componente
-   montado y transicionando su posición con CSS spring.
-   El wrapper interno (.bn-mascot-squish--active) añade un squish de
-   pelota al viajar, dando la sensación de que Banqui cambia de dirección.
+   Posiciones:
+     default (surface/busy) → bottom-left, small (scale 0.42)
+     --landing              → center-left, full size
+     --profile              → center-left near glass card, full size
+     --many-charts          → center-left, medium (side-by-side with charts)
    ================================================================ */
 
 .bn-mascot-overlay {
@@ -15,30 +16,35 @@
   flex-direction: column;
   align-items: flex-start;
 
-  /* Default: lado izquierdo, centrado verticalmente */
-  top: 50%;
-  left: clamp(16px, 4vw, 48px);
-  bottom: auto;
+  /* Default = surface/busy mode: bottom-left, small */
+  top: auto;
+  bottom: 16px;
+  left: 16px;
   right: auto;
-  transform: translateY(-50%);
+  transform: scale(0.42);
+  transform-origin: bottom left;
 
-  /* Spring con rebote ligero — da sensación de peso al flotar */
   transition:
     top       400ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    bottom    400ms cubic-bezier(0.34, 1.56, 0.64, 1),
     left      600ms cubic-bezier(0.34, 1.56, 0.64, 1),
     transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
-  will-change: top, transform;
+  will-change: bottom, left, transform;
 }
 
-/* En móvil: mascota arriba centrada */
+/* Desktop: account for sidebar */
+@media (min-width: 769px) {
+  .bn-mascot-overlay {
+    left: calc(280px + 16px);
+  }
+}
+
+/* Mobile: bottom-left, above composer */
 @media (max-width: 768px) {
   .bn-mascot-overlay {
-    top: max(8px, env(safe-area-inset-top, 8px));
-    left: 50%;
-    bottom: auto;
-    right: auto;
-    transform: translateX(-50%) scale(0.62);
-    transform-origin: top center;
+    bottom: 68px;
+    left: 4px;
+    transform: scale(0.35);
   }
 }
 
@@ -46,16 +52,17 @@
    Banqui en la columna izquierda, centrado verticalmente */
 .bn-mascot-overlay--landing {
   top: 50%;
-  left: clamp(16px, 4vw, 48px);
   bottom: auto;
+  left: clamp(16px, 4vw, 48px);
   right: auto;
   transform: translateY(-50%);
+  transform-origin: center center;
 }
 @media (max-width: 768px) {
   .bn-mascot-overlay--landing {
     top: max(16px, env(safe-area-inset-top, 16px));
-    left: 50%;
     bottom: auto;
+    left: 50%;
     right: auto;
     transform: translateX(-50%) scale(0.62);
     transform-origin: top center;
@@ -66,26 +73,66 @@
    Banqui en la columna izquierda de la tarjeta glass */
 .bn-mascot-overlay--profile {
   top: 50%;
-  left: max(20px, calc(50vw - 430px + 40px));
   bottom: auto;
+  left: max(20px, calc(50vw - 430px + 40px));
   right: auto;
   transform: translateY(-50%);
+  transform-origin: center center;
 }
 @media (max-width: 768px) {
   .bn-mascot-overlay--profile {
     top: max(12px, env(safe-area-inset-top, 12px));
-    left: 50%;
     bottom: auto;
+    left: 50%;
     right: auto;
     transform: translateX(-50%) scale(0.62);
     transform-origin: top center;
   }
 }
 
+/* ── Many charts ──
+   Banqui on the left side, medium size, vertically centered */
+.bn-mascot-overlay--many-charts {
+  top: 50%;
+  bottom: auto;
+  left: clamp(16px, 3vw, 32px);
+  right: auto;
+  transform: translateY(-50%) scale(0.65);
+  transform-origin: center left;
+}
+@media (min-width: 769px) {
+  .bn-mascot-overlay--many-charts {
+    left: calc(280px + 16px);
+  }
+}
+@media (max-width: 768px) {
+  .bn-mascot-overlay--many-charts {
+    top: max(8px, env(safe-area-inset-top, 8px));
+    bottom: auto;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%) scale(0.52);
+    transform-origin: top center;
+  }
+}
+
 /* ================================================================
-   Squish de viaje — wrapper interno para separar la animación de
-   la posición (la posición está en .bn-mascot-overlay, la animación
-   aquí, sin conflicto entre transition y animation).
+   Speech bubble — constrain on profile/landing/access so it
+   doesn't visually cover the form fields
+   ================================================================ */
+
+.bn-mascot-overlay--profile .bn-mascot-bubble,
+.bn-mascot-overlay--landing .bn-mascot-bubble {
+  max-width: 180px !important;
+}
+.bn-mascot-overlay--profile .bn-mascot-bubble > *,
+.bn-mascot-overlay--landing .bn-mascot-bubble > * {
+  max-width: 180px !important;
+  font-size: 12px !important;
+}
+
+/* ================================================================
+   Squish de viaje
    ================================================================ */
 
 .bn-mascot-squish--active {

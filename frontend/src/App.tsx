@@ -8,6 +8,7 @@ import type { ActionRef, Envelope } from "./contract/a2ui";
 import type { ServerEvent } from "./contract/events";
 import { applyEnvelopes, type SurfaceState } from "./a2ui/surfaceReducer";
 import { renderSurface } from "./a2ui/registry";
+import { CHART_ADAPTERS } from "./a2ui/charts/registry";
 import { pointerSet } from "./a2ui/pointer";
 import { useSocket, clearStoredSession, setActiveSessionId } from "./net/useSocket";
 import { sendAction, sendUserMessage, deleteSession } from "./net/client";
@@ -479,70 +480,31 @@ export default function App() {
   }
 
   const hasSurface = !!surface && !!surface.root;
-  // Landing "Liquid Glass" (Home.tsx): pantalla de arranque a pantalla
-  // completa, sin topbar/composer fijo — solo mientras no hay conversación
-  // activa. Se mantiene también mientras se espera la primera respuesta
-  // (busy sin surface todavía), ver spec de la migración.
   const showLanding = !hasSurface && status === "open";
+
+  const chartCount = useMemo(() => {
+    if (!surface?.components) return 0;
+    return Object.values(surface.components).filter(
+      (node) => CHART_ADAPTERS[node.component]
+    ).length;
+  }, [surface]);
+  const manyCharts = chartCount > 2;
 
   const body: ReactNode = hasSurface
     ? renderSurface(surface, viewData, { setLocal, runAction, busy })
     : null;
 
-  // Banqui — siempre montado para ilusión de continuidad entre pantallas.
-  // Siempre en el lado izquierdo, centrado verticalmente, tamaño fijo 240px.
-  // Mascota sigue el mouse verticalmente (solo en desktop, en surface view)
-  const isWide = useRef(window.innerWidth > 768);
-  useEffect(() => {
-    const onResize = () => { isWide.current = window.innerWidth > 768; };
-    window.addEventListener("resize", onResize, { passive: true });
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
-
-  useEffect(() => {
-    const el = mascotOverlayRef.current;
-    if (!el) return;
-    let raf = 0;
-    let targetY = window.innerHeight / 2;
-    let currentY = targetY;
-    const mascotH = 240;
-    const pad = 60;
-
-    const onMove = (e: MouseEvent) => {
-      if (!isWide.current) return;
-      const minY = pad;
-      const maxY = window.innerHeight - mascotH - pad;
-      targetY = Math.max(minY, Math.min(maxY, e.clientY - mascotH / 2));
-    };
-
-    const tick = () => {
-      currentY += (targetY - currentY) * 0.08;
-      if (isWide.current && !el.classList.contains("bn-mascot-overlay--landing") && !el.classList.contains("bn-mascot-overlay--profile")) {
-        el.style.top = `${currentY}px`;
-        el.style.transform = "none";
-      } else {
-        el.style.top = "";
-        el.style.transform = "";
-      }
-      raf = requestAnimationFrame(tick);
-    };
-
-    window.addEventListener("mousemove", onMove, { passive: true });
-    raf = requestAnimationFrame(tick);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(raf);
-    };
-  }, []);
+  const mascotModifier =
+    currentScreenForTutorial === "surface" || currentScreenForTutorial === "busy"
+      ? (manyCharts ? " bn-mascot-overlay--many-charts" : "")
+      : currentScreenForTutorial === "profile"
+      ? " bn-mascot-overlay--profile"
+      : " bn-mascot-overlay--landing";
 
   const mascotaOverlay = (
     <div
       ref={mascotOverlayRef}
-      className={`bn-mascot-overlay${
-        currentScreenForTutorial === "surface" || currentScreenForTutorial === "busy"
-          ? "" : currentScreenForTutorial === "profile"
-          ? " bn-mascot-overlay--profile" : " bn-mascot-overlay--landing"
-      }`}
+      className={`bn-mascot-overlay${mascotModifier}`}
     >
       {/* Wrapper interno para el squish de viaje sin conflicto con la transición de posición */}
       <div className={mascotTraveling ? "bn-mascot-squish--active" : undefined}>
@@ -618,7 +580,7 @@ export default function App() {
         onSelectConversation={switchConversation}
         onDeleteConversation={deleteConversation}
       />
-      <div className={`bn-app${showLanding ? " bn-app--full" : ""}`}>
+      <div className={`bn-app${showLanding ? " bn-app--full" : ""}${manyCharts ? " bn-app--many-charts" : ""}`}>
       {showLanding ? (
         <>
           <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />

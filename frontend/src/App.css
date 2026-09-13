@@ -384,10 +384,19 @@
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
-  padding: var(--bn-space-5) var(--bn-space-4) var(--bn-space-6);
+  padding: var(--bn-space-5);
+  margin: var(--bn-space-4);
+  margin-bottom: var(--bn-space-2);
   display: flex;
   flex-direction: column;
   gap: var(--bn-space-4);
+
+  background: var(--bn-glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--bn-glass-border);
+  border-radius: var(--bn-radius-surface);
+  box-shadow: var(--bn-glass-glow), 0 8px 48px rgba(0, 0, 0, 0.3);
 }
 
 /* ================================================================
@@ -592,6 +601,27 @@
 }
 
 /* ================================================================
+   Many-charts layout — Banqui left side, charts stack vertically
+   ================================================================ */
+
+.bn-app--many-charts .bn-surface-area {
+  margin-left: 180px;
+}
+.bn-app--many-charts .bn-composer,
+.bn-app--many-charts .bn-trace,
+.bn-app--many-charts .bn-trace-cancel {
+  padding-left: 180px;
+}
+@media (max-width: 768px) {
+  .bn-app--many-charts .bn-surface-area {
+    margin-left: var(--bn-space-4);
+  }
+  .bn-app--many-charts .bn-composer {
+    padding-left: var(--bn-space-4);
+  }
+}
+
+/* ================================================================
    Trace bar
    ================================================================ */
 
@@ -600,11 +630,16 @@
   align-items: center;
   gap: var(--bn-space-2);
   padding: var(--bn-space-2) var(--bn-space-4);
-  border-top: 1px solid var(--bn-glass-border);
+  padding-left: 120px;
   color: var(--bn-mute);
   font-size: 0.8125rem;
   min-height: 20px;
   flex-shrink: 0;
+}
+@media (max-width: 768px) {
+  .bn-trace {
+    padding-left: var(--bn-space-4);
+  }
 }
 .bn-trace__dot {
   width: 6px;
@@ -625,14 +660,19 @@
   width: 100%;
   background: transparent;
   border: none;
-  border-top: 1px solid var(--bn-glass-border);
   padding: 10px var(--bn-space-4);
+  padding-left: 120px;
   font-size: 0.8125rem;
   color: var(--bn-red-deep);
   text-align: left;
   cursor: pointer;
   flex-shrink: 0;
   min-height: 44px;
+}
+@media (max-width: 768px) {
+  .bn-trace-cancel {
+    padding-left: var(--bn-space-4);
+  }
 }
 .bn-trace-cancel:hover {
   text-decoration: underline;
@@ -660,11 +700,13 @@
   gap: var(--bn-space-2);
   padding: var(--bn-space-3) var(--bn-space-4);
   padding-bottom: max(var(--bn-space-3), calc(env(safe-area-inset-bottom, 0px) + var(--bn-space-2)));
-  border-top: 1px solid var(--bn-glass-border);
-  background: var(--bn-app-bg);
-  backdrop-filter: blur(var(--bn-glass-blur));
-  -webkit-backdrop-filter: blur(var(--bn-glass-blur));
+  padding-left: 120px;
   flex-shrink: 0;
+}
+@media (max-width: 768px) {
+  .bn-composer {
+    padding-left: var(--bn-space-4);
+  }
 }
 .bn-composer__input {
   flex: 1 1 auto;

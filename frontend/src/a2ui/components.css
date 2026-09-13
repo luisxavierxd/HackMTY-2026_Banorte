@@ -23,6 +23,9 @@
   gap: var(--bn-space-3);
   flex-wrap: wrap;
 }
+.bn-app--many-charts .bn-row {
+  flex-direction: column;
+}
 .bn-align-start {
   justify-content: flex-start;
 }
