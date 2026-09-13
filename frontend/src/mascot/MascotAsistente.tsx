@@ -437,6 +437,7 @@ const Mascot = forwardRef<{ pulseSquish: () => void }, MascotProps>(
         style={{
           width: size, height: size, position: "relative", flexShrink: 0,
           cursor: "pointer",
+          pointerEvents: "auto",
           ...style,
         }}
       >

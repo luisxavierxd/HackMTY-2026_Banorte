@@ -30,6 +30,7 @@ import ProfileSidebar from "./shell/ProfileSidebar";
 import Composer from "./shell/Composer";
 import Trace, { type TraceStatus } from "./shell/Trace";
 import Home from "./shell/Home";
+import DotField from "./shell/DotField";
 import ErrorBanner from "./shell/Error";
 import Loading from "./shell/Loading";
 import SurfaceErrorBoundary from "./shell/SurfaceErrorBoundary";
@@ -559,8 +560,16 @@ export default function App() {
   );
 
   if (needsAccessKey) {
+    const isLight = theme === 'light';
     return (
       <>
+        <DotField
+          style={{ position: "fixed", inset: 0, zIndex: 0 }}
+          dotRadius={3} dotSpacing={16} bulgeStrength={60} cursorRadius={180}
+          bulgeOnly noGlow
+          gradientFrom={isLight ? "rgba(235,0,41,0.32)" : "rgba(235,0,41,0.38)"}
+          gradientTo={isLight ? "rgba(190,0,25,0.14)" : "rgba(180,0,20,0.18)"}
+        />
         <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />
         <AccessGate wrongKey={hadWrongKey} onSubmit={() => location.reload()} />
         {mascotaOverlay}
@@ -569,10 +578,16 @@ export default function App() {
   }
 
   if (!profile) {
-    // Banqui como overlay (siempre el mismo) — no se pasa como prop interno
-    // para mantener la ilusión de continuidad (mismo componente montado).
+    const isLight = theme === 'light';
     return (
       <>
+        <DotField
+          style={{ position: "fixed", inset: 0, zIndex: 0 }}
+          dotRadius={3} dotSpacing={16} bulgeStrength={60} cursorRadius={180}
+          bulgeOnly noGlow
+          gradientFrom={isLight ? "rgba(235,0,41,0.32)" : "rgba(235,0,41,0.38)"}
+          gradientTo={isLight ? "rgba(190,0,25,0.14)" : "rgba(180,0,20,0.18)"}
+        />
         <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />
         <ProfileGate onSubmit={() => setProfileState(getProfile())} />
         {mascotaOverlay}

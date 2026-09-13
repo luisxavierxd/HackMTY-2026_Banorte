@@ -10,7 +10,7 @@
 .bn-mascot-overlay {
   position: fixed;
   z-index: 200;
-  pointer-events: auto;
+  pointer-events: none;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
