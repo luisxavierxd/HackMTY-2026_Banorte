@@ -1,0 +1,282 @@
+/*
+ * ProfileGate — Dark glass style
+ * Basado en Figma: Liquid Glass iOS 26 Community / "Cuéntanos de ti"
+ * Specs clave:
+ *   bg: radial-gradient charcoal → negro
+ *   card: glass rgba(255,255,255,0.06) + backdrop-blur 75px + border rgba(255,255,255,0.18)
+ *   inputs: glass pill, borde rgba(255,255,255,0.20), border-radius pill
+ *   font: Albert Sans SemiBold 56px títulos, Regular 14-15px labels/inputs
+ *   banky: 220×220px inline en la columna izquierda
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;600&display=swap");
+
+/* ── Fondo ─────────────────────────────────────────────────────────────── */
+.bn-pglass-outer {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: radial-gradient(
+    ellipse 140% 120% at 68% 50%,
+    rgba(108, 108, 108, 1) 0%,
+    rgba(62,  62,  62,  1) 28%,
+    rgba(28,  28,  28,  1) 58%,
+    rgba(10,  10,  10,  1) 100%
+  );
+}
+
+/* ── Glass card ─────────────────────────────────────────────────────────── */
+.bn-pglass-card {
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  gap: 48px;
+  padding: 48px 44px;
+
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(75px);
+  -webkit-backdrop-filter: blur(75px);
+  border: 1.2px solid rgba(255, 255, 255, 0.18);
+  border-radius: 40px;
+  box-shadow:
+    inset 0 0 80px rgba(255, 255, 255, 0.03),
+    0 4px 128px rgba(0, 0, 0, 0.5);
+}
+
+/* ── Columna izquierda: título + Banky ──────────────────────────────────── */
+.bn-pglass-left {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  width: 240px;
+}
+
+.bn-pglass-title {
+  font-family: "Albert Sans", system-ui, sans-serif;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-shadow: 0 24px 20.8px rgba(211, 211, 211, 0.4);
+  margin: 0;
+}
+
+/* Banky (capas de imagen estáticas — misma técnica que landing.css) */
+.bn-pglass-mascot {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  flex-shrink: 0;
+}
+.bn-pglass-mascot-face {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 90%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  user-select: none;
+}
+.bn-pglass-mascot-mustache {
+  position: absolute;
+  left: 50%;
+  top: 68%;
+  width: 28%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  user-select: none;
+}
+.bn-pglass-mascot-hand {
+  position: absolute;
+  width: 18%;
+  pointer-events: none;
+  user-select: none;
+}
+.bn-pglass-mascot-hand--left {
+  left: 15%;
+  top: 80%;
+  transform: scaleX(-1);
+}
+.bn-pglass-mascot-hand--right {
+  right: 10%;
+  top: 76%;
+}
+
+/* ── Columna derecha: formulario ────────────────────────────────────────── */
+.bn-pglass-form {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.bn-pglass-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.bn-pglass-label {
+  font-family: "Albert Sans", system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.67);
+  letter-spacing: -0.01em;
+  padding-left: 4px;
+}
+
+/* Glass pill — igual al input del Figma */
+.bn-pglass-input {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  padding: 11px 18px;
+  width: 100%;
+  box-sizing: border-box;
+
+  font-family: "Albert Sans", system-ui, sans-serif;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.9);
+
+  box-shadow: inset 0 0 24px rgba(255, 255, 255, 0.04);
+  outline: none;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+.bn-pglass-input::placeholder {
+  color: rgba(108, 108, 108, 0.8);
+}
+.bn-pglass-input:focus {
+  border-color: rgba(255, 255, 255, 0.38);
+  background: rgba(255, 255, 255, 0.12);
+}
+/* Quitar flechas de number input */
+.bn-pglass-input::-webkit-outer-spin-button,
+.bn-pglass-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.bn-pglass-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Error state */
+.bn-pglass-input--error {
+  border-color: rgba(235, 0, 41, 0.7) !important;
+  background: rgba(235, 0, 41, 0.08) !important;
+}
+
+/* Checkbox de privacidad */
+.bn-pglass-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: "Albert Sans", system-ui, sans-serif;
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: 2px;
+  padding-left: 4px;
+}
+.bn-pglass-checkbox input[type="checkbox"] {
+  margin-top: 2px;
+  flex-shrink: 0;
+  accent-color: #eb0029;
+}
+
+.bn-pglass-link {
+  background: none;
+  border: none;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.80);
+  text-decoration: underline;
+  font: inherit;
+  cursor: pointer;
+}
+.bn-pglass-link:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+/* Botón submit — pill rojo glass */
+.bn-pglass-submit {
+  background: rgba(235, 0, 41, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(235, 0, 41, 0.4);
+  border-radius: 999px;
+  padding: 13px 20px;
+  margin-top: 6px;
+  width: 100%;
+
+  font-family: "Albert Sans", system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.01em;
+  text-transform: capitalize;
+
+  cursor: pointer;
+  transition: background 140ms ease, opacity 140ms ease;
+  box-shadow: 0 2px 16px rgba(235, 0, 41, 0.3);
+}
+.bn-pglass-submit:disabled {
+  background: rgba(80, 80, 80, 0.4);
+  border-color: rgba(255, 255, 255, 0.10);
+  box-shadow: none;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.bn-pglass-submit:not(:disabled):hover {
+  background: rgba(235, 0, 41, 1);
+}
+.bn-pglass-submit:not(:disabled):active {
+  background: rgba(179, 0, 31, 1);
+}
+
+/* Card wide para el aviso de privacidad */
+.bn-pglass-card--wide {
+  max-width: 600px;
+  flex-direction: column;
+  gap: 16px;
+}
+.bn-pglass-card--wide .bn-privacy h2 {
+  color: #fff;
+}
+.bn-pglass-card--wide .bn-privacy h3 {
+  color: rgba(255, 255, 255, 0.9);
+}
+.bn-pglass-card--wide .bn-privacy p {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ── Responsive: apilar en móvil ────────────────────────────────────────── */
+@media (max-width: 680px) {
+  .bn-pglass-card {
+    flex-direction: column;
+    align-items: center;
+    padding: 28px 20px;
+    gap: 20px;
+    border-radius: 28px;
+  }
+  .bn-pglass-left {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
+  .bn-pglass-mascot {
+    width: 110px;
+    height: 110px;
+    flex-shrink: 0;
+  }
+  .bn-pglass-title {
+    font-size: clamp(26px, 8vw, 36px);
+  }
+}

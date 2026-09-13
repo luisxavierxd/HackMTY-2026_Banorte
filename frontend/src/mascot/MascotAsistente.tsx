@@ -142,6 +142,7 @@ function SpeechBubble({
   speedMs = 35,
   playBlip,
   onChar,
+  onContinuar,
   style,
   className,
 }: {
@@ -149,6 +150,7 @@ function SpeechBubble({
   speedMs?: number;
   playBlip: (v: number, c: string) => void;
   onChar?: (i: number, c: string) => void;
+  onContinuar?: () => void;
   style?: React.CSSProperties;
   className?: string;
 }) {
@@ -160,37 +162,74 @@ function SpeechBubble({
       className={className}
       style={{
         position: "relative",
-        background: "rgba(255, 255, 255, 0.08)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        border: "1px solid rgba(255, 255, 255, 0.14)",
-        borderRadius: 16,
+        background: "rgba(18, 18, 22, 0.88)",
+        backdropFilter: "blur(24px)",
+        WebkitBackdropFilter: "blur(24px)",
+        border: "1px solid rgba(255, 255, 255, 0.18)",
+        borderRadius: 20,
         padding: "12px 16px",
+        paddingBottom: done && onContinuar ? "8px" : "12px",
         boxShadow:
-          "inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 8px 24px rgba(0, 0, 0, 0.3)",
-        maxWidth: 240,
+          "inset 0 1px 0 rgba(255,255,255,0.12), 0 8px 32px rgba(0,0,0,0.45)",
+        maxWidth: 230,
         minHeight: "2.4em",
         fontSize: 13,
-        lineHeight: 1.4,
-        color: "rgba(255, 255, 255, 0.9)",
+        lineHeight: 1.45,
+        color: "rgba(255, 255, 255, 0.92)",
         fontFamily: "inherit",
+        display: "flex",
+        flexDirection: "column",
+        gap: 8,
         ...style,
       }}
     >
-      <span>{displayed}</span>
-      {!done && (
-        <span
+      <span style={{ flex: 1 }}>
+        {displayed}
+        {!done && (
+          <span
+            style={{
+              display: "inline-block",
+              width: 2,
+              height: "1em",
+              verticalAlign: "middle",
+              background: "rgba(255, 255, 255, 0.7)",
+              marginLeft: 2,
+              animation: "mascot-caret-blink 0.8s steps(1) infinite",
+            }}
+          />
+        )}
+      </span>
+
+      {/* Botón Continuar — aparece solo cuando el typewriter terminó */}
+      {done && onContinuar && (
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); onContinuar(); }}
           style={{
-            display: "inline-block",
-            width: 2,
-            height: "1em",
-            verticalAlign: "middle",
-            background: "rgba(255, 255, 255, 0.7)",
-            marginLeft: 2,
-            animation: "mascot-caret-blink 0.8s steps(1) infinite",
+            alignSelf: "flex-end",
+            background: "rgba(235,0,41,0.80)",
+            border: "1px solid rgba(235,0,41,0.40)",
+            borderRadius: 999,
+            color: "#fff",
+            fontSize: 12,
+            fontWeight: 600,
+            fontFamily: "inherit",
+            padding: "5px 12px",
+            cursor: "pointer",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            transition: "background 120ms",
+            lineHeight: 1,
+            whiteSpace: "nowrap",
           }}
-        />
+          onMouseEnter={(e) => { (e.target as HTMLButtonElement).style.background = "rgba(235,0,41,1)"; }}
+          onMouseLeave={(e) => { (e.target as HTMLButtonElement).style.background = "rgba(235,0,41,0.80)"; }}
+        >
+          Continuar →
+        </button>
       )}
+
+      {/* Cola de la burbuja apuntando hacia Banqui (abajo-izquierda) */}
       <div
         style={{
           position: "absolute",
@@ -198,12 +237,10 @@ function SpeechBubble({
           left: 28,
           width: 14,
           height: 14,
-          background: "rgba(255, 255, 255, 0.08)",
-          borderBottom: "1px solid rgba(255, 255, 255, 0.14)",
-          borderRight: "1px solid rgba(255, 255, 255, 0.14)",
+          background: "rgba(18, 18, 22, 0.88)",
+          borderBottom: "1px solid rgba(255, 255, 255, 0.18)",
+          borderRight: "1px solid rgba(255, 255, 255, 0.18)",
           transform: "rotate(45deg)",
-          backdropFilter: "blur(20px)",
-          WebkitBackdropFilter: "blur(20px)",
         }}
       />
       <style>{`@keyframes mascot-caret-blink { 50% { opacity: 0; } }`}</style>
@@ -253,6 +290,8 @@ const Mascot = forwardRef<{ pulseSquish: () => void }, MascotProps>(
     const handRRef = useRef<HTMLImageElement>(null);
 
     const squishEnergy = useRef(0);
+    // Click en Banqui → spin del bigote durante ~1.2 s
+    const clickSpinUntilRef = useRef(0);
     useEffect(() => {
       if (speechTick > 0) squishEnergy.current = 1;
     }, [speechTick]);
@@ -334,7 +373,8 @@ const Mascot = forwardRef<{ pulseSquish: () => void }, MascotProps>(
         const handRScale = alive ? 1 + Math.sin(t * 3.6 + 2.6) * 0.025 : 1;
 
         const spinnerSpeed = 260;
-        const mustacheRotation = cargando ? (t * spinnerSpeed) % 360 : 0;
+        const isClickSpin = now < clickSpinUntilRef.current;
+        const mustacheRotation = (cargando || isClickSpin) ? (t * spinnerSpeed) % 360 : 0;
         const mustacheFloat =
           alive && !cargando ? Math.sin(t * 4.9 + 0.4) * 0.9 : 0;
         const mustacheBase = 0.85 + c.mustache * 0.15;
@@ -346,7 +386,8 @@ const Mascot = forwardRef<{ pulseSquish: () => void }, MascotProps>(
         }
         if (mustacheRef.current) {
           mustacheRef.current.style.opacity = String(c.mustache);
-          mustacheRef.current.style.transform = cargando
+          const spinActive = cargando || isClickSpin;
+          mustacheRef.current.style.transform = spinActive
             ? `translate(-50%, -50%) rotate(${mustacheRotation}deg) scale(${mustacheBase})`
             : `translate(-50%, calc(-50% + ${mustacheFloat}px)) scale(${mustacheScaleX}, ${mustacheScaleY})`;
         }
@@ -384,7 +425,18 @@ const Mascot = forwardRef<{ pulseSquish: () => void }, MascotProps>(
       <div
         ref={rootRef}
         className={className}
-        style={{ width: size, height: size, position: "relative", flexShrink: 0, ...style }}
+        onClick={() => {
+          // Click → spin bigote 1.5 s + squish
+          clickSpinUntilRef.current = performance.now() + 1500;
+          squishEnergy.current = 1.5;
+        }}
+        role="img"
+        aria-label="Banqui"
+        style={{
+          width: size, height: size, position: "relative", flexShrink: 0,
+          cursor: "pointer",
+          ...style,
+        }}
       >
         <img
           src={CARAS[cara]}
@@ -462,6 +514,8 @@ interface MascotAsistenteProps {
   containerClassName?: string;
   onHablarEmpieza?: (texto: string) => void;
   onHablarTermina?: () => void;
+  /** Callback que se llama cuando el usuario hace clic en "Continuar →" del globo */
+  onContinuar?: () => void;
 }
 
 const MascotAsistente = forwardRef<MascotAsistenteRef, MascotAsistenteProps>(
@@ -478,6 +532,7 @@ const MascotAsistente = forwardRef<MascotAsistenteRef, MascotAsistenteProps>(
       containerStyle,
       containerClassName,
       onHablarEmpieza,
+      onContinuar,
     },
     ref
   ) {
@@ -534,13 +589,14 @@ const MascotAsistente = forwardRef<MascotAsistenteRef, MascotAsistenteProps>(
           ...containerStyle,
         }}
       >
-        <div style={{ marginLeft: size * 0.08, minHeight: "2.4em" }}>
+        <div style={{ marginLeft: size * 0.08, minHeight: speech.text ? undefined : 0 }}>
           <SpeechBubble
             key={speech.nonce}
             text={speech.text}
             speedMs={speech.speed}
             playBlip={playBlip}
             onChar={() => setSpeechTick((n) => n + 1)}
+            onContinuar={speech.text ? onContinuar : undefined}
             style={bubbleStyle}
             className={bubbleClassName}
           />

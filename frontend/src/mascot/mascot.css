@@ -1,41 +1,101 @@
-/* Overlay fijo en esquina inferior derecha — visible en todas las pantallas */
+/* ================================================================
+   Mascot Overlay — Banqui flota entre pantallas
+
+   La ilusión de continuidad se logra manteniendo el mismo componente
+   montado y transicionando su posición con CSS spring.
+   El wrapper interno (.bn-mascot-squish--active) añade un squish de
+   pelota al viajar, dando la sensación de que Banqui cambia de dirección.
+   ================================================================ */
+
 .bn-mascot-overlay {
   position: fixed;
-  bottom: 20px;
-  right: 16px;
   z-index: 200;
-  pointer-events: none; /* deja pasar clicks al contenido de abajo */
+  pointer-events: auto;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+
+  /* Default: esquina inferior-izquierda, junto al composer */
+  bottom: 20px;
+  left: 16px;
+  top: auto;
+  right: auto;
+  transform: none;
+
+  /* Spring con rebote ligero — da sensación de peso al flotar */
+  transition:
+    bottom    600ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    top       600ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    left      600ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    right     600ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
 }
 
-/* En móvil reduce el tamaño para no tapar el contenido */
+/* En móvil más pequeño y elevado sobre el composer */
 @media (max-width: 539px) {
   .bn-mascot-overlay {
-    bottom: 80px; /* sube sobre el composer */
-    right: 8px;
-    transform: scale(0.72);
-    transform-origin: bottom right;
+    bottom: 76px;
+    left: 8px;
+    transform: scale(0.78);
+    transform-origin: bottom left;
   }
 }
 
-/* Landing "Liquid Glass" (shell/Home.tsx): la mascota se centra arriba del
- * título en vez de la esquina inferior — declarado después a propósito
- * para ganarle a las reglas de arriba con la misma especificidad. */
+/* ── Landing / Home ──
+   Banqui en la columna izquierda, centrado verticalmente */
 .bn-mascot-overlay--landing {
+  top: 50%;
+  left: clamp(16px, 4vw, 48px);
   bottom: auto;
   right: auto;
-  top: max(16px, env(safe-area-inset-top, 16px));
-  left: 50%;
-  align-items: center;
-  transform: translateX(-50%);
+  transform: translateY(-50%);
 }
 @media (max-width: 539px) {
   .bn-mascot-overlay--landing {
+    top: max(16px, env(safe-area-inset-top, 16px));
+    left: 50%;
     bottom: auto;
     right: auto;
-    transform: translateX(-50%) scale(0.72);
+    transform: translateX(-50%) scale(0.78);
     transform-origin: top center;
   }
+}
+
+/* ── Profile gate ──
+   Banqui en la columna izquierda de la tarjeta glass */
+.bn-mascot-overlay--profile {
+  top: 50%;
+  left: max(20px, calc(50vw - 430px + 40px));
+  bottom: auto;
+  right: auto;
+  transform: translateY(-50%);
+}
+@media (max-width: 700px) {
+  .bn-mascot-overlay--profile {
+    top: max(12px, env(safe-area-inset-top, 12px));
+    left: 50%;
+    bottom: auto;
+    right: auto;
+    transform: translateX(-50%) scale(0.78);
+    transform-origin: top center;
+  }
+}
+
+/* ================================================================
+   Squish de viaje — wrapper interno para separar la animación de
+   la posición (la posición está en .bn-mascot-overlay, la animación
+   aquí, sin conflicto entre transition y animation).
+   ================================================================ */
+
+.bn-mascot-squish--active {
+  animation: bn-mascot-travel 560ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes bn-mascot-travel {
+  0%   { transform: scaleX(1.00) scaleY(1.00) rotate(0deg); }
+  20%  { transform: scaleX(1.14) scaleY(0.88) rotate(-6deg); }
+  60%  { transform: scaleX(0.88) scaleY(1.14) rotate(5deg); }
+  82%  { transform: scaleX(1.05) scaleY(0.96) rotate(-2deg); }
+  100% { transform: scaleX(1.00) scaleY(1.00) rotate(0deg); }
 }
