@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { SurfaceRevealContext } from "./a2ui/surfaceRevealContext";
 import "./design/base.css";
 import "./App.css";
 import "./mascot/mascot.css";
@@ -40,6 +41,13 @@ import { useTheme } from "./shell/useTheme";
 import ThemeToggle from "./shell/ThemeToggle";
 
 const IS_LAB = new URLSearchParams(location.search).get("lab") === "1";
+
+// Static tutorial steps for the surface screen (steps 1-3 after the dynamic intro)
+const SURFACE_STEPS_STATIC = [
+  { texto: "Cada sección irá apareciendo una a una. Obsérvalas con calma.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "apuntando" },
+  { texto: "Puedes interactuar con las gráficas y los botones de cada tarjeta.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando" },
+  { texto: "¿Tienes alguna pregunta sobre tus datos? Escríbela abajo y te ayudo.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "pulgarArriba" },
+] as const;
 
 function RefreshIcon() {
   return (
@@ -384,11 +392,13 @@ export default function App() {
       { texto: "Elige una sugerencia o escribe tu propia pregunta abajo.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "apuntando" },
     ],
     busy: [
-      { texto: "Déjame revisar eso…", cara: "pensativo", bigote: "ninguno", manoI: "ninguna", manoD: "ninguna", cargando: true },
+      { texto: "Un momento, voy a analizar tu información…", cara: "pensativo", bigote: "normal", manoI: "ninguna", manoD: "ninguna", cargando: true },
     ],
     surface: [
-      { texto: title ? `Listo. ${title.slice(0, 60)}` : "Aquí está tu información.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "pulgarArriba" },
-      { texto: "Puedes interactuar con cada sección. ¿Tienes alguna duda? Escríbeme.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando" },
+      { texto: title ? `¡Listo! Aquí tienes: ${title.slice(0, 50)}.` : "¡Listo! Aquí está tu información financiera.", cara: "normal", bigote: "normal", manoI: "enseñando", manoD: "enseñando" },
+      { texto: "Cada sección irá apareciendo una a una. Obsérvalas con calma.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "apuntando" },
+      { texto: "Puedes interactuar con las gráficas y los botones de cada tarjeta.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando" },
+      { texto: "¿Tienes alguna pregunta sobre tus datos? Escríbela abajo y te ayudo.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "pulgarArriba" },
     ],
     error: [
       { texto: "Algo salió mal. ¿Lo intentamos de nuevo?", cara: "preocupado", bigote: "ninguno", manoI: "ninguna", manoD: "ninguna" },
@@ -396,6 +406,15 @@ export default function App() {
   };
 
   const [tutorialStep, setTutorialStep] = useState(0);
+  const tutorialStepRef = useRef(0);
+  useEffect(() => { tutorialStepRef.current = tutorialStep; }, [tutorialStep]);
+
+  const [revealedCount, setRevealedCount] = useState(0);
+  // Reset to 0 when a new surface arrives so items reveal sequentially
+  useEffect(() => { setRevealedCount(0); }, [turnId]);
+  // Show everything while busy (previous surface still visible)
+  useEffect(() => { if (busy) setRevealedCount(99); }, [busy]);
+
   const prevScreenRef = useRef<ScreenId | null>(null);
 
   // Determina la pantalla actual para seleccionar los pasos del tutorial
@@ -460,6 +479,28 @@ export default function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentScreenForTutorial, tutorialStep, title]);
 
+  // Auto-advance reveal: called when Banky finishes a speech on the surface screen
+  const handleHablarTermina = useCallback(() => {
+    if (currentScreenForTutorial !== "surface") return;
+    setTimeout(() => {
+      setRevealedCount((n) => n + 1);
+      const curStep = tutorialStepRef.current;
+      if (curStep < SURFACE_STEPS_STATIC.length) {
+        const nextStep = curStep + 1;
+        setTutorialStep(nextStep);
+        const s = SURFACE_STEPS_STATIC[curStep as 0 | 1 | 2];
+        if (mascotRef.current) {
+          mascotRef.current.setPose({ cara: s.cara, bigote: s.bigote, manoIzquierda: s.manoI, manoDerecha: s.manoD });
+          mascotRef.current.hablar(s.texto);
+        }
+      } else {
+        // All guided steps done — reveal any remaining items
+        setTimeout(() => setRevealedCount(99), 1500);
+      }
+    }, 1500);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentScreenForTutorial]);
+
   // ------------------------------------------------------------------
 
   // Galería offline de fixtures (?lab=1): reusa registry.tsx sin backend.
@@ -491,12 +532,16 @@ export default function App() {
   const manyCharts = chartCount > 2;
 
   const body: ReactNode = hasSurface
-    ? renderSurface(surface, viewData, { setLocal, runAction, busy })
+    ? (
+      <SurfaceRevealContext.Provider value={revealedCount}>
+        {renderSurface(surface, viewData, { setLocal, runAction, busy })}
+      </SurfaceRevealContext.Provider>
+    )
     : null;
 
   const mascotModifier =
     currentScreenForTutorial === "surface" || currentScreenForTutorial === "busy"
-      ? (manyCharts ? " bn-mascot-overlay--many-charts" : "")
+      ? " bn-mascot-overlay--many-charts"
       : currentScreenForTutorial === "profile"
       ? " bn-mascot-overlay--profile"
       : " bn-mascot-overlay--landing";
@@ -515,7 +560,8 @@ export default function App() {
           bigoteInicial="normal"
           manoIzquierdaInicial="normal"
           manoDerechaInicial="enseñando"
-          onContinuar={handleContinuar}
+          onContinuar={currentScreenForTutorial !== "surface" ? handleContinuar : undefined}
+          onHablarTermina={handleHablarTermina}
         />
       </div>
     </div>
@@ -580,7 +626,7 @@ export default function App() {
         onSelectConversation={switchConversation}
         onDeleteConversation={deleteConversation}
       />
-      <div className={`bn-app${showLanding ? " bn-app--full" : ""}${manyCharts ? " bn-app--many-charts" : ""}`}>
+      <div className={`bn-app${showLanding ? " bn-app--full" : ""}${hasSurface || busy ? " bn-app--many-charts" : ""}`}>
       {showLanding ? (
         <>
           <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />
@@ -590,55 +636,7 @@ export default function App() {
         <Loading />
       ) : (
       <>
-      <header className="bn-topbar">
-        <span className="bn-topbar__title">{title || "Banky"}</span>
-        <div className="bn-topbar__actions">
-          <button
-            type="button"
-            className="bn-topbar__history-toggle"
-            aria-expanded={transcriptOpen}
-            disabled={transcript.length === 0}
-            onClick={() => setTranscriptOpen((v) => !v)}
-          >
-            Conversación <ChevronIcon open={transcriptOpen} />
-          </button>
-          <ThemeToggle theme={theme} onToggle={toggleTheme} />
-          <button
-            type="button"
-            className="bn-topbar__refresh"
-            aria-label="Nueva conversación"
-            title="Nueva conversación"
-            onClick={startNewConversation}
-          >
-            <RefreshIcon />
-          </button>
-        </div>
-      </header>
-
-      {transcriptOpen && transcript.length > 0 && (
-        <div className="bn-transcript" role="log">
-          {transcript.map((entry, i) =>
-            entry.surface ? (
-              <button
-                key={i}
-                type="button"
-                className="bn-transcript__item bn-transcript__item--agent bn-transcript__item--clickable"
-                onClick={() => restoreEntry(entry)}
-                title="Ver esta pantalla y seguir desde aquí"
-              >
-                <span className="bn-transcript__role">Asistente</span>
-                {entry.text}
-                <span className="bn-transcript__hint">Ver esta pantalla ↩</span>
-              </button>
-            ) : (
-              <p key={i} className={`bn-transcript__item bn-transcript__item--${entry.role}`}>
-                <span className="bn-transcript__role">{entry.role === "user" ? "Tú" : "Asistente"}</span>
-                {entry.text}
-              </p>
-            )
-          )}
-        </div>
-      )}
+      <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />
 
       <main className="bn-surface-area">
         <SurfaceErrorBoundary

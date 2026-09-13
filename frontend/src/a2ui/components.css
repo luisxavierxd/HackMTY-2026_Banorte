@@ -42,10 +42,14 @@
   border: 1px solid var(--bn-glass-border);
   border-radius: var(--bn-radius-surface);
   padding: var(--bn-space-4);
-  background: var(--bn-glass-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: var(--bn-glass-glow);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    var(--bn-glass-glow),
+    0 4px 24px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.20);
 }
 .bn-card--highlight {
   border-color: var(--bn-red);
@@ -149,11 +153,13 @@
 
 .bn-table-wrap {
   overflow-x: auto;
-  border: 1px solid var(--bn-glass-border);
+  border: 1px solid rgba(235, 0, 41, 0.18);
   border-radius: var(--bn-radius-control);
-  background: var(--bn-glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  overflow: hidden;
 }
 .bn-table {
   width: 100%;
@@ -162,18 +168,25 @@
 }
 .bn-table th,
 .bn-table td {
-  padding: 10px 12px;
+  padding: 10px 14px;
   text-align: left;
-  border-bottom: 1px solid var(--bn-glass-border);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   white-space: nowrap;
 }
 .bn-table th {
-  color: var(--bn-mute);
-  font-weight: 600;
-  font-size: 0.75rem;
+  background: linear-gradient(135deg, rgba(235, 0, 41, 0.18), rgba(180, 0, 30, 0.08));
+  color: rgba(235, 0, 41, 0.85);
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid rgba(235, 0, 41, 0.22);
 }
 .bn-table tr:last-child td {
   border-bottom: none;
+}
+.bn-table td {
+  color: var(--bn-ink);
 }
 
 .bn-optionlist {
@@ -186,20 +199,33 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 2px;
-  padding: 12px 16px;
-  border: 1px solid var(--bn-glass-border);
-  border-radius: var(--bn-radius-control);
-  background: var(--bn-glass-bg);
+  padding: 14px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: var(--bn-radius-pill);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   text-align: left;
-  transition: border-color 150ms ease, background 150ms ease;
+  transition: border-color 150ms ease, background 150ms ease, box-shadow 150ms ease;
   width: 100%;
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
 }
 .bn-option:hover {
-  background: var(--bn-active-bg);
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
 }
 .bn-option--selected {
   border-color: var(--bn-red);
   background: var(--bn-red-wash);
+  box-shadow:
+    0 0 0 1px rgba(235, 0, 41, 0.30),
+    0 4px 16px rgba(235, 0, 41, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 .bn-option--highlight:not(.bn-option--selected) {
   border-color: var(--bn-ahorro);

@@ -143,6 +143,7 @@ function SpeechBubble({
   playBlip,
   onChar,
   onContinuar,
+  onDone,
   style,
   className,
 }: {
@@ -151,10 +152,17 @@ function SpeechBubble({
   playBlip: (v: number, c: string) => void;
   onChar?: (i: number, c: string) => void;
   onContinuar?: () => void;
+  onDone?: () => void;
   style?: React.CSSProperties;
   className?: string;
 }) {
   const { displayed, done } = useTypewriter(text, speedMs, playBlip, onChar);
+
+  useEffect(() => {
+    if (done && text) onDone?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [done]);
+
   if (!text) return null;
 
   return (
@@ -170,9 +178,9 @@ function SpeechBubble({
         padding: "12px 16px",
         paddingBottom: done && onContinuar ? "8px" : "12px",
         boxShadow: "var(--bn-glass-glow), 0 8px 32px rgba(0,0,0,0.45)",
-        maxWidth: 310,
-        minHeight: "2.4em",
-        fontSize: 14,
+        maxWidth: 360,
+        minHeight: "3em",
+        fontSize: 19,
         fontWeight: 600,
         lineHeight: 1.45,
         color: "var(--bn-ink-full)",
@@ -535,6 +543,7 @@ const MascotAsistente = forwardRef<MascotAsistenteRef, MascotAsistenteProps>(
       containerStyle,
       containerClassName,
       onHablarEmpieza,
+      onHablarTermina,
       onContinuar,
     },
     ref
@@ -600,6 +609,7 @@ const MascotAsistente = forwardRef<MascotAsistenteRef, MascotAsistenteProps>(
             playBlip={playBlip}
             onChar={() => setSpeechTick((n) => n + 1)}
             onContinuar={speech.text ? onContinuar : undefined}
+            onDone={speech.text ? onHablarTermina : undefined}
             style={bubbleStyle}
             className={bubbleClassName}
           />
