@@ -20,6 +20,8 @@ export interface RenderCtx {
   runAction: (action: ActionRef | undefined, label?: string) => void;
   renderChild: (id: string | undefined) => ReactNode;
   renderChildren: (ids: string[] | undefined) => ReactNode;
+  /** Devuelve el tipo de componente A2UI ("Callout", "ActionButton", …) de un ID hijo. */
+  getComponentType: (id: string) => string | undefined;
 }
 
 export interface A2UIComponentProps<P = Record<string, unknown>> {

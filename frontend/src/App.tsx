@@ -42,6 +42,16 @@ import ThemeToggle from "./shell/ThemeToggle";
 
 const IS_LAB = new URLSearchParams(location.search).get("lab") === "1";
 
+function containsNegativeNumber(obj: unknown, depth = 0): boolean {
+  if (depth > 8) return false;
+  if (typeof obj === "number") return obj < 0;
+  if (Array.isArray(obj)) return obj.some((v) => containsNegativeNumber(v, depth + 1));
+  if (obj && typeof obj === "object") {
+    return Object.values(obj as Record<string, unknown>).some((v) => containsNegativeNumber(v, depth + 1));
+  }
+  return false;
+}
+
 // Static tutorial steps for the surface screen (steps 1-3 after the dynamic intro)
 const SURFACE_STEPS_STATIC = [
   { texto: "Cada sección irá apareciendo una a una. Obsérvalas con calma.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "apuntando" },
@@ -224,6 +234,34 @@ export default function App() {
     if (busy) return;
     hoverLabelRef.current = "";
     if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+    // Reset pointing arm when leaving surface
+    mascotRef.current?.setPose({ manoDerecha: "normal", manoDerechaAngulo: 0 });
+  }, [busy]);
+
+  // ── Cursor tracking: Banky apunta al cursor en la sección de gráficas ──
+  const mouseMoveThrottleRef = useRef(0);
+  const handleSurfaceMouseMove = useCallback((e: React.MouseEvent) => {
+    if (busy || !mascotRef.current || !mascotOverlayRef.current) return;
+    const now = Date.now();
+    if (now - mouseMoveThrottleRef.current < 80) return; // ~12 fps máx
+    mouseMoveThrottleRef.current = now;
+    const rect = mascotOverlayRef.current.getBoundingClientRect();
+    const bx = rect.left + rect.width / 2;
+    const by = rect.top + rect.height / 2;
+    const angle = Math.atan2(e.clientY - by, e.clientX - bx) * (180 / Math.PI);
+    mascotRef.current.setPose({ manoDerecha: "apuntando", manoDerechaAngulo: angle });
+    // Banky hover label narration (merge con handleSurfaceHover)
+    const target = (e.target as HTMLElement).closest("[data-bn-component]") as HTMLElement | null;
+    const label = target?.dataset.bnLabel || "";
+    if (label && label !== hoverLabelRef.current) {
+      hoverLabelRef.current = label;
+      if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+      hoverTimerRef.current = setTimeout(() => {
+        const comp = target?.dataset.bnComponent || "";
+        const hint = COMPONENT_HINTS[comp] || "Esto es";
+        mascotRef.current?.hablar(`${hint} ${label}.`);
+      }, 400);
+    }
   }, [busy]);
 
   const handleEvent = useCallback((event: ServerEvent) => {
@@ -492,6 +530,16 @@ export default function App() {
   // Show everything while busy (previous surface still visible)
   useEffect(() => { if (busy) setRevealedCount(99); }, [busy]);
 
+  // Detectar números negativos en la surface → Banky preocupado
+  useEffect(() => {
+    if (!hasSurface || busy) return;
+    const hasNeg = containsNegativeNumber(viewData);
+    if (hasNeg) {
+      setTimeout(() => mascotRef.current?.setPose({ cara: "preocupado" }), 800);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [surface]);
+
   const prevScreenRef = useRef<ScreenId | null>(null);
 
   // Determina la pantalla actual para seleccionar los pasos del tutorial
@@ -715,7 +763,7 @@ export default function App() {
       <>
       <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />
 
-      <main className="bn-surface-area" onMouseOver={handleSurfaceHover} onMouseLeave={handleSurfaceLeave}>
+      <main className="bn-surface-area" onMouseMove={handleSurfaceMouseMove} onMouseLeave={handleSurfaceLeave}>
         <SurfaceErrorBoundary
           key={turnId}
           onReset={() => {

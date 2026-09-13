@@ -118,19 +118,19 @@
 }
 
 /* ── Surface guide / many charts ──
-   Banqui full-size on the left half, vertically centered */
+   Banqui centrado en la mitad izquierda */
 .bn-mascot-overlay--many-charts {
   top: 50%;
   bottom: auto;
-  left: clamp(16px, 4vw, 40px);
+  left: 25vw;
   right: auto;
-  transform: translateY(-50%);
-  transform-origin: center left;
-}
-@media (min-width: 769px) {
-  .bn-mascot-overlay--many-charts {
-    left: 16px; /* align with glass card left edge; sidebar margin removed in surface mode */
-  }
+  width: auto;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 @media (max-width: 768px) {
   .bn-mascot-overlay--many-charts {
@@ -138,15 +138,15 @@
     bottom: auto;
     left: 50%;
     right: auto;
-    transform: translateX(-50%) scale(0.70);
+    transform: translateX(-50%) scale(0.62);
     transform-origin: top center;
   }
 }
 
-/* Constrain bubble width so it stays within the left column */
+/* Limita el ancho del bubble en la mitad izquierda */
 .bn-mascot-overlay--many-charts .bn-mascot-bubble,
 .bn-mascot-overlay--many-charts .bn-mascot-bubble > * {
-  max-width: 300px !important;
+  max-width: 220px !important;
 }
 
 /* ================================================================

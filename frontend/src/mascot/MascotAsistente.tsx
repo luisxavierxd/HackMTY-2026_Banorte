@@ -117,14 +117,13 @@ function useTypewriter(
     setVisibleCount(0);
     if (!text) return;
     let i = 0;
+    // Sonido una sola vez al inicio del discurso (no por caracter)
+    if (text[0] && text[0].trim() !== "") playBlip(1, text[0]);
     const id = setInterval(() => {
       i += 1;
       setVisibleCount(i);
       const ch = text[i - 1];
-      if (ch && ch.trim() !== "") {
-        playBlip(i, ch);
-        onChar?.(i, ch);
-      }
+      if (ch && ch.trim() !== "") onChar?.(i, ch);
       if (i >= text.length) clearInterval(id);
     }, speedMs);
     return () => clearInterval(id);

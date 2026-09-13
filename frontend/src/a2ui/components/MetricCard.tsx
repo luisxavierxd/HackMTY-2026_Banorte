@@ -10,9 +10,23 @@ interface MetricCardProps {
   tone?: Tone;
 }
 
+function abbreviateAmount(v: string): string {
+  // "-$15,806" → "-$15.8K"  |  "$555" sin cambio  |  texto/% sin cambio
+  const m = v.match(/^(-?)(\$?)(\d[\d,]*)(\.\d+)?(.*)$/);
+  if (!m) return v;
+  const [, sign, curr, intPart, , rest] = m;
+  const n = Number(intPart.replace(/,/g, ""));
+  if (isNaN(n) || n < 10_000) return v;
+  const abbr = n >= 1_000_000
+    ? `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`
+    : `${(n / 1_000).toFixed(1).replace(/\.0$/, "")}K`;
+  return `${sign}${curr}${abbr}${rest}`;
+}
+
 export default function MetricCard({ props, ctx }: A2UIComponentProps<MetricCardProps>) {
   const tone = props.tone ?? "neutral";
-  const value = resolveBinding(props.value, ctx.data, "");
+  const rawValue = resolveBinding(props.value, ctx.data, "");
+  const value = abbreviateAmount(String(rawValue));
   const delta = props.delta !== undefined ? resolveBinding(props.delta, ctx.data, "") : "";
 
   return (

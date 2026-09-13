@@ -101,6 +101,7 @@ function renderComponent(
       (ids ?? []).map((cid) => (
         <React.Fragment key={cid}>{renderComponent(cid, surface, data, depth + 1, actions)}</React.Fragment>
       )),
+    getComponentType: (childId) => surface.components[childId]?.component,
   };
 
   const label = CONTAINERS.has(node.component) ? "" : componentLabel(node.component, node.props);

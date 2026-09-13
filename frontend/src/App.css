@@ -710,52 +710,144 @@
 }
 
 /* ================================================================
-   Surface-guide layout — Banqui full-size left side, charts right
+   Surface-guide layout — Bento grid, Banqui pequeño abajo-izquierda
    ================================================================ */
 
-/* Surface guide layout — glass card full width, Banky overlays left.
-   Override the desktop sidebar margin so the empty 280px column disappears. */
+/* En desktop: el contenido ocupa la mitad derecha, Banky en la izquierda */
 @media (min-width: 769px) {
   .bn-app--many-charts {
-    margin-left: 0;
+    margin-left: 50vw;
     border-left: none;
   }
 }
 
-/* Glass card fills the full app width.
-   padding-left pushes content past Banky (240px) + 20px gap. */
+/* Surface area: sin scroll, sin fondo extra */
 .bn-app--many-charts .bn-surface-area {
-  margin-left: var(--bn-space-4);
-  margin-top: 68px;
-  padding-left: 260px;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  margin: var(--bn-space-3);
+  margin-bottom: var(--bn-space-2);
+  padding: var(--bn-space-3);
+  background: none;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
-.bn-app--many-charts .bn-composer,
+
+/* Composer / trace: padding normal (Banky está en la otra mitad) */
+.bn-app--many-charts .bn-composer {
+  padding-left: var(--bn-space-4);
+}
 .bn-app--many-charts .bn-trace,
 .bn-app--many-charts .bn-trace-cancel {
-  padding-left: 280px;
+  padding-left: var(--bn-space-4);
 }
+
 @media (max-width: 768px) {
   .bn-app--many-charts .bn-surface-area {
-    margin-top: var(--bn-space-4);
-    padding-left: var(--bn-space-4);
+    overflow-y: auto;
   }
   .bn-app--many-charts .bn-composer,
   .bn-app--many-charts .bn-trace,
   .bn-app--many-charts .bn-trace-cancel {
-    padding-left: var(--bn-space-4);
+    padding-left: var(--bn-space-3);
   }
 }
 
-/* Pop-in animation — each item fires when it mounts (React-controlled reveal) */
+/* ── Bento grid base ── */
+.bn-app--many-charts .bn-surface-area > .bn-col {
+  display: grid;
+  height: 100%;
+  gap: 10px;
+  overflow: hidden;
+  align-content: stretch;
+}
+
+/* 1 elemento: full width */
+.bn-app--many-charts .bn-surface-area > .bn-bento-1 {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+/* 2 elementos: dos columnas */
+.bn-app--many-charts .bn-surface-area > .bn-bento-2 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+}
+
+/* 3 elementos: 1 grande izquierda + 2 pequeños derecha */
+.bn-app--many-charts .bn-surface-area > .bn-bento-3 {
+  grid-template-columns: 1.2fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+.bn-app--many-charts .bn-surface-area > .bn-bento-3 > .bn-bento-cell:first-child {
+  grid-row: span 2;
+}
+
+/* 4 elementos: 2×2 */
+.bn-app--many-charts .bn-surface-area > .bn-bento-4 {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+/* Mobile: columna simple */
+@media (max-width: 768px) {
+  .bn-app--many-charts .bn-surface-area > .bn-col {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    gap: 10px;
+  }
+}
+
+/* ── Bento cell — cápsula oscura neumórfica ── */
+.bn-bento-cell {
+  background: rgba(16, 16, 16, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.055);
+  border-radius: 20px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 6px 36px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+  min-height: 0;
+  min-width: 0;
+  padding: var(--bn-space-3);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Suprimir el fondo de los componentes A2UI dentro del bento */
+.bn-bento-cell .bn-card {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.bn-bento-cell .bn-metric {
+  flex: 0 0 auto;
+}
+
+/* Utilidades (Callout, ActionButton): ancho completo, sin cápsula */
+.bn-bento-span {
+  grid-column: 1 / -1;
+}
+
+/* ── Pop-in animación por celda ── */
 @keyframes bn-surface-pop {
-  0%   { opacity: 0; transform: scale(0.88) translateY(18px); }
-  65%  { opacity: 1; transform: scale(1.025) translateY(-3px); }
+  0%   { opacity: 0; transform: scale(0.88) translateY(14px); }
+  65%  { opacity: 1; transform: scale(1.02) translateY(-2px); }
   100% { opacity: 1; transform: scale(1)    translateY(0); }
 }
 
-.bn-app--many-charts .bn-surface-area > .bn-col > * {
-  animation: bn-surface-pop 560ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  animation-delay: 0.08s;
+.bn-app--many-charts .bn-surface-area > .bn-col > .bn-bento-cell {
+  animation: bn-surface-pop 480ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  animation-delay: 0.06s;
 }
 
 /* ================================================================
