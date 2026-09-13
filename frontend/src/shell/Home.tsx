@@ -1,4 +1,5 @@
 import { useState, type FormEvent, type KeyboardEvent } from "react";
+import DotField from "./DotField";
 
 interface HomeProps {
   onSend: (text: string) => void;
@@ -49,6 +50,18 @@ export default function Home({ onSend, disabled }: HomeProps) {
 
   return (
     <div className="bn-home">
+      <DotField
+        style={{ position: "absolute", inset: 0 }}
+        dotRadius={1.5}
+        dotSpacing={16}
+        bulgeStrength={55}
+        glowRadius={140}
+        cursorRadius={480}
+        bulgeOnly
+        gradientFrom="rgba(235, 0, 41, 0.22)"
+        gradientTo="rgba(120, 0, 20, 0.12)"
+        glowColor="#0c0c10"
+      />
       <div className="bn-home__content">
         <p className="bn-home__greeting">Bienvenido a Banky</p>
         <h1 className="bn-home__title">¿En qué te puedo ayudar?</h1>
