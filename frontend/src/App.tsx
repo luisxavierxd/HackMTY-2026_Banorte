@@ -34,6 +34,8 @@ import ErrorBanner from "./shell/Error";
 import Loading from "./shell/Loading";
 import SurfaceErrorBoundary from "./shell/SurfaceErrorBoundary";
 import Lab from "./lab/Lab";
+import { useTheme } from "./shell/useTheme";
+import ThemeToggle from "./shell/ThemeToggle";
 
 const IS_LAB = new URLSearchParams(location.search).get("lab") === "1";
 
@@ -84,6 +86,8 @@ function ChevronIcon({ open }: { open: boolean }) {
 }
 
 export default function App() {
+  const { theme, toggle: toggleTheme } = useTheme();
+
   // ------------------------------------------------------------------
   // Mascota — ref para controlarla desde cualquier parte de la lógica
   // ------------------------------------------------------------------
@@ -364,27 +368,27 @@ export default function App() {
 
   const TUTORIAL: Record<ScreenId, TutorialStep[]> = {
     access: [
-      { texto: "¡Hola! 👋 Ingresa el código de acceso para entrar.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando" },
+      { texto: "Hola, ingresa el código de acceso para entrar.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando" },
     ],
     profile: [
-      { texto: "¡Hola! Soy Banqui, tu asistente financiero de Banorte 🏦", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando" },
-      { texto: "Cuéntame sobre ti — entre más sepas de ti, mejores consejos podré darte 💡", cara: "normal", bigote: "normal", manoI: "normal", manoD: "normal" },
-      { texto: "Llena los campos y acepta el aviso de privacidad para comenzar ✅", cara: "normal", bigote: "normal", manoI: "enseñando", manoD: "enseñando" },
+      { texto: "Hola, soy Banqui, tu asistente financiero de Banorte.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando" },
+      { texto: "Cuéntame sobre ti — entre más sepa de ti, mejores consejos podré darte.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "normal" },
+      { texto: "Llena los campos y acepta el aviso de privacidad para comenzar.", cara: "normal", bigote: "normal", manoI: "enseñando", manoD: "enseñando" },
     ],
     landing: [
-      { texto: "¡Perfecto! Ya sé quién eres 😊 Esta es tu pantalla principal.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "pulgarArriba" },
-      { texto: "Puedo analizar tus ahorros, inversiones y ayudarte con metas financieras 📊", cara: "normal", bigote: "normal", manoI: "normal", manoD: "normal" },
-      { texto: "Elige una sugerencia o escribe tu propia pregunta abajo 👇", cara: "normal", bigote: "normal", manoI: "normal", manoD: "apuntando" },
+      { texto: "Listo, ya sé quién eres. Esta es tu pantalla principal.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "pulgarArriba" },
+      { texto: "Puedo analizar tus ahorros, inversiones y ayudarte con metas financieras.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "normal" },
+      { texto: "Elige una sugerencia o escribe tu propia pregunta abajo.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "apuntando" },
     ],
     busy: [
-      { texto: "Déjame revisar eso… ⏳", cara: "pensativo", bigote: "ninguno", manoI: "ninguna", manoD: "ninguna", cargando: true },
+      { texto: "Déjame revisar eso…", cara: "pensativo", bigote: "ninguno", manoI: "ninguna", manoD: "ninguna", cargando: true },
     ],
     surface: [
-      { texto: title ? `¡Listo! ${title.slice(0, 60)}` : "¡Aquí está tu información! 🎉", cara: "normal", bigote: "normal", manoI: "normal", manoD: "pulgarArriba" },
-      { texto: "Puedes interactuar con cada sección. ¿Tienes alguna duda? Escríbeme 💬", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando" },
+      { texto: title ? `Listo. ${title.slice(0, 60)}` : "Aquí está tu información.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "pulgarArriba" },
+      { texto: "Puedes interactuar con cada sección. ¿Tienes alguna duda? Escríbeme.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando" },
     ],
     error: [
-      { texto: "Ups, algo salió mal. ¿Lo intentamos de nuevo? 😅", cara: "preocupado", bigote: "ninguno", manoI: "ninguna", manoD: "ninguna" },
+      { texto: "Algo salió mal. ¿Lo intentamos de nuevo?", cara: "preocupado", bigote: "ninguno", manoI: "ninguna", manoD: "ninguna" },
     ],
   };
 
@@ -484,32 +488,14 @@ export default function App() {
     : null;
 
   // Banqui — siempre montado para ilusión de continuidad entre pantallas.
-  // La clase CSS cambia su posición con una transición spring de 600ms.
-  // mascotScreen determina la pantalla actual para posición y tamaño.
-  const mascotScreen = needsAccessKey ? "access"
-    : !profile ? "profile"
-    : hasSurface ? "surface"
-    : "landing";
-
-  const overlayClass = mascotScreen === "profile"
-    ? "bn-mascot-overlay bn-mascot-overlay--profile"
-    : mascotScreen === "landing"
-      ? "bn-mascot-overlay bn-mascot-overlay--landing"
-      : "bn-mascot-overlay";
-
-  // Tamaño de Banqui según pantalla
-  const mascotSize = mascotScreen === "landing" ? 240
-    : mascotScreen === "profile" ? 220
-    : mascotScreen === "access" ? 160
-    : 80; // surface — pequeño junto al composer
-
+  // Siempre en el lado izquierdo, centrado verticalmente, tamaño fijo 240px.
   const mascotaOverlay = (
-    <div className={overlayClass}>
+    <div className="bn-mascot-overlay bn-mascot-overlay--landing">
       {/* Wrapper interno para el squish de viaje sin conflicto con la transición de posición */}
       <div className={mascotTraveling ? "bn-mascot-squish--active" : undefined}>
         <MascotAsistente
           ref={mascotRef}
-          size={mascotSize}
+          size={240}
           caraInicial="normal"
           bigoteInicial="normal"
           manoIzquierdaInicial="normal"
@@ -523,6 +509,7 @@ export default function App() {
   if (needsAccessKey) {
     return (
       <>
+        <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />
         <AccessGate wrongKey={hadWrongKey} onSubmit={() => location.reload()} />
         {mascotaOverlay}
       </>
@@ -534,6 +521,7 @@ export default function App() {
     // para mantener la ilusión de continuidad (mismo componente montado).
     return (
       <>
+        <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />
         <ProfileGate onSubmit={() => setProfileState(getProfile())} />
         {mascotaOverlay}
       </>
@@ -565,7 +553,10 @@ export default function App() {
       />
       <div className={`bn-app${showLanding ? " bn-app--full" : ""}`}>
       {showLanding ? (
-        <Home onSend={handleSend} disabled={busy} />
+        <>
+          <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />
+          <Home onSend={handleSend} disabled={busy} theme={theme} />
+        </>
       ) : !hasSurface ? (
         <Loading />
       ) : (
@@ -582,6 +573,7 @@ export default function App() {
           >
             Conversación <ChevronIcon open={transcriptOpen} />
           </button>
+          <ThemeToggle theme={theme} onToggle={toggleTheme} />
           <button
             type="button"
             className="bn-topbar__refresh"

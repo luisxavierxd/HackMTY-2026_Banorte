@@ -52,4 +52,79 @@
 
   /* ---- layout ---- */
   --bn-max-width: 580px;
+
+  /* ---- major surface backgrounds ---- */
+  --bn-topbar-bg: rgba(12, 12, 16, 0.70);
+  --bn-app-bg: rgba(12, 12, 16, 0.60);
+  --bn-sidebar-bg: rgba(18, 16, 22, 0.82);
+  --bn-card-bg: rgba(32, 30, 36, 0.65);
+  --bn-card-border: rgba(255, 255, 255, 0.14);
+  --bn-surface-subtle: rgba(255, 255, 255, 0.03);
+  --bn-ink-full: #ffffff;
+
+  /* ---- interactive overlays ---- */
+  --bn-hover-xs: rgba(255, 255, 255, 0.04);
+  --bn-hover-sm: rgba(255, 255, 255, 0.06);
+  --bn-active-bg: rgba(255, 255, 255, 0.08);
+  --bn-hover-md: rgba(255, 255, 255, 0.12);
+  --bn-hover-lg: rgba(255, 255, 255, 0.14);
+  --bn-disabled-bg: rgba(255, 255, 255, 0.10);
+  --bn-disabled-ink: rgba(255, 255, 255, 0.30);
+
+  /* ---- dim text levels ---- */
+  --bn-ink-dim-1: rgba(255, 255, 255, 0.55);
+  --bn-ink-dim-2: rgba(255, 255, 255, 0.45);
+  --bn-ink-dim-3: rgba(255, 255, 255, 0.40);
+  --bn-ink-dim-4: rgba(255, 255, 255, 0.35);
+  --bn-ink-near: rgba(255, 255, 255, 0.85);
+
+  /* ---- borders / misc ---- */
+  --bn-border-soft: rgba(255, 255, 255, 0.06);
+  --bn-focus-border: rgba(255, 255, 255, 0.25);
+  --bn-field-border: rgba(255, 255, 255, 0.10);
+  --bn-field-bg: rgba(255, 255, 255, 0.08);
+  --bn-field-bg-focus: rgba(255, 255, 255, 0.10);
+  --bn-field-placeholder: rgba(255, 255, 255, 0.35);
+  --bn-dot-bg: rgba(255, 255, 255, 0.20);
+}
+
+[data-theme="light"] {
+  --bn-bg: #f5f4f8;
+  --bn-bg-gradient: radial-gradient(ellipse 120% 80% at 50% 10%, #ede8f5 0%, #f0edf8 50%, #f5f4f8 100%);
+  --bn-surface: rgba(0, 0, 0, 0.04);
+  --bn-surface-raised: rgba(0, 0, 0, 0.07);
+  --bn-line: rgba(0, 0, 0, 0.10);
+  --bn-ink: #1a1820;
+  --bn-mute: rgba(26, 24, 32, 0.50);
+  --bn-gray: #6b6578;
+  --bn-gray-soft: rgba(0, 0, 0, 0.10);
+  --bn-glass-bg: rgba(255, 255, 255, 0.60);
+  --bn-glass-border: rgba(0, 0, 0, 0.09);
+  --bn-glass-glow: inset 0 1px 0 rgba(255, 255, 255, 0.90);
+  --bn-topbar-bg: rgba(245, 244, 248, 0.88);
+  --bn-app-bg: rgba(245, 244, 248, 0.72);
+  --bn-sidebar-bg: rgba(240, 238, 248, 0.93);
+  --bn-card-bg: rgba(255, 255, 255, 0.78);
+  --bn-card-border: rgba(0, 0, 0, 0.09);
+  --bn-surface-subtle: rgba(0, 0, 0, 0.02);
+  --bn-ink-full: #1a1820;
+  --bn-hover-xs: rgba(0, 0, 0, 0.03);
+  --bn-hover-sm: rgba(0, 0, 0, 0.04);
+  --bn-active-bg: rgba(0, 0, 0, 0.05);
+  --bn-hover-md: rgba(0, 0, 0, 0.07);
+  --bn-hover-lg: rgba(0, 0, 0, 0.09);
+  --bn-disabled-bg: rgba(0, 0, 0, 0.08);
+  --bn-disabled-ink: rgba(26, 24, 32, 0.30);
+  --bn-ink-dim-1: rgba(26, 24, 32, 0.55);
+  --bn-ink-dim-2: rgba(26, 24, 32, 0.45);
+  --bn-ink-dim-3: rgba(26, 24, 32, 0.40);
+  --bn-ink-dim-4: rgba(26, 24, 32, 0.35);
+  --bn-ink-near: rgba(26, 24, 32, 0.88);
+  --bn-border-soft: rgba(0, 0, 0, 0.05);
+  --bn-focus-border: rgba(0, 0, 0, 0.22);
+  --bn-field-border: rgba(0, 0, 0, 0.10);
+  --bn-field-bg: rgba(0, 0, 0, 0.04);
+  --bn-field-bg-focus: rgba(0, 0, 0, 0.06);
+  --bn-field-placeholder: rgba(26, 24, 32, 0.35);
+  --bn-dot-bg: rgba(26, 24, 32, 0.18);
 }
