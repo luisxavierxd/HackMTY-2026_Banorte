@@ -204,9 +204,9 @@
 }
 .bn-sidebar__conversation-delete {
   flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-  margin-right: 4px;
+  width: 44px;
+  height: 44px;
+  margin-right: 2px;
   border-radius: 50%;
   background: none;
   border: none;
@@ -270,7 +270,8 @@
   background: var(--bn-glass-bg);
   border: 1px solid var(--bn-glass-border);
   border-radius: var(--bn-radius-pill);
-  padding: 6px 14px;
+  padding: 10px 16px;
+  min-height: 44px;
   color: var(--bn-mute);
   font-size: 0.8125rem;
   font-weight: 500;
@@ -435,8 +436,8 @@
     padding: 10px 14px;
   }
   .bn-composer__send {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
   }
 }
 
@@ -446,7 +447,7 @@
     padding: var(--bn-space-3);
   }
   .bn-home__content {
-    margin-top: 160px;
+    margin-top: clamp(100px, 22vh, 160px);
     gap: var(--bn-space-3);
   }
   .bn-home__title {
@@ -462,16 +463,16 @@
     padding: 10px 0;
   }
   .bn-home__send {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
   }
 }
 
 /* ── Mobile sidebar launcher ── */
 @media (max-width: 480px) {
   .bn-sidebar-launcher {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     left: var(--bn-space-3);
   }
 }

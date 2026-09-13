@@ -109,7 +109,8 @@ function useTypewriter(
   text: string,
   speedMs: number,
   playBlip: (v: number, c: string) => void,
-  onChar?: (i: number, c: string) => void
+  onChar?: (i: number, c: string) => void,
+  fullSound = false,
 ) {
   const [visibleCount, setVisibleCount] = useState(0);
 
@@ -117,18 +118,20 @@ function useTypewriter(
     setVisibleCount(0);
     if (!text) return;
     let i = 0;
-    // Sonido una sola vez al inicio del discurso (no por caracter)
-    if (text[0] && text[0].trim() !== "") playBlip(1, text[0]);
+    if (!fullSound && text[0] && text[0].trim() !== "") playBlip(1, text[0]);
     const id = setInterval(() => {
       i += 1;
       setVisibleCount(i);
       const ch = text[i - 1];
-      if (ch && ch.trim() !== "") onChar?.(i, ch);
+      if (ch && ch.trim() !== "") {
+        if (fullSound) playBlip(i, ch);
+        onChar?.(i, ch);
+      }
       if (i >= text.length) clearInterval(id);
     }, speedMs);
     return () => clearInterval(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [text, speedMs]);
+  }, [text, speedMs, fullSound]);
 
   return { displayed: text.slice(0, visibleCount), done: visibleCount >= text.length };
 }
@@ -145,6 +148,7 @@ function SpeechBubble({
   onDone,
   style,
   className,
+  fullSound = false,
 }: {
   text: string;
   speedMs?: number;
@@ -154,8 +158,9 @@ function SpeechBubble({
   onDone?: () => void;
   style?: React.CSSProperties;
   className?: string;
+  fullSound?: boolean;
 }) {
-  const { displayed, done } = useTypewriter(text, speedMs, playBlip, onChar);
+  const { displayed, done } = useTypewriter(text, speedMs, playBlip, onChar, fullSound);
 
   useEffect(() => {
     if (done && text) onDone?.();
@@ -489,7 +494,7 @@ const Mascot = forwardRef<{ pulseSquish: () => void }, MascotProps>(
 // =====================================================================
 export interface MascotAsistenteRef {
   /** Hace que Bancho diga un mensaje (typewriter + sonido + squish). */
-  hablar(texto: string, opts?: { velocidad?: number }): void;
+  hablar(texto: string, opts?: { velocidad?: number; fullSound?: boolean }): void;
   /** Borra el globo de texto inmediatamente. */
   callar(): void;
   /** Cambia cualquier combinación de cara/bigote/manos/ángulos (merge parcial). */
@@ -562,17 +567,18 @@ const MascotAsistente = forwardRef<MascotAsistenteRef, MascotAsistenteProps>(
       text: "",
       nonce: 0,
       speed: velocidadTextoDefault,
+      fullSound: false,
     });
     const [speechTick, setSpeechTick] = useState(0);
 
     const playBlip = useBlipSound();
 
     useImperativeHandle(ref, () => ({
-      hablar(texto, { velocidad = velocidadTextoDefault } = {}) {
-        setSpeech((s) => ({ text: texto, nonce: s.nonce + 1, speed: velocidad }));
+      hablar(texto, { velocidad = velocidadTextoDefault, fullSound: fs = false } = {}) {
+        setSpeech((s) => ({ text: texto, nonce: s.nonce + 1, speed: velocidad, fullSound: fs }));
       },
       callar() {
-        setSpeech((s) => ({ text: "", nonce: s.nonce + 1, speed: s.speed }));
+        setSpeech((s) => ({ text: "", nonce: s.nonce + 1, speed: s.speed, fullSound: false }));
       },
       setPose(cambios) {
         setPoseState((p) => ({ ...p, ...cambios }));
@@ -608,6 +614,7 @@ const MascotAsistente = forwardRef<MascotAsistenteRef, MascotAsistenteProps>(
               text={speech.text}
               speedMs={speech.speed}
               playBlip={playBlip}
+              fullSound={speech.fullSound}
               onChar={() => setSpeechTick((n) => n + 1)}
               onContinuar={speech.text ? onContinuar : undefined}
               onDone={speech.text ? onHablarTermina : undefined}

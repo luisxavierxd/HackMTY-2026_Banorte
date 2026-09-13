@@ -3,6 +3,7 @@ import { useState, type FormEvent, type KeyboardEvent } from "react";
 interface HomeProps {
   onSend: (text: string) => void;
   disabled?: boolean;
+  nombre?: string;
 }
 
 const SUGGESTIONS = [
@@ -25,7 +26,7 @@ function SendIcon() {
   );
 }
 
-export default function Home({ onSend, disabled }: HomeProps) {
+export default function Home({ onSend, disabled, nombre }: HomeProps) {
   const [value, setValue] = useState("");
 
   function submit() {
@@ -50,7 +51,7 @@ export default function Home({ onSend, disabled }: HomeProps) {
   return (
     <div className="bn-home">
       <div className="bn-home__content">
-        <h1 className="bn-home__title">¿En qué te puedo ayudar?</h1>
+        <h1 className="bn-home__title">{nombre ? `${nombre}, ¿en qué te puedo ayudar?` : "¿En qué te puedo ayudar?"}</h1>
         <p className="bn-home__subtitle">
           Tu asistente financiero inteligente, listo para analizar tus finanzas y ayudarte a tomar mejores decisiones.
         </p>

@@ -504,22 +504,24 @@ export default function App() {
   // ------------------------------------------------------------------
 
   // Pasos del tutorial por estado de la app
-  type TutorialStep = { texto: string; cara: string; bigote: string; manoI: string; manoD: string; cargando?: boolean; };
+  type TutorialStep = { texto: string; cara: string; bigote: string; manoI: string; manoD: string; cargando?: boolean; fullSound?: boolean; };
   type ScreenId = "access" | "profile" | "landing" | "busy" | "surface" | "error";
+
+  const nombre = profile?.nombre?.split(" ")[0] ?? "";
 
   const TUTORIAL: Record<ScreenId, TutorialStep[]> = {
     access: [
-      { texto: "Hola, ingresa el código de acceso para entrar.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando" },
+      { texto: "Hola, ingresa el código de acceso para entrar.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando", fullSound: true },
     ],
     profile: [
-      { texto: "Hola, soy Banqui, tu asistente financiero de Banorte.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando" },
-      { texto: "Cuéntame sobre ti — entre más sepa de ti, mejores consejos podré darte.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "normal" },
-      { texto: "Llena los campos y acepta el aviso de privacidad para comenzar.", cara: "normal", bigote: "normal", manoI: "enseñando", manoD: "enseñando" },
+      { texto: "Hola, soy Banqui, tu asistente financiero de Banorte.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando", fullSound: true },
+      { texto: "Cuéntame sobre ti — entre más sepa de ti, mejores consejos podré darte.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "normal", fullSound: true },
+      { texto: "Llena los campos y acepta el aviso de privacidad para comenzar.", cara: "normal", bigote: "normal", manoI: "enseñando", manoD: "enseñando", fullSound: true },
     ],
     landing: [
-      { texto: "Listo, ya sé quién eres. Esta es tu pantalla principal.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "pulgarArriba" },
-      { texto: "Puedo analizar tus ahorros, inversiones y ayudarte con metas financieras.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "normal" },
-      { texto: "Elige una sugerencia o escribe tu propia pregunta abajo.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "apuntando" },
+      { texto: nombre ? `¡Hola ${nombre}! Esta es tu pantalla principal.` : "Listo, ya sé quién eres. Esta es tu pantalla principal.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "pulgarArriba", fullSound: true },
+      { texto: "Puedo analizar tus ahorros, inversiones y ayudarte con metas financieras.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "normal", fullSound: true },
+      { texto: "Elige una sugerencia o escribe tu propia pregunta abajo.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "apuntando", fullSound: true },
     ],
     busy: [
       { texto: "Un momento, voy a analizar tu información…", cara: "pensativo", bigote: "normal", manoI: "ninguna", manoD: "ninguna", cargando: true },
@@ -593,7 +595,7 @@ export default function App() {
     const t = setTimeout(() => {
       m.setPose({ cara: step.cara, bigote: step.bigote, manoIzquierda: step.manoI, manoDerecha: step.manoD });
       m.setCargando(step.cargando ?? false);
-      m.hablar(step.texto);
+      m.hablar(step.texto, { fullSound: step.fullSound });
     }, 400);
     return () => clearTimeout(t);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -615,7 +617,7 @@ export default function App() {
     const m = mascotRef.current;
     m.setPose({ cara: step.cara, bigote: step.bigote, manoIzquierda: step.manoI, manoDerecha: step.manoD });
     m.setCargando(step.cargando ?? false);
-    m.hablar(step.texto);
+    m.hablar(step.texto, { fullSound: step.fullSound });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentScreenForTutorial, tutorialStep, title]);
 
@@ -777,7 +779,7 @@ export default function App() {
             gradientTo={theme === 'light' ? "rgba(190,0,25,0.14)" : "rgba(180,0,20,0.18)"}
           />
           <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />
-          <Home onSend={handleSend} disabled={busy} />
+          <Home onSend={handleSend} disabled={busy} nombre={nombre} />
         </>
       ) : !hasSurface ? (
         <Loading />
