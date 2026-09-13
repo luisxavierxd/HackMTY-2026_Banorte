@@ -1,9 +1,11 @@
 import { useState, type FormEvent, type KeyboardEvent } from "react";
 import DotField from "./DotField";
+import type { Theme } from "./useTheme";
 
 interface HomeProps {
   onSend: (text: string) => void;
   disabled?: boolean;
+  theme?: Theme;
 }
 
 const SUGGESTIONS = [
@@ -26,7 +28,8 @@ function SendIcon() {
   );
 }
 
-export default function Home({ onSend, disabled }: HomeProps) {
+export default function Home({ onSend, disabled, theme = 'dark' }: HomeProps) {
+  const isLight = theme === 'light';
   const [value, setValue] = useState("");
 
   function submit() {
@@ -58,9 +61,9 @@ export default function Home({ onSend, disabled }: HomeProps) {
         glowRadius={140}
         cursorRadius={480}
         bulgeOnly
-        gradientFrom="rgba(235, 0, 41, 0.22)"
-        gradientTo="rgba(120, 0, 20, 0.12)"
-        glowColor="#0c0c10"
+        gradientFrom={isLight ? "rgba(235, 0, 41, 0.16)" : "rgba(235, 0, 41, 0.22)"}
+        gradientTo={isLight ? "rgba(160, 0, 20, 0.07)" : "rgba(120, 0, 20, 0.12)"}
+        glowColor={isLight ? "#f5f4f8" : "#0c0c10"}
       />
       <div className="bn-home__content">
         <p className="bn-home__greeting">Bienvenido a Banky</p>

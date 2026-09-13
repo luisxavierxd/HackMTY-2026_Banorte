@@ -34,6 +34,8 @@ import ErrorBanner from "./shell/Error";
 import Loading from "./shell/Loading";
 import SurfaceErrorBoundary from "./shell/SurfaceErrorBoundary";
 import Lab from "./lab/Lab";
+import { useTheme } from "./shell/useTheme";
+import ThemeToggle from "./shell/ThemeToggle";
 
 const IS_LAB = new URLSearchParams(location.search).get("lab") === "1";
 
@@ -84,6 +86,8 @@ function ChevronIcon({ open }: { open: boolean }) {
 }
 
 export default function App() {
+  const { theme, toggle: toggleTheme } = useTheme();
+
   // ------------------------------------------------------------------
   // Mascota — ref para controlarla desde cualquier parte de la lógica
   // ------------------------------------------------------------------
@@ -464,38 +468,44 @@ export default function App() {
 
   if (needsAccessKey) {
     return (
-      <AccessGate
-        wrongKey={hadWrongKey}
-        onSubmit={() => location.reload()}
-        mascot={
-          <MascotAsistente
-            ref={mascotRef}
-            size={160}
-            caraInicial="normal"
-            bigoteInicial="normal"
-            manoIzquierdaInicial="normal"
-            manoDerechaInicial="enseñando"
-          />
-        }
-      />
+      <>
+        <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />
+        <AccessGate
+          wrongKey={hadWrongKey}
+          onSubmit={() => location.reload()}
+          mascot={
+            <MascotAsistente
+              ref={mascotRef}
+              size={160}
+              caraInicial="normal"
+              bigoteInicial="normal"
+              manoIzquierdaInicial="normal"
+              manoDerechaInicial="enseñando"
+            />
+          }
+        />
+      </>
     );
   }
 
   if (!profile) {
     return (
-      <ProfileGate
-        onSubmit={() => setProfileState(getProfile())}
-        mascot={
-          <MascotAsistente
-            ref={mascotRef}
-            size={160}
-            caraInicial="normal"
-            bigoteInicial="normal"
-            manoIzquierdaInicial="normal"
-            manoDerechaInicial="enseñando"
-          />
-        }
-      />
+      <>
+        <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />
+        <ProfileGate
+          onSubmit={() => setProfileState(getProfile())}
+          mascot={
+            <MascotAsistente
+              ref={mascotRef}
+              size={160}
+              caraInicial="normal"
+              bigoteInicial="normal"
+              manoIzquierdaInicial="normal"
+              manoDerechaInicial="enseñando"
+            />
+          }
+        />
+      </>
     );
   }
 
@@ -524,7 +534,10 @@ export default function App() {
       />
       <div className={`bn-app${showLanding ? " bn-app--full" : ""}`}>
       {showLanding ? (
-        <Home onSend={handleSend} disabled={busy} />
+        <>
+          <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />
+          <Home onSend={handleSend} disabled={busy} theme={theme} />
+        </>
       ) : !hasSurface ? (
         <Loading />
       ) : (
@@ -541,6 +554,7 @@ export default function App() {
           >
             Conversación <ChevronIcon open={transcriptOpen} />
           </button>
+          <ThemeToggle theme={theme} onToggle={toggleTheme} />
           <button
             type="button"
             className="bn-topbar__refresh"
