@@ -153,14 +153,81 @@ export default function App() {
     setOverrides((prev) => ({ ...prev, [path]: value }));
   }, []);
 
+  const humanizeToolName = useCallback((name: string) => {
+    const short = name.includes("__") ? name.split("__").pop()! : name;
+    return short.replace(/_/g, " ");
+  }, []);
+
+  const mascotNarrate = useCallback((texto: string, cara = "pensativo", cargando = true) => {
+    const m = mascotRef.current;
+    if (!m) return;
+    m.setPose({ cara, bigote: "ninguno", manoIzquierda: "ninguna", manoDerecha: "ninguna" });
+    m.setCargando(cargando);
+    m.hablar(texto);
+  }, []);
+
+  // Banky narra lo que el usuario señala con el mouse en la surface
+  const hoverLabelRef = useRef("");
+  const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const COMPONENT_HINTS: Record<string, string> = {
+    MetricCard: "Esta cifra muestra",
+    Card: "Esta sección es",
+    ActionButton: "Este botón te permite",
+    LineChart: "Esta gráfica muestra",
+    BarChart: "Esta gráfica muestra",
+    PieChart: "Este gráfico muestra",
+    ComparisonBars: "Esta comparación muestra",
+    ProgressRing: "Este indicador muestra",
+    Slider: "Aquí puedes ajustar",
+    TextField: "Aquí puedes escribir",
+    OptionList: "Aquí puedes elegir",
+    Callout: "",
+    Timeline: "Esta línea de tiempo muestra",
+    DataTable: "Esta tabla muestra",
+  };
+
+  const handleSurfaceHover = useCallback((e: React.MouseEvent) => {
+    if (busy) return;
+    const target = (e.target as HTMLElement).closest("[data-bn-component]") as HTMLElement | null;
+    const label = target?.dataset.bnLabel || "";
+    if (!label || label === hoverLabelRef.current) return;
+    hoverLabelRef.current = label;
+    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+    hoverTimerRef.current = setTimeout(() => {
+      const comp = target?.dataset.bnComponent || "";
+      const hint = COMPONENT_HINTS[comp] || "Esto es";
+      const m = mascotRef.current;
+      if (!m) return;
+      m.setPose({ cara: "normal", bigote: "normal", manoIzquierda: "normal", manoDerecha: "apuntando" });
+      m.setCargando(false);
+      m.hablar(`${hint} ${label}.`);
+    }, 400);
+  }, [busy]);
+
+  const handleSurfaceLeave = useCallback(() => {
+    if (busy) return;
+    hoverLabelRef.current = "";
+    if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
+  }, [busy]);
+
   const handleEvent = useCallback((event: ServerEvent) => {
     switch (event.type) {
       case "tool_call":
         setBusy(true);
         setTrace({ kind: "tool_call", name: event.name, ts: Date.now() });
+        mascotNarrate(`Consultando ${humanizeToolName(event.name)}…`);
+        break;
+      case "tool_result":
+        if (event.ok) {
+          mascotNarrate("Listo, ya tengo los datos. Analizando…");
+        } else {
+          mascotNarrate("Hmm, hubo un problema. Déjame intentar otra cosa…", "preocupado");
+        }
         break;
       case "thinking":
         setTrace({ kind: "thinking", text: event.text, ts: Date.now() });
+        mascotNarrate(event.text || "Déjame pensar…");
         break;
       case "surface": {
         const next = applyEnvelopes(surfaceRef.current, event.a2ui);
@@ -181,17 +248,18 @@ export default function App() {
       case "error":
         setError(event.message);
         setBusy(false);
+        mascotNarrate("Algo salió mal. ¿Lo intentamos de nuevo?", "preocupado", false);
         break;
       case "ack":
         setBusy(true);
         setTrace({ kind: "action", name: event.action, ts: Date.now() });
+        mascotNarrate(`Procesando ${humanizeToolName(event.action)}…`);
         break;
       case "ready":
-      case "tool_result":
       default:
         break;
     }
-  }, [addTranscript]);
+  }, [addTranscript, mascotNarrate, humanizeToolName]);
 
   // Código de acceso: gate a nivel de app (no HTTP Basic Auth, ver
   // net/accessKey.ts) — si el harness rechaza la key (o no hay una puesta),
@@ -590,6 +658,13 @@ export default function App() {
         <Loading />
       ) : (
       <>
+      <DotField
+        style={{ position: "fixed", inset: 0, zIndex: 0 }}
+        dotRadius={3} dotSpacing={16} bulgeStrength={60} cursorRadius={180}
+        bulgeOnly noGlow
+        gradientFrom={theme === 'light' ? "rgba(235,0,41,0.32)" : "rgba(235,0,41,0.38)"}
+        gradientTo={theme === 'light' ? "rgba(190,0,25,0.14)" : "rgba(180,0,20,0.18)"}
+      />
       <header className="bn-topbar">
         <span className="bn-topbar__title">{title || "Banky"}</span>
         <div className="bn-topbar__actions">
@@ -640,7 +715,7 @@ export default function App() {
         </div>
       )}
 
-      <main className="bn-surface-area">
+      <main className="bn-surface-area" onMouseOver={handleSurfaceHover} onMouseLeave={handleSurfaceLeave}>
         <SurfaceErrorBoundary
           key={turnId}
           onReset={() => {
