@@ -155,7 +155,7 @@ export default function App() {
       setCanCancel(false);
       return;
     }
-    const timer = setTimeout(() => setCanCancel(true), 45_000);
+    const timer = setTimeout(() => setCanCancel(true), 8_000);
     return () => clearTimeout(timer);
   }, [busy]);
 
