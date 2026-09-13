@@ -30,25 +30,24 @@ export default function MetricCard({ props, ctx }: A2UIComponentProps<MetricCard
   const delta = props.delta !== undefined ? resolveBinding(props.delta, ctx.data, "") : "";
   const caption = props.caption !== undefined ? resolveBinding(props.caption, ctx.data, "") : "";
 
+  const bullets = (() => {
+    if (!caption || caption === "") return [];
+    const text = String(caption);
+    return text.split(/(?<=\.)\s+/).map((s) => s.replace(/\.$/, "").trim()).filter(Boolean);
+  })();
+
   return (
     <div className="bn-metric">
-      <span className="bn-metric__label">{props.label}</span>
+      <h3 className="bn-metric__title">{props.label}</h3>
       <span className="bn-metric__value bn-amount">{String(value)}</span>
       {delta !== "" && delta !== undefined && delta !== null && (
         <span className={clsx("bn-badge", "bn-metric__delta", `bn-tone-${tone}`)}>{String(delta)}</span>
       )}
-      {caption !== "" && caption !== undefined && caption !== null && (() => {
-        const text = String(caption);
-        const parts = text.split(/(?<=\.)\s+/).filter(Boolean);
-        if (parts.length > 1) {
-          return (
-            <ul className="bn-metric__bullets">
-              {parts.map((p, i) => <li key={i}>{p.replace(/\.$/, "")}</li>)}
-            </ul>
-          );
-        }
-        return <p className="bn-metric__caption">{text}</p>;
-      })()}
+      {bullets.length > 0 && (
+        <ul className="bn-metric__bullets">
+          {bullets.map((b, i) => <li key={i}>{b}</li>)}
+        </ul>
+      )}
     </div>
   );
 }

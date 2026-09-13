@@ -139,6 +139,13 @@
   font-size: 0.75rem;
   color: var(--bn-mute);
 }
+.bn-metric__title {
+  font-family: var(--bn-font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--bn-ink);
+}
 .bn-metric__value {
   font-family: var(--bn-font-display);
   font-size: clamp(1.25rem, 4vw, 1.5rem);

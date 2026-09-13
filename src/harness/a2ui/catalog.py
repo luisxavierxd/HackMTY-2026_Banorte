@@ -69,8 +69,12 @@ COMPONENTS: dict[str, dict[str, Any]] = {
     "MetricCard": {
         "doc": "Un número que importa, con etiqueta, variación y texto explicativo. "
                "SIEMPRE incluye delta (frase corta de contexto, ej. '+25% sobre lo "
-               "recomendado') y caption (1-2 oraciones que expliquen qué significa el "
-               "número y por qué importa). Sin caption la tarjeta queda vacía.",
+               "recomendado') y caption con 3-4 puntos breves separados por '. ' que "
+               "expliquen qué significa el número, por qué importa y qué puede hacer "
+               "el usuario al respecto. Ejemplo de caption: 'Cubre tus gastos fijos "
+               "de 3 meses. Supera el mínimo recomendado por expertos. Puedes usarlo "
+               "como base para invertir. Revísalo cada trimestre para ajustar.' "
+               "Sin caption la tarjeta queda vacía y se ve mal.",
         "props": {
             "label": {"type": "string", "required": True},
             "value": {"type": "binding", "required": True},
