@@ -180,6 +180,7 @@ function SpeechBubble({
         display: "flex",
         flexDirection: "column",
         gap: 8,
+        pointerEvents: "none",
         ...style,
       }}
     >
@@ -206,6 +207,7 @@ function SpeechBubble({
           type="button"
           onClick={(e) => { e.stopPropagation(); onContinuar(); }}
           style={{
+            pointerEvents: "auto",
             alignSelf: "flex-end",
             background: "rgba(235,0,41,0.80)",
             border: "1px solid rgba(235,0,41,0.40)",
