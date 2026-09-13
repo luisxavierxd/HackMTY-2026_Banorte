@@ -8,12 +8,13 @@
 export type Binding<T = unknown> = T | { path: string };
 
 export function isBindingRef(value: unknown): value is { path: string } {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    !Array.isArray(value) &&
-    typeof (value as Record<string, unknown>).path === "string"
-  );
+  if (
+    typeof value !== "object" ||
+    value === null ||
+    Array.isArray(value)
+  ) return false;
+  const keys = Object.keys(value);
+  return keys.length === 1 && keys[0] === "path" && typeof (value as Record<string, unknown>).path === "string";
 }
 
 /** Referencia de acción tal como la emite el composer: {event:{name, params}}. */

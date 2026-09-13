@@ -40,6 +40,9 @@ export const comparisonBars: ChartAdapter<ComparisonBarsProps> = {
         confine: true,
         axisPointer: { type: "shadow" },
         valueFormatter: (v: unknown) => ctx.fmt(Number(v), fmt),
+        backgroundColor: ctx.t.sidebarBg,
+        borderColor: ctx.t.cardBorder,
+        textStyle: { color: ctx.t.inkFull },
       },
       legend: {
         bottom: 0,
@@ -53,7 +56,7 @@ export const comparisonBars: ChartAdapter<ComparisonBarsProps> = {
         data: categories,
         axisLine: { show: false },
         axisTick: { show: false },
-        axisLabel: { color: ctx.t.mute },
+        axisLabel: { color: ctx.t.mute, interval: 0, fontSize: 11, overflow: "truncate", width: 90 },
       },
       yAxis: {
         type: "value",

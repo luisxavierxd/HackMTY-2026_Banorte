@@ -64,6 +64,9 @@ function readTheme(el: HTMLElement): Theme {
     ink: v("--bn-ink", "#241C1A"),
     mute: v("--bn-mute", "#6E625F"),
     surface: v("--bn-surface", "#FFFFFF"),
+    sidebarBg: v("--bn-sidebar-bg", "rgba(18,16,22,0.82)"),
+    cardBorder: v("--bn-card-border", "rgba(255,255,255,0.14)"),
+    inkFull: v("--bn-ink-full", "#ffffff"),
   };
 }
 
@@ -133,7 +136,8 @@ export default function ChartHost({ node, data }: ChartHostProps) {
     );
   }
 
-  const height = typeof adapter.height === "function" ? adapter.height(props) : adapter.height ?? 220;
+  const fullHeight = typeof adapter.height === "function" ? adapter.height(props) : adapter.height ?? 220;
+  const height = isEmpty ? 60 : fullHeight;
   const title = (props.title as string | undefined) ?? undefined;
 
   return (

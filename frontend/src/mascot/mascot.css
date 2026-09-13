@@ -118,11 +118,11 @@
 }
 
 /* ── Surface guide / many charts ──
-   Banqui centrado en la mitad izquierda */
+   Banqui centrado en el 35% izquierdo */
 .bn-mascot-overlay--many-charts {
   top: 50%;
   bottom: auto;
-  left: 25vw;
+  left: 17.5vw;
   right: auto;
   width: auto;
   transform: translate(-50%, -50%);
@@ -134,12 +134,7 @@
 }
 @media (max-width: 768px) {
   .bn-mascot-overlay--many-charts {
-    top: max(8px, env(safe-area-inset-top, 8px));
-    bottom: auto;
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%) scale(0.62);
-    transform-origin: top center;
+    display: none;
   }
 }
 

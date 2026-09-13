@@ -81,7 +81,7 @@ export const barChart: ChartAdapter<BarChartProps> = {
       data: categories,
       axisLine: { show: false },
       axisTick: { show: false },
-      axisLabel: { color: ctx.t.mute },
+      axisLabel: { color: ctx.t.mute, interval: 0, fontSize: 11, overflow: "truncate" as const, width: 90 },
     };
 
     return {
@@ -91,6 +91,9 @@ export const barChart: ChartAdapter<BarChartProps> = {
         confine: true,
         axisPointer: { type: "line" },
         valueFormatter: (v: unknown) => ctx.fmt(Number(v), fmt),
+        backgroundColor: ctx.t.sidebarBg,
+        borderColor: ctx.t.cardBorder,
+        textStyle: { color: ctx.t.inkFull },
       },
       xAxis: horizontal ? valueAxis : categoryAxis,
       yAxis: horizontal ? categoryAxis : valueAxis,

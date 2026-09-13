@@ -25,6 +25,9 @@ export interface Theme {
   ink: string; // --bn-ink
   mute: string; // --bn-mute
   surface: string; // --bn-surface
+  sidebarBg: string; // --bn-sidebar-bg (tooltip bg)
+  cardBorder: string; // --bn-card-border (tooltip border)
+  inkFull: string; // --bn-ink-full (tooltip text)
 }
 
 export interface ChartCtx {

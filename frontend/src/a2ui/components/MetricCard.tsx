@@ -7,11 +7,11 @@ interface MetricCardProps {
   label: string;
   value?: Binding<string | number>;
   delta?: Binding<string | number>;
+  caption?: Binding<string>;
   tone?: Tone;
 }
 
 function abbreviateAmount(v: string): string {
-  // "-$15,806" → "-$15.8K"  |  "$555" sin cambio  |  texto/% sin cambio
   const m = v.match(/^(-?)(\$?)(\d[\d,]*)(\.\d+)?(.*)$/);
   if (!m) return v;
   const [, sign, curr, intPart, , rest] = m;
@@ -28,6 +28,7 @@ export default function MetricCard({ props, ctx }: A2UIComponentProps<MetricCard
   const rawValue = resolveBinding(props.value, ctx.data, "");
   const value = abbreviateAmount(String(rawValue));
   const delta = props.delta !== undefined ? resolveBinding(props.delta, ctx.data, "") : "";
+  const caption = props.caption !== undefined ? resolveBinding(props.caption, ctx.data, "") : "";
 
   return (
     <div className="bn-metric">
@@ -35,6 +36,9 @@ export default function MetricCard({ props, ctx }: A2UIComponentProps<MetricCard
       <span className="bn-metric__value bn-amount">{String(value)}</span>
       {delta !== "" && delta !== undefined && delta !== null && (
         <span className={clsx("bn-badge", "bn-metric__delta", `bn-tone-${tone}`)}>{String(delta)}</span>
+      )}
+      {caption !== "" && caption !== undefined && caption !== null && (
+        <p className="bn-metric__caption">{String(caption)}</p>
       )}
     </div>
   );

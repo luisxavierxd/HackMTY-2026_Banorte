@@ -9,7 +9,7 @@ interface ColumnProps {
 }
 
 // Componentes que no reciben la cápsula bento (van a ancho completo, sin fondo)
-const NON_CARD = new Set(["Callout", "ActionButton", "Divider", "Text", "Badge"]);
+const NON_CARD = new Set(["Callout", "ActionButton", "Divider", "Text", "Badge", "Slider", "OptionList", "TextField"]);
 
 export default function Column({ props, ctx }: A2UIComponentProps<ColumnProps>) {
   const gap = props.gap ?? "md";
@@ -21,29 +21,21 @@ export default function Column({ props, ctx }: A2UIComponentProps<ColumnProps>) 
     ? children
     : children.slice(0, revealedCount);
 
-  // Root column: una sola tarjeta, máximo una gráfica
+  // Root column: cada hijo card/row va en su propia bento cell
   if (!isNested) {
-    let chartSeen = false;
-    const filtered = visibleChildren.filter((id) => {
-      const isCard = !NON_CARD.has(ctx.getComponentType(id) ?? "");
-      if (isCard) {
-        if (chartSeen) return false;
-        chartSeen = true;
-      }
-      return true;
-    });
-
-    const cardIds = filtered.filter((id) => !NON_CARD.has(ctx.getComponentType(id) ?? ""));
-    const utilIds = filtered.filter((id) => NON_CARD.has(ctx.getComponentType(id) ?? ""));
+    const cardIds = visibleChildren.filter((id) => !NON_CARD.has(ctx.getComponentType(id) ?? ""));
+    const utilIds = visibleChildren.filter((id) => NON_CARD.has(ctx.getComponentType(id) ?? ""));
+    const n = Math.min(cardIds.length, 4);
+    const bentoClass = n > 0 ? `bn-bento-${n}` : "bn-bento-1";
 
     return (
       <IsNestedColumnContext.Provider value={true}>
-        <div className={clsx("bn-col", "bn-bento-1")}>
-          {cardIds.length > 0 && (
-            <div className="bn-bento-cell">
-              {ctx.renderChildren(cardIds)}
+        <div className={clsx("bn-col", bentoClass)}>
+          {cardIds.map((childId) => (
+            <div key={childId} className="bn-bento-cell">
+              {ctx.renderChildren([childId])}
             </div>
-          )}
+          ))}
           {utilIds.map((childId) => (
             <div key={childId} className="bn-bento-span">
               {ctx.renderChildren([childId])}

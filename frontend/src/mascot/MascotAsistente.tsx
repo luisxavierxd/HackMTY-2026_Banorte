@@ -524,6 +524,8 @@ interface MascotAsistenteProps {
   onHablarTermina?: () => void;
   /** Callback que se llama cuando el usuario hace clic en "Continuar →" del globo */
   onContinuar?: () => void;
+  /** Suppresses the speech bubble — character animates but doesn't talk */
+  noBubble?: boolean;
 }
 
 const MascotAsistente = forwardRef<MascotAsistenteRef, MascotAsistenteProps>(
@@ -542,6 +544,7 @@ const MascotAsistente = forwardRef<MascotAsistenteRef, MascotAsistenteProps>(
       onHablarEmpieza,
       onHablarTermina,
       onContinuar,
+      noBubble = false,
     },
     ref
   ) {
@@ -594,23 +597,25 @@ const MascotAsistente = forwardRef<MascotAsistenteRef, MascotAsistenteProps>(
           display: "inline-flex",
           flexDirection: "column",
           alignItems: "flex-start",
-          gap: 8,
+          gap: noBubble ? 0 : 8,
           ...containerStyle,
         }}
       >
-        <div className="bn-mascot-bubble" style={{ marginLeft: size * 0.08, minHeight: speech.text ? undefined : 0 }}>
-          <SpeechBubble
-            key={speech.nonce}
-            text={speech.text}
-            speedMs={speech.speed}
-            playBlip={playBlip}
-            onChar={() => setSpeechTick((n) => n + 1)}
-            onContinuar={speech.text ? onContinuar : undefined}
-            onDone={speech.text ? onHablarTermina : undefined}
-            style={bubbleStyle}
-            className={bubbleClassName}
-          />
-        </div>
+        {!noBubble && (
+          <div className="bn-mascot-bubble" style={{ marginLeft: size * 0.08, minHeight: speech.text ? undefined : 0 }}>
+            <SpeechBubble
+              key={speech.nonce}
+              text={speech.text}
+              speedMs={speech.speed}
+              playBlip={playBlip}
+              onChar={() => setSpeechTick((n) => n + 1)}
+              onContinuar={speech.text ? onContinuar : undefined}
+              onDone={speech.text ? onHablarTermina : undefined}
+              style={bubbleStyle}
+              className={bubbleClassName}
+            />
+          </div>
+        )}
 
         <Mascot
           cara={pose.cara}

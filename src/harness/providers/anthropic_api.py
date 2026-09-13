@@ -84,9 +84,6 @@ class AnthropicProvider:
         temperature: float = 0.2,
     ) -> Completion:
         native = self._to_messages(messages)
-        if json_mode:
-            # prefill: obliga al modelo a continuar un objeto JSON ya abierto
-            native = native + [{"role": "assistant", "content": [{"type": "text", "text": "{"}]}]
 
         kwargs: dict[str, Any] = {
             "model": self.model,
@@ -108,8 +105,6 @@ class AnthropicProvider:
                 calls.append(ToolCall(id=block.id, name=block.name, args=dict(block.input or {})))
 
         text = "".join(text_parts)
-        if json_mode and text:
-            text = "{" + text  # devolvemos el prefill que nos comimos
 
         return Completion(
             text=text,

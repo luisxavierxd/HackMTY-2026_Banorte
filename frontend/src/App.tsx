@@ -112,6 +112,7 @@ export default function App() {
   // Mascota — ref para controlarla desde cualquier parte de la lógica
   // ------------------------------------------------------------------
   const mascotRef = useRef<MascotAsistenteRef>(null);
+  const miniBankyRef = useRef<MascotAsistenteRef>(null);
   const mascotOverlayRef = useRef<HTMLDivElement>(null);
   const [mascotTraveling, setMascotTraveling] = useState(false);
 
@@ -182,6 +183,11 @@ export default function App() {
     m.setPose({ cara, bigote: "normal", manoIzquierda: "ninguna", manoDerecha: "ninguna" });
     m.setCargando(cargando);
     m.hablar(texto);
+    const mini = miniBankyRef.current;
+    if (mini) {
+      mini.setPose({ cara, bigote: "normal", manoIzquierda: "ninguna", manoDerecha: "ninguna" });
+      mini.setCargando(cargando);
+    }
   }, []);
 
   const mascotResetPose = useCallback(() => {
@@ -189,6 +195,11 @@ export default function App() {
     if (!m) return;
     m.setPose({ cara: "normal", bigote: "normal", manoIzquierda: "normal", manoDerecha: "enseñando" });
     m.setCargando(false);
+    const mini = miniBankyRef.current;
+    if (mini) {
+      mini.setPose({ cara: "normal", bigote: "normal", manoIzquierda: "normal", manoDerecha: "enseñando" });
+      mini.setCargando(false);
+    }
   }, []);
 
   // Banky narra lo que el usuario señala con el mouse en la surface
@@ -433,10 +444,14 @@ export default function App() {
 
   const handleSend = useCallback(
     (text: string) => {
-      setBusy(true);
       setError(null);
       addTranscript("user", text);
-      sendUserMessage(send, text);
+      const ok = sendUserMessage(send, text);
+      if (ok === false) {
+        setError("Conexión perdida. Intenta de nuevo en un momento.");
+        return;
+      }
+      setBusy(true);
     },
     [send, addTranscript]
   );
@@ -754,16 +769,32 @@ export default function App() {
       <div className={`bn-app${showLanding ? " bn-app--full" : ""}${hasSurface || busy ? " bn-app--many-charts" : ""}`}>
       {showLanding ? (
         <>
+          <DotField
+            style={{ position: "fixed", inset: 0, zIndex: 0 }}
+            dotRadius={3} dotSpacing={16} bulgeStrength={60} cursorRadius={180}
+            bulgeOnly noGlow
+            gradientFrom={theme === 'light' ? "rgba(235,0,41,0.32)" : "rgba(235,0,41,0.38)"}
+            gradientTo={theme === 'light' ? "rgba(190,0,25,0.14)" : "rgba(180,0,20,0.18)"}
+          />
           <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />
-          <Home onSend={handleSend} disabled={busy} theme={theme} />
+          <Home onSend={handleSend} disabled={busy} />
         </>
       ) : !hasSurface ? (
         <Loading />
       ) : (
       <>
+      <DotField
+        style={{ position: "fixed", inset: 0, zIndex: 0 }}
+        dotRadius={3} dotSpacing={16} bulgeStrength={60} cursorRadius={180}
+        bulgeOnly noGlow
+        gradientFrom={theme === 'light' ? "rgba(235,0,41,0.32)" : "rgba(235,0,41,0.38)"}
+        gradientTo={theme === 'light' ? "rgba(190,0,25,0.14)" : "rgba(180,0,20,0.18)"}
+      />
+
       <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />
 
       <main className="bn-surface-area" onMouseMove={handleSurfaceMouseMove} onMouseLeave={handleSurfaceLeave}>
+        {title && <h1 className="bn-surface-title">{title}</h1>}
         <SurfaceErrorBoundary
           key={turnId}
           onReset={() => {
@@ -785,12 +816,70 @@ export default function App() {
           Esto está tardando más de lo normal — cancelar y reformular
         </button>
       )}
-      <Composer onSend={handleSend} disabled={busy || status !== "open"} />
+      <div className="bn-composer-row">
+        <div className="bn-mini-banky">
+          <MascotAsistente
+            ref={miniBankyRef}
+            size={52}
+            caraInicial="normal"
+            bigoteInicial="normal"
+            manoIzquierdaInicial="normal"
+            manoDerechaInicial="enseñando"
+            noBubble
+          />
+        </div>
+        <Composer onSend={handleSend} disabled={busy} />
+      </div>
       </>
       )}
       </div>
     </div>
     {mascotaOverlay}
+    {(hasSurface || busy) && (
+      <div className="bn-nav-strip">
+        <button
+          type="button"
+          className="bn-nav-strip__btn"
+          aria-expanded={transcriptOpen}
+          disabled={transcript.length === 0}
+          onClick={() => setTranscriptOpen((v) => !v)}
+        >
+          Conversación <ChevronIcon open={transcriptOpen} />
+        </button>
+        <button
+          type="button"
+          className="bn-nav-strip__btn"
+          onClick={startNewConversation}
+        >
+          <RefreshIcon /> Nueva
+        </button>
+
+        {transcriptOpen && transcript.length > 0 && (
+          <div className="bn-transcript-overlay" role="log">
+            {transcript.map((entry, i) =>
+              entry.surface ? (
+                <button
+                  key={i}
+                  type="button"
+                  className="bn-transcript__item bn-transcript__item--agent bn-transcript__item--clickable"
+                  onClick={() => { restoreEntry(entry); setTranscriptOpen(false); }}
+                  title="Ver esta pantalla y seguir desde aquí"
+                >
+                  <span className="bn-transcript__role">Asistente</span>
+                  {entry.text}
+                  <span className="bn-transcript__hint">↩</span>
+                </button>
+              ) : (
+                <p key={i} className={`bn-transcript__item bn-transcript__item--${entry.role}`}>
+                  <span className="bn-transcript__role">{entry.role === "user" ? "Tú" : "Asistente"}</span>
+                  {entry.text}
+                </p>
+              )
+            )}
+          </div>
+        )}
+      </div>
+    )}
     </>
   );
 }

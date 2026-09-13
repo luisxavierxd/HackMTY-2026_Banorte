@@ -35,6 +35,9 @@ export const pieChart: ChartAdapter<PieChartProps> = {
         trigger: "item",
         confine: true,
         valueFormatter: (v: unknown) => ctx.fmt(Number(v), fmt),
+        backgroundColor: ctx.t.sidebarBg,
+        borderColor: ctx.t.cardBorder,
+        textStyle: { color: ctx.t.inkFull },
       },
       legend: {
         bottom: 0,

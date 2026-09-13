@@ -16,7 +16,7 @@ export interface LineChartProps {
 
 export const lineChart: ChartAdapter<LineChartProps> = {
   name: "LineChart",
-  height: 240,
+  height: 180,
   isEmpty(props, data) {
     return !(props.series ?? []).some((s) => resolveSeriesPoints(s, data).length > 0);
   },
@@ -27,10 +27,10 @@ export const lineChart: ChartAdapter<LineChartProps> = {
     const anim = animationConfig(ctx);
     const categories = xCategories(props.series, data, props.xKey);
 
-    const series = props.series.map((s) => {
+    const series = props.series.map((s, idx) => {
       const values = seriesValues(s, data);
-      const emphasis = !!s.emphasis;
-      const color = emphasis ? toneColor(s.tone, ctx.t) : ctx.t.graySoft;
+      const primary = idx === 0 || !!s.emphasis;
+      const color = primary ? ctx.t.red : ctx.t.graySoft;
       const last = values[values.length - 1];
 
       return {
@@ -40,14 +40,13 @@ export const lineChart: ChartAdapter<LineChartProps> = {
         smooth: true,
         showSymbol: true,
         symbol: "circle",
-        // Sin símbolos salvo en el último punto de la serie.
         symbolSize: (_v: number, p: { dataIndex: number }) =>
-          p.dataIndex === values.length - 1 ? (emphasis ? 8 : 5) : 0,
-        lineStyle: { width: emphasis ? 3 : 1.5, color },
+          p.dataIndex === values.length - 1 ? (primary ? 8 : 5) : 0,
+        lineStyle: { width: primary ? 3 : 1.5, color },
         itemStyle: { color },
-        z: emphasis ? 3 : 1,
+        z: primary ? 3 : 1,
         areaStyle:
-          area && emphasis
+          area && primary
             ? {
                 color: {
                   type: "linear",
@@ -56,14 +55,14 @@ export const lineChart: ChartAdapter<LineChartProps> = {
                   x2: 0,
                   y2: 1,
                   colorStops: [
-                    { offset: 0, color: toneWash(s.tone, ctx.t) },
+                    { offset: 0, color: ctx.t.redWash },
                     { offset: 1, color: "transparent" },
                   ],
                 },
               }
             : undefined,
         markPoint:
-          emphasis && annotateLast && values.length
+          primary && annotateLast && values.length
             ? {
                 symbol: "circle",
                 symbolSize: 34,
@@ -83,6 +82,9 @@ export const lineChart: ChartAdapter<LineChartProps> = {
         confine: true,
         axisPointer: { type: "line" },
         valueFormatter: (v: unknown) => ctx.fmt(Number(v), fmt),
+        backgroundColor: ctx.t.sidebarBg,
+        borderColor: ctx.t.cardBorder,
+        textStyle: { color: ctx.t.inkFull },
       },
       xAxis: {
         type: "category",

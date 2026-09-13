@@ -238,103 +238,89 @@
    Topbar — glass header
    ================================================================ */
 
-.bn-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: max(var(--bn-space-3), env(safe-area-inset-top, var(--bn-space-3))) var(--bn-space-4) var(--bn-space-3);
-  min-height: 56px;
-  border-bottom: 1px solid var(--bn-glass-border);
-  position: sticky;
-  top: 0;
-  background: var(--bn-topbar-bg);
-  backdrop-filter: blur(var(--bn-glass-blur));
-  -webkit-backdrop-filter: blur(var(--bn-glass-blur));
-  z-index: 5;
-  flex-shrink: 0;
-  box-shadow:
-    inset 3px 0 0 var(--bn-red),
-    var(--bn-glass-glow);
-}
-.bn-topbar__title {
-  font-family: var(--bn-font-display);
-  font-weight: 700;
-  font-size: 1.0625rem;
-  color: var(--bn-ink);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  padding-left: calc(44px + var(--bn-space-3));
-}
-.bn-topbar__actions {
-  display: flex;
-  align-items: center;
-  gap: var(--bn-space-1);
-  flex-shrink: 0;
-}
-.bn-topbar__history-toggle {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background: none;
-  border: none;
-  min-height: 44px;
-  padding: 0 var(--bn-space-2);
-  border-radius: var(--bn-radius-control);
-  color: var(--bn-mute);
-  font-size: 0.8125rem;
-  transition: color 150ms ease, background 150ms ease;
-}
-.bn-topbar__history-toggle:not(:disabled):hover {
-  color: var(--bn-ink);
-  background: var(--bn-hover-sm);
-}
-.bn-topbar__history-toggle:disabled {
-  opacity: 0.4;
-}
-@media (max-width: 480px) {
-  .bn-topbar__history-toggle {
-    font-size: 0;
-    padding: 0 var(--bn-space-1);
-    min-width: 44px;
-    justify-content: center;
-  }
-  .bn-topbar__history-toggle svg {
-    font-size: initial;
-  }
-}
-.bn-topbar__refresh {
-  background: none;
-  border: none;
-  min-width: 44px;
-  min-height: 44px;
-  border-radius: var(--bn-radius-control);
-  color: var(--bn-mute);
+/* ================================================================
+   Nav strip — above Banky title, left-aligned
+   ================================================================ */
+
+.bn-nav-strip {
+  position: fixed;
+  top: var(--bn-space-3);
+  left: 60px;
+  width: calc(35vw - 60px);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 150ms ease, background 150ms ease;
+  gap: var(--bn-space-2);
+  padding: var(--bn-space-2);
+  z-index: 250;
 }
-.bn-topbar__refresh:hover {
+@media (max-width: 768px) {
+  .bn-nav-strip {
+    position: fixed;
+    top: var(--bn-space-2);
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+  }
+}
+.bn-nav-strip__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bn-glass-bg);
+  border: 1px solid var(--bn-glass-border);
+  border-radius: var(--bn-radius-pill);
+  padding: 6px 14px;
+  color: var(--bn-mute);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 150ms ease, background 150ms ease, border-color 150ms ease;
+}
+.bn-nav-strip__btn:not(:disabled):hover {
   color: var(--bn-ink);
-  background: var(--bn-hover-sm);
+  background: var(--bn-hover-md);
+  border-color: var(--bn-focus-border);
+}
+.bn-nav-strip__btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.bn-nav-strip__btn svg {
+  width: 14px;
+  height: 14px;
 }
 
 /* ================================================================
-   Transcript
+   Transcript overlay — floats over content
    ================================================================ */
 
-.bn-transcript {
+.bn-transcript-overlay {
+  position: fixed;
+  top: 92px;
+  left: 2vw;
+  width: 31vw;
+  max-height: min(50vh, calc(100vh - 120px));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   display: flex;
   flex-direction: column;
   gap: var(--bn-space-2);
-  padding: var(--bn-space-3) var(--bn-space-4);
-  border-bottom: 1px solid var(--bn-glass-border);
-  background: var(--bn-surface-subtle);
-  max-height: 45vh;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  flex-shrink: 0;
+  padding: var(--bn-space-3);
+  background: var(--bn-sidebar-bg);
+  border: 1px solid var(--bn-glass-border);
+  border-radius: var(--bn-radius-control);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  z-index: 300;
+}
+@media (max-width: 768px) {
+  .bn-transcript-overlay {
+    left: var(--bn-space-3);
+    right: var(--bn-space-3);
+    width: auto;
+  }
 }
 .bn-transcript__item {
   margin: 0;
@@ -713,19 +699,19 @@
    Surface-guide layout — Bento grid, Banqui pequeño abajo-izquierda
    ================================================================ */
 
-/* En desktop: el contenido ocupa la mitad derecha, Banky en la izquierda */
+/* En desktop: el contenido ocupa el 65% derecho, Banky el 35% izquierdo */
 @media (min-width: 769px) {
   .bn-app--many-charts {
-    margin-left: 50vw;
+    margin-left: 35vw;
     border-left: none;
   }
 }
 
-/* Surface area: sin scroll, sin fondo extra */
+/* Surface area: scrollable, sin fondo extra */
 .bn-app--many-charts .bn-surface-area {
   flex: 1 1 0;
   min-height: 0;
-  overflow: hidden;
+  overflow-y: auto;
   margin: var(--bn-space-3);
   margin-bottom: var(--bn-space-2);
   padding: var(--bn-space-3);
@@ -756,40 +742,53 @@
   }
 }
 
-/* ── Bento grid base ── */
+/* ── Surface title bar ── */
+.bn-surface-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--bn-ink-full);
+  margin: 0 0 var(--bn-space-3) 0;
+  padding: 0;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+/* ── Bento grid base — card unificada con borde exterior ── */
 .bn-app--many-charts .bn-surface-area > .bn-col {
   display: grid;
-  height: 100%;
-  gap: 10px;
+  gap: 1px;
+  grid-auto-rows: min-content;
+  min-height: 0;
+  background: var(--bn-card-bg);
+  border: 1px solid var(--bn-card-border);
+  border-radius: 20px;
+  box-shadow:
+    var(--bn-glass-glow),
+    0 6px 36px rgba(0, 0, 0, 0.18);
   overflow: hidden;
-  align-content: stretch;
 }
 
 /* 1 elemento: full width */
 .bn-app--many-charts .bn-surface-area > .bn-bento-1 {
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
 }
 
 /* 2 elementos: dos columnas */
 .bn-app--many-charts .bn-surface-area > .bn-bento-2 {
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
 }
 
-/* 3 elementos: 1 grande izquierda + 2 pequeños derecha */
+/* 3 elementos: 2 arriba lado a lado + 1 abajo ancho completo */
 .bn-app--many-charts .bn-surface-area > .bn-bento-3 {
-  grid-template-columns: 1.2fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
 }
-.bn-app--many-charts .bn-surface-area > .bn-bento-3 > .bn-bento-cell:first-child {
-  grid-row: span 2;
+.bn-app--many-charts .bn-surface-area > .bn-bento-3 > .bn-bento-cell:nth-child(3) {
+  grid-column: 1 / -1;
 }
 
-/* 4 elementos: 2×2 */
+/* 4+ elementos: 2 columnas, filas auto */
 .bn-app--many-charts .bn-surface-area > .bn-bento-4 {
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
 }
 
 /* Mobile: columna simple */
@@ -798,26 +797,25 @@
     display: flex;
     flex-direction: column;
     height: auto;
-    gap: 10px;
+    gap: 1px;
   }
 }
 
-/* ── Bento cell — cápsula oscura neumórfica ── */
+/* ── Bento cell — sección interna sin borde propio ── */
 .bn-bento-cell {
-  background: rgba(16, 16, 16, 0.78);
-  border: 1px solid rgba(255, 255, 255, 0.055);
-  border-radius: 20px;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 6px 36px rgba(0, 0, 0, 0.55);
+  background: var(--bn-surface-subtle);
+  border: none;
+  border-radius: 0;
   overflow: hidden;
   min-height: 0;
   min-width: 0;
-  padding: var(--bn-space-3);
+  padding: var(--bn-space-2) var(--bn-space-3);
   display: flex;
   flex-direction: column;
   position: relative;
 }
+
+/* Separador sutil entre celdas via gap de 1px + fondo del grid */
 
 /* Suprimir el fondo de los componentes A2UI dentro del bento */
 .bn-bento-cell .bn-card {
@@ -833,21 +831,21 @@
   flex: 0 0 auto;
 }
 
-/* Utilidades (Callout, ActionButton): ancho completo, sin cápsula */
+/* Utilidades (Callout, ActionButton): ancho completo */
 .bn-bento-span {
   grid-column: 1 / -1;
+  padding: var(--bn-space-1, 4px) var(--bn-space-3);
+  background: var(--bn-surface-subtle);
 }
 
-/* ── Pop-in animación por celda ── */
+/* ── Pop-in animación ── */
 @keyframes bn-surface-pop {
-  0%   { opacity: 0; transform: scale(0.88) translateY(14px); }
-  65%  { opacity: 1; transform: scale(1.02) translateY(-2px); }
+  0%   { opacity: 0; transform: scale(0.96) translateY(10px); }
   100% { opacity: 1; transform: scale(1)    translateY(0); }
 }
 
-.bn-app--many-charts .bn-surface-area > .bn-col > .bn-bento-cell {
-  animation: bn-surface-pop 480ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
-  animation-delay: 0.06s;
+.bn-app--many-charts .bn-surface-area > .bn-col {
+  animation: bn-surface-pop 400ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 /* ================================================================
@@ -978,6 +976,42 @@
 .bn-composer__send:not(:disabled):active {
   background: var(--bn-red-deep);
   transform: scale(0.95);
+}
+
+/* ================================================================
+   Mini Banky — mobile only, next to composer
+   ================================================================ */
+
+.bn-composer-row {
+  display: contents;
+}
+
+.bn-mini-banky {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .bn-composer-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 0;
+    flex-shrink: 0;
+    padding-left: var(--bn-space-2);
+    padding-bottom: max(var(--bn-space-2), calc(env(safe-area-inset-bottom, 0px) + var(--bn-space-1)));
+  }
+  .bn-composer-row .bn-composer {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding-left: 0;
+    padding-bottom: 0;
+  }
+  .bn-mini-banky {
+    display: flex;
+    align-items: flex-end;
+    flex-shrink: 0;
+    pointer-events: auto;
+    margin-bottom: 2px;
+  }
 }
 
 /* ================================================================

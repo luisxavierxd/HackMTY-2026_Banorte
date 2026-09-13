@@ -66,6 +66,58 @@ Formato de salida: SOLO un objeto JSON, sin markdown, con esta forma:
   ]
 }}
 
+PLANTILLAS DE LAYOUT (OBLIGATORIO — elige UNA y síguelo al pie de la letra):
+
+La raíz SIEMPRE es un Column con id "root". Sus hijos directos siguen UNA
+de estas 5 configuraciones. NO inventes disposiciones: la pantalla se
+renderiza en un grid bento — si el orden o los tipos de hijos no coinciden
+con una plantilla, el layout se rompe.
+
+PLANTILLA A — Solo métricas (0 gráficas):
+  root.children = [metric1, metric2?, callout?, action]
+  Usa MetricCards (1-3), un Callout opcional, y el ActionButton al final.
+
+PLANTILLA B — Una gráfica + contexto:
+  root.children = [metric1, chart1, callout?, action]
+  Un MetricCard con la cifra principal ARRIBA, luego la gráfica
+  (LineChart|BarChart|PieChart|ComparisonBars|ProgressRing), Callout
+  opcional, y ActionButton al final.
+
+PLANTILLA C — Dos gráficas lado a lado:
+  root.children = [metric1, chart1, chart2, callout?, action]
+  Un MetricCard arriba, dos gráficas (el grid las pone lado a lado),
+  Callout opcional, ActionButton al final.
+
+PLANTILLA D — Gráfica + control interactivo:
+  root.children = [metric1, chart1, control1, callout?, action]
+  MetricCard, gráfica, un control (Slider|OptionList|TextField),
+  Callout opcional, ActionButton al final.
+
+PLANTILLA E — Control interactivo sin gráfica:
+  root.children = [metric1?, control1, callout?, action]
+  MetricCard opcional, un control, Callout opcional, ActionButton al final.
+
+Reglas estrictas de orden dentro de root.children:
+1. MetricCards SIEMPRE van primero (posiciones 0 y 1 como máximo).
+2. Gráficas van después de las métricas (posiciones 1-2).
+3. Controles interactivos (Slider/OptionList/TextField) van después de gráficas.
+4. Callout va penúltimo (si existe).
+5. ActionButton va SIEMPRE último.
+6. NUNCA pongas un Card envolviendo una gráfica — las gráficas van directas
+   como hijos de root, el grid bento les pone su cápsula automáticamente.
+7. NUNCA pongas un Row como hijo de root — el grid se encarga del acomodo.
+8. Máximo 2 MetricCards y máximo 2 gráficas por pantalla.
+9. OBLIGATORIO: cada MetricCard DEBE llevar:
+   - "delta": frase corta de contexto (ej. "+25% sobre lo recomendado",
+     "Tu meta a 12 meses", "Equivale a $350 diarios").
+   - "caption": 1-2 oraciones que expliquen qué significa el número y por
+     qué importa para la persona (ej. "Esto quiere decir que puedes
+     cubrir tus necesidades básicas y aún te sobra para ahorrar.").
+   Sin delta y caption la tarjeta queda vacía y se ve mal.
+10. El "title" del plan se muestra como encabezado arriba de todo el card.
+    Escríbelo claro y específico (ej. "Tu plan de ahorro a 12 meses", NO
+    "Resultados" ni "Información").
+
 Reglas de composición:
 - Lista PLANA: los contenedores referencian hijos por id. Todo id referenciado existe.
 - Un valor de prop puede ser literal ("$1,690") o un binding {{"path": "/plan/selected"}}
@@ -82,8 +134,6 @@ Reglas de composición:
   ComparisonBars "a"/"b") — aunque el resultado de la tool use otro nombre
   (ej. "grupo" en vez de "label", o "ideal"/"real" en vez de "a"/"b" en
   regla_50_30_20). Remapea, no copies el nombre de campo original.
-- Una gráfica por pantalla, máximo dos. Si hay una gráfica, debe ir acompañada
-  de un MetricCard con la cifra que importa y de un control accionable.
 - OJO, dos vocabularios de tono distintos, no se mezclan:
   - LineChart, BarChart, ComparisonBars, ProgressRing usan tone="costo"
     (lo que la persona paga) o tone="ahorro" (lo que gana).

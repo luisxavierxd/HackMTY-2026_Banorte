@@ -67,11 +67,15 @@ COMPONENTS: dict[str, dict[str, Any]] = {
         },
     },
     "MetricCard": {
-        "doc": "Un número que importa, con etiqueta y variación opcional.",
+        "doc": "Un número que importa, con etiqueta, variación y texto explicativo. "
+               "SIEMPRE incluye delta (frase corta de contexto, ej. '+25% sobre lo "
+               "recomendado') y caption (1-2 oraciones que expliquen qué significa el "
+               "número y por qué importa). Sin caption la tarjeta queda vacía.",
         "props": {
             "label": {"type": "string", "required": True},
             "value": {"type": "binding", "required": True},
             "delta": {"type": "binding"},
+            "caption": {"type": "binding"},
             "tone": {
                 "type": "enum",
                 "values": ["neutral", "success", "warning", "danger"],
