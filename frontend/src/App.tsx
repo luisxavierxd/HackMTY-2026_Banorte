@@ -206,23 +206,6 @@ export default function App() {
   const hoverLabelRef = useRef("");
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const COMPONENT_HINTS: Record<string, string> = {
-    MetricCard: "Esta cifra indica tu",
-    Card: "Esta sección contiene información sobre tu",
-    ActionButton: "Este botón te permite realizar una acción sobre tu",
-    LineChart: "Esta gráfica visualiza la tendencia de tus",
-    BarChart: "Esta gráfica compara tus",
-    PieChart: "Este gráfico desglosa la distribución de tus",
-    ComparisonBars: "Esta comparación contrasta tus",
-    ProgressRing: "Este indicador refleja el avance de tu",
-    Slider: "Aquí puedes ajustar el valor de tu",
-    TextField: "Aquí puedes escribir información sobre tu",
-    OptionList: "Aquí puedes elegir entre opciones de",
-    Callout: "",
-    Timeline: "Esta línea de tiempo detalla el historial de tus",
-    DataTable: "Esta tabla detalla tus",
-  };
-
   const handleSurfaceHover = useCallback((e: React.MouseEvent) => {
     if (busy) return;
     const target = (e.target as HTMLElement).closest("[data-bn-component]") as HTMLElement | null;
@@ -231,13 +214,11 @@ export default function App() {
     hoverLabelRef.current = label;
     if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
     hoverTimerRef.current = setTimeout(() => {
-      const comp = target?.dataset.bnComponent || "";
-      const hint = COMPONENT_HINTS[comp] || "Esto es";
       const m = mascotRef.current;
       if (!m) return;
       m.setPose({ cara: "normal", bigote: "normal", manoIzquierda: "normal", manoDerecha: "apuntando" });
       m.setCargando(false);
-      m.hablar(`${hint} ${label}.`);
+      m.hablar(label);
     }, 400);
   }, [busy]);
 
@@ -268,9 +249,7 @@ export default function App() {
       hoverLabelRef.current = label;
       if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
       hoverTimerRef.current = setTimeout(() => {
-        const comp = target?.dataset.bnComponent || "";
-        const hint = COMPONENT_HINTS[comp] || "Esto es";
-        mascotRef.current?.hablar(`${hint} ${label}.`);
+        mascotRef.current?.hablar(label);
       }, 400);
     }
   }, [busy]);

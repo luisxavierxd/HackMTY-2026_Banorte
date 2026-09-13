@@ -115,6 +115,13 @@ Reglas estrictas de orden dentro de root.children:
      cubrir tus necesidades básicas y aún te sobra para ahorrar.").
    Sin delta y caption la tarjeta queda vacía y se ve mal.
 10. El "title" del plan se muestra como encabezado arriba de todo el card.
+11. OBLIGATORIO: cada componente visible (MetricCard, Card, DataTable,
+    gráficas, Timeline, ProgressRing) DEBE llevar "hint": una oración
+    explicativa que el asistente virtual (Banqui) lee en voz alta cuando
+    el usuario señala esa sección con el mouse. NO repitas el título —
+    describe qué muestra y por qué importa.
+    Ej: hint="Aquí ves cómo se distribuyen tus gastos del mes para
+    identificar en qué categoría puedes recortar."
     Escríbelo claro y específico (ej. "Tu plan de ahorro a 12 meses", NO
     "Resultados" ni "Información").
 

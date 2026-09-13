@@ -32,6 +32,7 @@ const CONTAINERS = new Set(["Column", "Row"]);
 
 function componentLabel(component: string, props: Record<string, unknown>): string {
   const p = props || {};
+  if (p.hint && typeof p.hint === "string") return p.hint;
   if (p.title) return String(p.title);
   if (p.label) return String(p.label);
   if (p.text && typeof p.text === "string") return p.text.length > 60 ? p.text.slice(0, 57) + "…" : p.text;

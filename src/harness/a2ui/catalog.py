@@ -40,6 +40,7 @@ COMPONENTS: dict[str, dict[str, Any]] = {
             "child": {"type": "componentId", "required": True},
             "title": {"type": "string"},
             "variant": {"type": "enum", "values": ["default", "highlight"], "default": "default"},
+            "hint": {"type": "string"},
         },
     },
     "Divider": {"doc": "Separador horizontal.", "props": {}},
@@ -80,6 +81,7 @@ COMPONENTS: dict[str, dict[str, Any]] = {
             "value": {"type": "binding", "required": True},
             "delta": {"type": "binding"},
             "caption": {"type": "binding"},
+            "hint": {"type": "string"},
             "tone": {
                 "type": "enum",
                 "values": ["neutral", "success", "warning", "danger"],
@@ -93,12 +95,14 @@ COMPONENTS: dict[str, dict[str, Any]] = {
             "columns": {"type": "objectList", "required": True, "keys": ["key", "label", "format"]},
             "rows": {"type": "binding", "required": True},
             "maxRows": {"type": "number", "default": 12},
+            "hint": {"type": "string"},
         },
     },
     "BarChart": {
         "doc": "Comparación simple de 2-8 valores.",
         "props": {
             "title": {"type": "string"},
+            "hint": {"type": "string"},
             "series": {"type": "objectList", "required": True, "keys": ["label", "value"]},
             "format": {"type": "enum", "values": ["currency", "percent", "number"], "default": "number"},
             "compare": {"type": "objectList", "keys": ["label", "value"]},
@@ -112,6 +116,7 @@ COMPONENTS: dict[str, dict[str, Any]] = {
                "NO copies los números: apunta con 'path' a la serie que ya está en /datos.",
         "props": {
             "title": {"type": "string"},
+            "hint": {"type": "string"},
             "series": {
                 "type": "objectList",
                 "required": True,
@@ -131,6 +136,7 @@ COMPONENTS: dict[str, dict[str, Any]] = {
             "value": {"type": "binding", "required": True},
             "target": {"type": "number", "required": True},
             "caption": {"type": "binding"},
+            "hint": {"type": "string"},
             "tone": {"type": "enum", "values": ["neutral", "ahorro", "costo"], "default": "ahorro"},
         },
     },
@@ -140,6 +146,7 @@ COMPONENTS: dict[str, dict[str, Any]] = {
                "uses para series en el tiempo, para eso es LineChart.",
         "props": {
             "title": {"type": "string"},
+            "hint": {"type": "string"},
             "slices": {"type": "objectList", "required": True, "keys": ["label", "value"]},
             "format": {"type": "enum", "values": ["currency", "percent", "number"], "default": "currency"},
         },
@@ -151,6 +158,7 @@ COMPONENTS: dict[str, dict[str, Any]] = {
                "un solo valor avanzando hacia una meta, usa ProgressRing (ya existe).",
         "props": {
             "title": {"type": "string"},
+            "hint": {"type": "string"},
             "labelA": {"type": "string", "default": "Escenario A"},
             "labelB": {"type": "string", "default": "Escenario B"},
             "categories": {
@@ -167,6 +175,7 @@ COMPONENTS: dict[str, dict[str, Any]] = {
                "graficar una curva continua (eso es LineChart).",
         "props": {
             "title": {"type": "string"},
+            "hint": {"type": "string"},
             "steps": {
                 "type": "objectList", "required": True,
                 "keys": ["label", "detail", "highlight"],
