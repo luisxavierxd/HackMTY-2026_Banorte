@@ -463,14 +463,21 @@ export default function App() {
   );
 
   if (needsAccessKey) {
-    // Recarga completa a propósito: useSocket abre el WS una sola vez al
-    // montar (mismo patrón que startNewConversation) — no hay forma limpia
-    // de "reconectar con la key nueva" sin recargar.
     return (
-      <>
-        <AccessGate wrongKey={hadWrongKey} onSubmit={() => location.reload()} />
-        {mascotaOverlay}
-      </>
+      <AccessGate
+        wrongKey={hadWrongKey}
+        onSubmit={() => location.reload()}
+        mascot={
+          <MascotAsistente
+            ref={mascotRef}
+            size={160}
+            caraInicial="normal"
+            bigoteInicial="normal"
+            manoIzquierdaInicial="normal"
+            manoDerechaInicial="enseñando"
+          />
+        }
+      />
     );
   }
 

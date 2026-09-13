@@ -713,90 +713,87 @@
 }
 
 /* ================================================================
-   Access gate — glass card
+   Access screen — mascot above centered glass card
    ================================================================ */
 
-.bn-access-gate {
+.bn-access-screen {
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: var(--bn-space-4);
+  gap: var(--bn-space-4);
 }
 
-.bn-access-gate__card {
+.bn-access-screen__mascot {
+  pointer-events: none;
+}
+
+.bn-access-card {
   width: 100%;
-  max-width: 360px;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
-  gap: var(--bn-space-3);
-  background: var(--bn-glass-bg);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid var(--bn-glass-border);
-  border-radius: var(--bn-radius-surface);
-  padding: var(--bn-space-5);
+  align-items: center;
+  gap: var(--bn-space-5);
+  background: rgba(32, 30, 36, 0.65);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 28px;
+  padding: var(--bn-space-6);
   box-shadow:
-    var(--bn-glass-glow),
-    0 16px 48px rgba(0, 0, 0, 0.4);
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04),
+    0 24px 64px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
-.bn-access-gate__card h1 {
+.bn-access-card__title {
   font-family: var(--bn-font-display);
-  font-size: 1.25rem;
-  color: var(--bn-ink);
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: #ffffff;
   margin: 0;
+  text-align: center;
 }
 
-.bn-access-gate__card p {
-  color: var(--bn-mute);
+.bn-access-card__desc {
+  color: rgba(255, 255, 255, 0.50);
   margin: 0;
   font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: center;
 }
 
-.bn-access-gate__card input {
-  padding: var(--bn-space-3);
-  border-radius: var(--bn-radius-control);
+.bn-access-card .bn-glass-field {
+  width: 100%;
+}
+
+.bn-access-card__error {
+  color: var(--bn-red-deep);
+  font-size: 0.875rem;
+  margin: 0;
+  text-align: center;
+}
+
+.bn-access-card__submit {
+  padding: var(--bn-space-3) var(--bn-space-6);
+  border-radius: var(--bn-radius-pill);
   border: 1px solid var(--bn-glass-border);
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--bn-ink);
-  font-size: 1rem;
-  transition: border-color 200ms ease;
-}
-.bn-access-gate__card input:focus {
-  outline: none;
-  border-color: rgba(255, 255, 255, 0.25);
-}
-.bn-access-gate__card input::placeholder {
-  color: var(--bn-mute);
-}
-
-.bn-access-gate__error {
-  color: var(--bn-red-deep) !important;
-}
-
-.bn-access-gate__card button {
-  padding: var(--bn-space-3);
-  border-radius: var(--bn-radius-control);
-  border: none;
-  background: var(--bn-red);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   color: #ffffff;
   font-weight: 600;
+  font-size: 0.9375rem;
   transition: background 150ms ease;
+  box-shadow: var(--bn-glass-glow);
 }
-.bn-access-gate__card button:hover:not(:disabled) {
-  background: var(--bn-red-deep);
-}
-.bn-access-gate__card button:disabled {
-  background: rgba(255, 255, 255, 0.10);
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.bn-access-gate__card--wide {
-  max-width: 520px;
-  max-height: 85vh;
-  overflow-y: auto;
+.bn-access-card__submit:hover {
+  background: rgba(255, 255, 255, 0.14);
 }
 
 /* ================================================================
