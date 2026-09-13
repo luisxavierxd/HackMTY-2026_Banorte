@@ -5,6 +5,8 @@
   flex-direction: column;
   gap: var(--bn-space-2);
   width: 100%;
+  min-width: 180px;
+  flex: 1 0 auto;
 }
 .bn-chart__title {
   font-family: var(--bn-font-display);
@@ -16,6 +18,8 @@
 .bn-chart__body {
   position: relative;
   width: 100%;
+  overflow: visible;
+  z-index: 0;
 }
 .bn-chart__canvas {
   width: 100%;

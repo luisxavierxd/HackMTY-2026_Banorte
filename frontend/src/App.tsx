@@ -92,6 +92,7 @@ export default function App() {
   // Mascota — ref para controlarla desde cualquier parte de la lógica
   // ------------------------------------------------------------------
   const mascotRef = useRef<MascotAsistenteRef>(null);
+  const mascotOverlayRef = useRef<HTMLDivElement>(null);
   const [mascotTraveling, setMascotTraveling] = useState(false);
 
   const [surface, setSurface] = useState<SurfaceState>(null);
@@ -484,13 +485,64 @@ export default function App() {
   const showLanding = !hasSurface && status === "open";
 
   const body: ReactNode = hasSurface
-    ? renderSurface(surface, viewData, { setLocal, runAction })
+    ? renderSurface(surface, viewData, { setLocal, runAction, busy })
     : null;
 
   // Banqui — siempre montado para ilusión de continuidad entre pantallas.
   // Siempre en el lado izquierdo, centrado verticalmente, tamaño fijo 240px.
+  // Mascota sigue el mouse verticalmente (solo en desktop, en surface view)
+  const isWide = useRef(window.innerWidth > 768);
+  useEffect(() => {
+    const onResize = () => { isWide.current = window.innerWidth > 768; };
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  useEffect(() => {
+    const el = mascotOverlayRef.current;
+    if (!el) return;
+    let raf = 0;
+    let targetY = window.innerHeight / 2;
+    let currentY = targetY;
+    const mascotH = 240;
+    const pad = 60;
+
+    const onMove = (e: MouseEvent) => {
+      if (!isWide.current) return;
+      const minY = pad;
+      const maxY = window.innerHeight - mascotH - pad;
+      targetY = Math.max(minY, Math.min(maxY, e.clientY - mascotH / 2));
+    };
+
+    const tick = () => {
+      currentY += (targetY - currentY) * 0.08;
+      if (isWide.current && !el.classList.contains("bn-mascot-overlay--landing") && !el.classList.contains("bn-mascot-overlay--profile")) {
+        el.style.top = `${currentY}px`;
+        el.style.transform = "none";
+      } else {
+        el.style.top = "";
+        el.style.transform = "";
+      }
+      raf = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener("mousemove", onMove, { passive: true });
+    raf = requestAnimationFrame(tick);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(raf);
+    };
+  }, []);
+
   const mascotaOverlay = (
-    <div className="bn-mascot-overlay bn-mascot-overlay--landing">
+    <div
+      ref={mascotOverlayRef}
+      className={`bn-mascot-overlay${
+        currentScreenForTutorial === "surface" || currentScreenForTutorial === "busy"
+          ? "" : currentScreenForTutorial === "profile"
+          ? " bn-mascot-overlay--profile" : " bn-mascot-overlay--landing"
+      }`}
+    >
       {/* Wrapper interno para el squish de viaje sin conflicto con la transición de posición */}
       <div className={mascotTraveling ? "bn-mascot-squish--active" : undefined}>
         <MascotAsistente

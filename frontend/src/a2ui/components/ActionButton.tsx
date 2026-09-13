@@ -20,7 +20,7 @@ export default function ActionButton({ props, ctx }: A2UIComponentProps<ActionBu
   }
 
   return (
-    <button type="button" className={clsx("bn-btn", `bn-btn--${variant}`)} onClick={handleClick}>
+    <button type="button" className={clsx("bn-btn", `bn-btn--${variant}`)} onClick={handleClick} disabled={ctx.busy}>
       {props.text}
     </button>
   );

@@ -15,30 +15,30 @@
   flex-direction: column;
   align-items: flex-start;
 
-  /* Default: esquina inferior-izquierda, junto al composer */
-  bottom: 20px;
-  left: 16px;
-  top: auto;
+  /* Default: lado izquierdo, centrado verticalmente */
+  top: 50%;
+  left: clamp(16px, 4vw, 48px);
+  bottom: auto;
   right: auto;
-  transform: none;
+  transform: translateY(-50%);
 
   /* Spring con rebote ligero — da sensación de peso al flotar */
   transition:
-    bottom    600ms cubic-bezier(0.34, 1.56, 0.64, 1),
-    top       600ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    top       400ms cubic-bezier(0.34, 1.56, 0.64, 1),
     left      600ms cubic-bezier(0.34, 1.56, 0.64, 1),
-    right     600ms cubic-bezier(0.34, 1.56, 0.64, 1),
     transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
-  will-change: transform;
+  will-change: top, transform;
 }
 
-/* En móvil más pequeño y elevado sobre el composer */
-@media (max-width: 539px) {
+/* En móvil: mascota arriba centrada */
+@media (max-width: 768px) {
   .bn-mascot-overlay {
-    bottom: 76px;
-    left: 8px;
-    transform: scale(0.78);
-    transform-origin: bottom left;
+    top: max(8px, env(safe-area-inset-top, 8px));
+    left: 50%;
+    bottom: auto;
+    right: auto;
+    transform: translateX(-50%) scale(0.62);
+    transform-origin: top center;
   }
 }
 
@@ -51,13 +51,13 @@
   right: auto;
   transform: translateY(-50%);
 }
-@media (max-width: 539px) {
+@media (max-width: 768px) {
   .bn-mascot-overlay--landing {
     top: max(16px, env(safe-area-inset-top, 16px));
     left: 50%;
     bottom: auto;
     right: auto;
-    transform: translateX(-50%) scale(0.78);
+    transform: translateX(-50%) scale(0.62);
     transform-origin: top center;
   }
 }
@@ -71,13 +71,13 @@
   right: auto;
   transform: translateY(-50%);
 }
-@media (max-width: 700px) {
+@media (max-width: 768px) {
   .bn-mascot-overlay--profile {
     top: max(12px, env(safe-area-inset-top, 12px));
     left: 50%;
     bottom: auto;
     right: auto;
-    transform: translateX(-50%) scale(0.78);
+    transform: translateX(-50%) scale(0.62);
     transform-origin: top center;
   }
 }

@@ -55,10 +55,10 @@ export default function Home({ onSend, disabled, theme = 'dark' }: HomeProps) {
     <div className="bn-home">
       <DotField
         style={{ position: "absolute", inset: 0 }}
-        dotRadius={1.6}
+        dotRadius={3}
         dotSpacing={16}
         bulgeStrength={60}
-        cursorRadius={480}
+        cursorRadius={180}
         bulgeOnly
         noGlow
         gradientFrom={isLight ? "rgba(235, 0, 41, 0.32)" : "rgba(235, 0, 41, 0.38)"}

@@ -51,6 +51,7 @@ const REGISTRY: Record<string, AnyComponent> = {
 export interface SurfaceActions {
   setLocal: (path: string, value: unknown) => void;
   runAction: (action: ActionRef | undefined, label?: string) => void;
+  busy?: boolean;
 }
 
 /** Punto de entrada: pinta el árbol completo desde la raíz de la superficie. */
@@ -76,6 +77,7 @@ function renderComponent(
 
   const ctx: RenderCtx = {
     data,
+    busy: actions.busy,
     setLocal: actions.setLocal,
     runAction: actions.runAction,
     renderChild: (childId) => (childId ? renderComponent(childId, surface, data, depth + 1, actions) : null),

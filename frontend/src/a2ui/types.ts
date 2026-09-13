@@ -12,6 +12,7 @@ import type { ActionRef } from "../contract/a2ui";
  */
 export interface RenderCtx {
   data: unknown;
+  busy?: boolean;
   setLocal: (path: string, value: unknown) => void;
   /** `label` es el texto visible del control que disparó la acción (ej. el
    *  texto del ActionButton) — sirve para mostrarlo en el historial de la
