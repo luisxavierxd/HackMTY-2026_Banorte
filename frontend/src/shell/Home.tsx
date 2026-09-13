@@ -25,14 +25,6 @@ function SendIcon() {
   );
 }
 
-/** Pantalla de arranque estilo "Liquid Glass" (Figma frame 2011:4): mascota +
- *  título + input glass-pill, que ES el composer real de este estado — no
- *  decorativo. A pantalla completa (ver App.css ".bn-app--full"), no dentro
- *  del marco angosto de la conversación. Reemplaza a Empty.tsx; ver
- *  docs/superpowers/specs/2026-09-12-landing-liquid-glass-design.md.
- *  El botón para abrir el sidebar es el flotante global de App.tsx
- *  (.bn-sidebar-launcher, arriba a la izquierda) — no uno propio aquí.
- *  Solo se muestra mientras no hay conversación activa (App.tsx). */
 export default function Home({ onSend, disabled }: HomeProps) {
   const [value, setValue] = useState("");
 
@@ -58,11 +50,12 @@ export default function Home({ onSend, disabled }: HomeProps) {
   return (
     <div className="bn-home">
       <div className="bn-home__content">
-        <h1 className="bn-home__title">Pregúntale a Banqui...</h1>
+        <p className="bn-home__greeting">Bienvenido a Banky</p>
+        <h1 className="bn-home__title">¿En qué te puedo ayudar?</h1>
+        <p className="bn-home__subtitle">
+          Tu asistente financiero inteligente, listo para analizar tus finanzas y ayudarte a tomar mejores decisiones.
+        </p>
 
-        {/* Chips de sugerencia (las mismas 3 de la pantalla anterior,
-         *  Empty.tsx) restilizadas como glass-chips arriba del input — solo
-         *  en escritorio, donde hay espacio junto al título grande. */}
         <div className="bn-home__chips">
           {SUGGESTIONS.map((s) => (
             <button

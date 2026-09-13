@@ -15,6 +15,8 @@ body,
 body {
   margin: 0;
   background: var(--bn-bg);
+  background-image: var(--bn-bg-gradient);
+  background-attachment: fixed;
   color: var(--bn-ink);
   font-family: var(--bn-font-body);
   font-size: 16px;
@@ -51,7 +53,6 @@ svg {
   font-feature-settings: "tnum" 1, "lnum" 1;
 }
 
-/* focus visibility for keyboard nav */
 :focus-visible {
   outline: 2px solid var(--bn-red);
   outline-offset: 2px;

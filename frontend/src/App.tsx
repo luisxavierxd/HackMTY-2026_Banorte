@@ -517,7 +517,7 @@ export default function App() {
       ) : (
       <>
       <header className="bn-topbar">
-        <span className="bn-topbar__title">{title || "Banorte"}</span>
+        <span className="bn-topbar__title">{title || "Banky"}</span>
         <div className="bn-topbar__actions">
           <button
             type="button"

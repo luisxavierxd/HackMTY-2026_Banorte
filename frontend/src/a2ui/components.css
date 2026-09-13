@@ -1,5 +1,4 @@
-/* Estilos del catálogo A2UI. Sin sombras, bordes de 1px, radios definidos
-   en design/tokens.css. Rojo = costo, teal (ahorro) = ganancia. */
+/* A2UI components — dark glass theme */
 
 .bn-col {
   display: flex;
@@ -37,13 +36,19 @@
 }
 
 .bn-card {
-  border: 1px solid var(--bn-line);
+  border: 1px solid var(--bn-glass-border);
   border-radius: var(--bn-radius-surface);
   padding: var(--bn-space-4);
-  background: var(--bn-surface);
+  background: var(--bn-glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: var(--bn-glass-glow);
 }
 .bn-card--highlight {
   border-color: var(--bn-red);
+  box-shadow:
+    var(--bn-glass-glow),
+    0 0 20px rgba(235, 0, 41, 0.08);
 }
 .bn-card__title {
   font-family: var(--bn-font-display);
@@ -60,7 +65,7 @@
 
 .bn-divider {
   border: none;
-  border-top: 1px solid var(--bn-line);
+  border-top: 1px solid var(--bn-glass-border);
   margin: var(--bn-space-2) 0;
 }
 
@@ -141,8 +146,11 @@
 
 .bn-table-wrap {
   overflow-x: auto;
-  border: 1px solid var(--bn-line);
+  border: 1px solid var(--bn-glass-border);
   border-radius: var(--bn-radius-control);
+  background: var(--bn-glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 .bn-table {
   width: 100%;
@@ -153,7 +161,7 @@
 .bn-table td {
   padding: 10px 12px;
   text-align: left;
-  border-bottom: 1px solid var(--bn-line);
+  border-bottom: 1px solid var(--bn-glass-border);
   white-space: nowrap;
 }
 .bn-table th {
@@ -176,12 +184,15 @@
   align-items: flex-start;
   gap: 2px;
   padding: 12px 16px;
-  border: 1px solid var(--bn-line);
+  border: 1px solid var(--bn-glass-border);
   border-radius: var(--bn-radius-control);
-  background: var(--bn-surface);
+  background: var(--bn-glass-bg);
   text-align: left;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+  transition: border-color 150ms ease, background 150ms ease;
   width: 100%;
+}
+.bn-option:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
 .bn-option--selected {
   border-color: var(--bn-red);
@@ -221,34 +232,29 @@
   width: 100%;
   margin: 0;
   accent-color: var(--bn-red);
-  /* El thumb nativo (~16-20px) es más alto que el grosor del track: si el
-     input mide 4px de alto, el navegador (sobre todo Firefox) recorta el
-     círculo del thumb en vez de dejarlo desbordar. El track sigue viéndose
-     delgado, pero el elemento necesita esta altura para que el thumb quepa
-     completo sin recorte. */
   height: 20px;
 }
 
-.bn-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
 .bn-field__label {
   font-size: 0.875rem;
   color: var(--bn-mute);
 }
 .bn-field__input {
-  border: 1px solid var(--bn-line);
+  border: 1px solid var(--bn-glass-border);
   border-radius: var(--bn-radius-control);
   padding: 10px 12px;
   font-size: 1rem;
-  background: var(--bn-surface);
+  background: rgba(255, 255, 255, 0.04);
   color: var(--bn-ink);
   width: 100%;
+  transition: border-color 200ms ease;
 }
 .bn-field__input:focus {
   border-color: var(--bn-red);
+  outline: none;
+}
+.bn-field__input::placeholder {
+  color: var(--bn-mute);
 }
 
 .bn-btn {
@@ -258,15 +264,25 @@
   font-weight: 600;
   border: 1px solid transparent;
   width: 100%;
+  transition: background 150ms ease, transform 100ms ease;
+}
+.bn-btn:active:not(:disabled) {
+  transform: scale(0.98);
 }
 .bn-btn--primary {
   background: var(--bn-red);
   color: #ffffff;
 }
+.bn-btn--primary:hover:not(:disabled) {
+  background: var(--bn-red-deep);
+}
 .bn-btn--secondary {
   background: transparent;
-  border-color: var(--bn-line);
+  border-color: var(--bn-glass-border);
   color: var(--bn-ink);
+}
+.bn-btn--secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.06);
 }
 .bn-btn--ghost {
   background: transparent;
@@ -300,7 +316,7 @@
   display: flex;
   gap: var(--bn-space-3);
   padding: var(--bn-space-2) 0;
-  border-left: 2px solid var(--bn-line);
+  border-left: 2px solid var(--bn-glass-border);
   padding-left: var(--bn-space-3);
   margin-left: 5px;
   position: relative;
@@ -315,7 +331,7 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: var(--bn-gray-soft, var(--bn-line));
+  background: var(--bn-gray-soft);
 }
 .bn-timeline__step--highlight .bn-timeline__marker {
   background: var(--bn-red);
@@ -344,6 +360,8 @@
   padding: var(--bn-space-3) var(--bn-space-4);
   border-radius: var(--bn-radius-control);
   border: 1px solid transparent;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 .bn-callout__icon {
   width: 8px;
@@ -357,6 +375,7 @@
   margin: 0;
   font-size: 0.875rem;
   line-height: 1.4;
+  color: var(--bn-ink);
 }
 .bn-callout.bn-tone-neutral {
   background: var(--bn-tone-neutral-wash);
@@ -374,12 +393,9 @@
   background: var(--bn-tone-danger-wash);
   color: var(--bn-tone-danger);
 }
-.bn-callout__text {
-  color: var(--bn-ink);
-}
 
 .bn-chart-placeholder {
-  border: 1px dashed var(--bn-line);
+  border: 1px dashed var(--bn-glass-border);
   border-radius: var(--bn-radius-control);
   padding: var(--bn-space-5);
   text-align: center;
@@ -401,7 +417,7 @@
   padding: var(--bn-space-3);
   color: var(--bn-mute);
   font-size: 0.875rem;
-  background: rgba(182, 171, 168, 0.12);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .bn-empty-inline {

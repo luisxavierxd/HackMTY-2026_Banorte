@@ -160,16 +160,19 @@ function SpeechBubble({
       className={className}
       style={{
         position: "relative",
-        background: "#fff",
-        border: "2px solid #171717",
+        background: "rgba(255, 255, 255, 0.08)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+        border: "1px solid rgba(255, 255, 255, 0.14)",
         borderRadius: 16,
         padding: "12px 16px",
-        boxShadow: "0 2px 10px rgba(0,0,0,0.15)",
+        boxShadow:
+          "inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 8px 24px rgba(0, 0, 0, 0.3)",
         maxWidth: 240,
         minHeight: "2.4em",
         fontSize: 13,
         lineHeight: 1.4,
-        color: "#171717",
+        color: "rgba(255, 255, 255, 0.9)",
         fontFamily: "inherit",
         ...style,
       }}
@@ -182,24 +185,25 @@ function SpeechBubble({
             width: 2,
             height: "1em",
             verticalAlign: "middle",
-            background: "#171717",
+            background: "rgba(255, 255, 255, 0.7)",
             marginLeft: 2,
             animation: "mascot-caret-blink 0.8s steps(1) infinite",
           }}
         />
       )}
-      {/* colita del globo — apunta hacia abajo-izquierda donde está la mascota */}
       <div
         style={{
           position: "absolute",
-          bottom: -9,
+          bottom: -8,
           left: 28,
-          width: 16,
-          height: 16,
-          background: "#fff",
-          borderBottom: "2px solid #171717",
-          borderRight: "2px solid #171717",
+          width: 14,
+          height: 14,
+          background: "rgba(255, 255, 255, 0.08)",
+          borderBottom: "1px solid rgba(255, 255, 255, 0.14)",
+          borderRight: "1px solid rgba(255, 255, 255, 0.14)",
           transform: "rotate(45deg)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
         }}
       />
       <style>{`@keyframes mascot-caret-blink { 50% { opacity: 0; } }`}</style>
