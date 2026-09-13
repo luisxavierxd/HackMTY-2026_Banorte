@@ -19,3 +19,23 @@
     transform-origin: bottom right;
   }
 }
+
+/* Landing "Liquid Glass" (shell/Home.tsx): la mascota se centra arriba del
+ * título en vez de la esquina inferior — declarado después a propósito
+ * para ganarle a las reglas de arriba con la misma especificidad. */
+.bn-mascot-overlay--landing {
+  bottom: auto;
+  right: auto;
+  top: max(16px, env(safe-area-inset-top, 16px));
+  left: 50%;
+  align-items: center;
+  transform: translateX(-50%);
+}
+@media (max-width: 539px) {
+  .bn-mascot-overlay--landing {
+    bottom: auto;
+    right: auto;
+    transform: translateX(-50%) scale(0.72);
+    transform-origin: top center;
+  }
+}

@@ -38,12 +38,14 @@
   }
 }
 
-/* Card en escritorio, drawer deslizable en móvil — perfil que da contexto
- * al agente (ver shell/ProfileSidebar.tsx). */
+/* Card en escritorio, drawer deslizable en móvil — perfil + historial de
+ * conversaciones que dan contexto al agente (ver shell/ProfileSidebar.tsx).
+ * Persistente en toda la app (landing y conversación activa) al estilo dark
+ * liquid-glass del Figma. */
 .bn-sidebar__scrim {
   position: fixed;
   inset: 0;
-  background: rgba(20, 14, 12, 0.4);
+  background: rgba(0, 0, 0, 0.5);
   z-index: 49;
 }
 
@@ -54,8 +56,11 @@
   height: 100vh;
   height: 100dvh;
   width: min(82vw, 300px);
-  background: var(--bn-surface);
-  border-right: 1px solid var(--bn-line);
+  background: rgba(24, 22, 24, 0.78);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
   z-index: 50;
   transform: translateX(-100%);
   transition: transform 220ms ease;
@@ -109,9 +114,9 @@
     height: auto;
     max-height: 100%;
     flex-shrink: 0;
-    border: 1px solid var(--bn-line);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: var(--bn-radius-control);
-    box-shadow: 0 8px 24px rgba(36, 28, 26, 0.08);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   }
   .bn-topbar__sidebar-toggle {
     display: none;
@@ -130,12 +135,12 @@
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--bn-mute);
+  color: rgba(255, 255, 255, 0.55);
 }
 .bn-sidebar__name {
   font-family: var(--bn-font-display);
   font-size: 1.375rem;
-  color: var(--bn-ink);
+  color: #ffffff;
   margin: 0;
 }
 .bn-sidebar__stats {
@@ -146,25 +151,108 @@
 }
 .bn-sidebar__stats dt {
   font-size: 0.75rem;
-  color: var(--bn-mute);
+  color: rgba(255, 255, 255, 0.55);
 }
 .bn-sidebar__stats dd {
   margin: 0;
   font-size: 1.0625rem;
   font-weight: 600;
-  color: var(--bn-ink);
+  color: #ffffff;
 }
-.bn-sidebar__logout {
-  margin-top: auto;
+
+/* "+ Nueva conversación" — mismo lenguaje glass-pill que los chips de Home. */
+.bn-sidebar__new {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--bn-radius-pill);
+  padding: 10px var(--bn-space-3);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+.bn-sidebar__new:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* Historial de conversaciones (net/conversations.ts) — crece para llenar el
+ * espacio entre "+ Nueva conversación" y "Salir", con su propio scroll. */
+.bn-sidebar__conversations {
+  flex: 1 1 auto;
+  min-height: 64px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0 calc(var(--bn-space-2) * -1);
+}
+.bn-sidebar__conversation {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: var(--bn-radius-control);
+}
+.bn-sidebar__conversation--active {
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: inset 3px 0 0 var(--bn-red);
+}
+.bn-sidebar__conversation-select {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
   background: none;
-  border: 1px solid var(--bn-line);
+  border: none;
+  padding: var(--bn-space-2);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: #ffffff;
+  border-radius: var(--bn-radius-control);
+}
+.bn-sidebar__conversation-select:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.bn-sidebar__conversation-title {
+  font-size: 0.875rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bn-sidebar__conversation-date {
+  font-size: 0.6875rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+.bn-sidebar__conversation-delete {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  margin-right: 4px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bn-sidebar__conversation-delete:hover {
+  color: var(--bn-red);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.bn-sidebar__logout {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: var(--bn-radius-control);
   padding: var(--bn-space-3);
-  color: var(--bn-red-deep);
+  color: var(--bn-red);
   font-weight: 600;
 }
 .bn-sidebar__logout:hover {
-  background: var(--bn-line);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .bn-topbar {
@@ -302,65 +390,159 @@
   gap: var(--bn-space-4);
 }
 
-.bn-empty {
-  margin: auto 0;
+/* ---- Landing "Liquid Glass" (shell/Home.tsx) ---- */
+.bn-home {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--bn-space-3);
-  text-align: left;
-  /* Deja aire en el tercio superior para que visualmente se lea centrada */
-  padding-top: var(--bn-space-6);
+  justify-content: center;
+  align-items: center;
+  padding: var(--bn-space-5) var(--bn-space-4);
+  overflow: hidden;
+  background: radial-gradient(120% 90% at 50% 18%, #2c2c30 0%, #17171a 55%, #0a0a0b 100%);
+  color: #ffffff;
 }
-.bn-empty__eyebrow {
-  display: block;
-  width: 32px;
-  height: 3px;
-  background: var(--bn-red);
+
+.bn-home__menu {
+  position: absolute;
+  top: max(var(--bn-space-4), env(safe-area-inset-top, var(--bn-space-4)));
+  left: var(--bn-space-4);
+  width: 44px;
+  height: 44px;
   border-radius: var(--bn-radius-pill);
-  margin-bottom: var(--bn-space-2);
-}
-.bn-empty__title {
-  font-family: var(--bn-font-display);
-  font-size: 1.625rem;
-  font-weight: 700;
-  line-height: 1.15;
-  color: var(--bn-ink);
-  margin: 0;
-}
-.bn-empty__body {
-  color: var(--bn-mute);
-  font-size: 0.95rem;
-  margin: 0;
-  max-width: 34ch;
-}
-.bn-empty__chips {
-  display: flex;
-  flex-direction: column;
-  gap: var(--bn-space-2);
-  margin-top: var(--bn-space-4);
-}
-/* El chip es el call-to-action principal del estado vacío: debe ser cómodo
-   de tocar y leer como una acción concreta, no una etiqueta. */
-.bn-chip {
-  text-align: left;
-  border: 1px solid var(--bn-line);
-  border-radius: var(--bn-radius-control);
-  /* min-height de 52px para táctil cómodo */
-  min-height: 52px;
-  padding: 14px 16px;
-  background: var(--bn-surface);
-  color: var(--bn-ink);
-  font-size: 0.9375rem;
-  line-height: 1.35;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #ffffff;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
-.bn-chip:hover {
-  border-color: var(--bn-gray-soft);
-  background: var(--bn-bg);
+@media (min-width: 880px) {
+  .bn-home__menu {
+    /* El sidebar ya está fijo y visible en escritorio, ver .bn-sidebar */
+    display: none;
+  }
 }
-.bn-chip:active {
-  background: var(--bn-line);
+
+.bn-home__content {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--bn-space-5);
+  text-align: center;
+  /* Deja aire arriba para la mascota flotante centrada, ver
+     .bn-mascot-overlay--landing en mascot.css */
+  margin-top: 96px;
+}
+
+.bn-home__title {
+  font-family: var(--bn-font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  line-height: 1.1;
+  margin: 0;
+  color: #ffffff;
+}
+
+/* Los 3 chips de sugerencia que traía la pantalla anterior (Empty.tsx),
+ * restilizados como glass-chips — solo en escritorio, arriba del input:
+ * en móvil no hay espacio junto al título grande + mascota + input. */
+.bn-home__chips {
+  display: none;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--bn-space-2);
+}
+@media (min-width: 880px) {
+  .bn-home__chips {
+    display: flex;
+  }
+}
+.bn-home__chip {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--bn-radius-pill);
+  padding: 10px 18px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #ffffff;
+  font-size: 0.875rem;
+}
+.bn-home__chip:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.16);
+}
+.bn-home__chip:disabled {
+  opacity: 0.5;
+}
+
+/* Input glass-pill: es el composer real de este estado, no decorativo. */
+.bn-home__form {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--bn-space-2);
+  padding: 8px 8px 8px 22px;
+  border-radius: var(--bn-radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 12px 32px rgba(0, 0, 0, 0.35);
+}
+.bn-home__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  /* Evita el zoom automático en iOS al enfocar un input < 16px */
+  font-size: max(1rem, 16px);
+  padding: 12px 0;
+}
+.bn-home__input::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+.bn-home__input:focus {
+  outline: none;
+}
+.bn-home__input:disabled {
+  opacity: 0.6;
+}
+.bn-home__send {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bn-red);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  transition: background 0.12s ease;
+}
+.bn-home__send:disabled {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.4);
+}
+.bn-home__send:not(:disabled):active {
+  background: var(--bn-red-deep);
+}
+
+@media (max-width: 539px) {
+  .bn-home__content {
+    /* Mascota reducida en móvil (ver mascot.css), necesita menos aire arriba */
+    margin-top: 64px;
+    gap: var(--bn-space-4);
+  }
 }
 
 .bn-loading {

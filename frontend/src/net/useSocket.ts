@@ -20,7 +20,7 @@ const MAX_BACKOFF_MS = 8000;
  *  refrescar la misma pestaña — es lo que hace que la demo parezca tener
  *  una base de datos detrás. Ver PrivacyNotice.tsx para el aviso legal que
  *  acompaña este uso de cookies. */
-function getSessionId(): string {
+export function getSessionId(): string {
   let id = getCookie(SESSION_KEY);
   if (!id) {
     id =
@@ -37,6 +37,13 @@ function getSessionId(): string {
  *  y una recarga de página para un "Nueva conversación" limpio de verdad. */
 export function clearStoredSession(): void {
   deleteCookie(SESSION_KEY);
+}
+
+/** Cambia cuál conversación (de las guardadas en net/conversations.ts) es la
+ *  activa. Igual que clearStoredSession, requiere recargar la página después
+ *  (useSocket abre el WS una sola vez al montar). */
+export function setActiveSessionId(id: string): void {
+  setCookie(SESSION_KEY, id, SESSION_DAYS);
 }
 
 function wsBase(): string {

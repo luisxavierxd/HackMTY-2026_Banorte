@@ -9,17 +9,27 @@ import type { ServerEvent } from "./contract/events";
 import { applyEnvelopes, type SurfaceState } from "./a2ui/surfaceReducer";
 import { renderSurface } from "./a2ui/registry";
 import { pointerSet } from "./a2ui/pointer";
-import { useSocket, clearStoredSession } from "./net/useSocket";
+import { useSocket, clearStoredSession, setActiveSessionId } from "./net/useSocket";
 import { sendAction, sendUserMessage, deleteSession } from "./net/client";
 import { getAccessKey, clearAccessKey } from "./net/accessKey";
 import { getProfile, clearProfile } from "./net/profile";
+import {
+  ensureConversation,
+  listConversations,
+  upsertConversation,
+  removeConversation,
+  clearConversations,
+  deriveTitle,
+  type ConversationRecord,
+  type TranscriptEntry,
+} from "./net/conversations";
 
 import AccessGate from "./shell/AccessGate";
 import ProfileGate from "./shell/ProfileGate";
 import ProfileSidebar from "./shell/ProfileSidebar";
 import Composer from "./shell/Composer";
 import Trace, { type TraceStatus } from "./shell/Trace";
-import Empty from "./shell/Empty";
+import Home from "./shell/Home";
 import ErrorBanner from "./shell/Error";
 import Loading from "./shell/Loading";
 import SurfaceErrorBoundary from "./shell/SurfaceErrorBoundary";
@@ -63,16 +73,6 @@ function ChevronIcon({ open }: { open: boolean }) {
       <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
-}
-
-interface TranscriptEntry {
-  role: "user" | "agent";
-  text: string;
-  ts: number;
-  /** Solo en entradas "agent": la superficie completa de ese turno, para
-   *  poder volver a verla/seguir desde ahí (ver restoreEntry). */
-  surface?: SurfaceState;
-  title?: string;
 }
 
 export default function App() {
@@ -200,13 +200,86 @@ export default function App() {
   const logoutProfile = useCallback(() => {
     // Mismo patrón que startNewConversation: recarga completa porque
     // useSocket abre el WS una sola vez al montar. "Salir" borra perfil Y
-    // conversación (pedido explícito: el logout es lo único que las borra).
+    // TODAS las conversaciones guardadas (pedido explícito: el logout es lo
+    // único que las borra, ver PrivacyNotice.tsx).
     void deleteSession(sessionId).finally(() => {
       clearProfile();
       clearStoredSession();
+      clearConversations();
       location.reload();
     });
   }, [sessionId]);
+
+  // Índice de conversaciones (net/conversations.ts) para la lista del
+  // sidebar. Se refresca cada vez que la conversación activa cambia (efecto
+  // de sync más abajo) o cuando se borra/crea una desde el sidebar.
+  const [conversationsList, setConversationsList] = useState<ConversationRecord[]>([]);
+  // Evita que el efecto de sync pise el registro guardado con el estado
+  // vacío inicial antes de que la hidratación (mount) alcance a correr.
+  const hydratedRef = useRef(false);
+
+  useEffect(() => {
+    const record = ensureConversation(sessionId);
+    if (record.transcript.length > 0 || record.lastSurface) {
+      surfaceRef.current = record.lastSurface;
+      setSurface(record.lastSurface);
+      setTitle(record.lastTitle || "");
+      setTranscript(record.transcript);
+    }
+    setConversationsList(listConversations());
+    hydratedRef.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!hydratedRef.current) return;
+    const firstUserText = transcript.find((e) => e.role === "user")?.text || "";
+    upsertConversation({
+      id: sessionId,
+      title: deriveTitle(firstUserText),
+      updatedAt: Date.now(),
+      transcript,
+      lastSurface: surface,
+      lastTitle: title,
+    });
+    setConversationsList(listConversations());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [transcript, surface, title, sessionId]);
+
+  const switchConversation = useCallback(
+    (id: string) => {
+      if (id === sessionId) {
+        setSidebarOpen(false);
+        return;
+      }
+      setActiveSessionId(id);
+      location.reload();
+    },
+    [sessionId]
+  );
+
+  const newConversationFromSidebar = useCallback(() => {
+    // No borra la conversación activa del lado del harness (a diferencia de
+    // startNewConversation de abajo) — la que se deja atrás sigue siendo
+    // resumible desde el sidebar.
+    clearStoredSession();
+    location.reload();
+  }, []);
+
+  const deleteConversation = useCallback(
+    (id: string) => {
+      void deleteSession(id).finally(() => {
+        removeConversation(id);
+        if (id === sessionId) {
+          clearStoredSession();
+          location.reload();
+        } else {
+          setConversationsList(listConversations());
+        }
+      });
+    },
+    [sessionId]
+  );
 
   const runAction = useCallback(
     (action: ActionRef | undefined, label?: string) => {
@@ -250,17 +323,13 @@ export default function App() {
     setTranscriptOpen(false);
   }, []);
 
-  const startNewConversation = useCallback(() => {
-    // Recarga completa a propósito: useSocket abre el WS una sola vez al
-    // montar, con el sessionId de ese momento — no hay forma limpia de
-    // "reconectar con otro id" sin recargar. deleteSession limpia el estado
-    // viejo del harness; clearStoredSession hace que la próxima carga saque
-    // un sessionId nuevo. Ninguna de las dos debe bloquear la recarga.
-    void deleteSession(sessionId).finally(() => {
-      clearStoredSession();
-      location.reload();
-    });
-  }, [sessionId]);
+  // Mismo botón "Nueva conversación" del topbar y "+ Nueva conversación" del
+  // sidebar: NO borra la conversación activa (queda guardada y resumible
+  // desde el sidebar) — solo limpia cuál es la activa. Recarga completa a
+  // propósito: useSocket abre el WS una sola vez al montar, con el
+  // sessionId de ese momento, y clearStoredSession hace que la próxima
+  // carga saque un sessionId nuevo (net/useSocket.ts::getSessionId).
+  const startNewConversation = newConversationFromSidebar;
 
   // Vista efectiva: data model del servidor + ediciones locales optimistas
   // (Slider/TextField/OptionList) todavía no confirmadas por el agente.
@@ -359,20 +428,21 @@ export default function App() {
   }
 
   const hasSurface = !!surface && !!surface.root;
+  // Landing "Liquid Glass" (Home.tsx): pantalla de arranque a pantalla
+  // completa, sin topbar/composer fijo — solo mientras no hay conversación
+  // activa. Se mantiene también mientras se espera la primera respuesta
+  // (busy sin surface todavía), ver spec de la migración.
+  const showLanding = !hasSurface && status === "open";
 
-  let body: ReactNode;
-  if (hasSurface) {
-    body = renderSurface(surface, viewData, { setLocal, runAction });
-  } else if (status !== "open") {
-    body = <Loading />;
-  } else {
-    body = <Empty onSuggestion={handleSend} />;
-  }
+  const body: ReactNode = hasSurface
+    ? renderSurface(surface, viewData, { setLocal, runAction })
+    : null;
 
   // La mascota acompaña al usuario en TODAS las pantallas — se renderiza
-  // siempre como overlay fijo; solo el contenido principal cambia.
+  // siempre como overlay fijo; en landing se centra arriba del título en
+  // vez de la esquina inferior (ver mascot.css ".bn-mascot-overlay--landing").
   const mascotaOverlay = (
-    <div className="bn-mascot-overlay">
+    <div className={`bn-mascot-overlay${showLanding && profile && !needsAccessKey ? " bn-mascot-overlay--landing" : ""}`}>
       <MascotAsistente
         ref={mascotRef}
         size={160}
@@ -416,8 +486,19 @@ export default function App() {
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
         onLogout={logoutProfile}
+        conversations={conversationsList}
+        activeId={sessionId}
+        onNewConversation={newConversationFromSidebar}
+        onSelectConversation={switchConversation}
+        onDeleteConversation={deleteConversation}
       />
       <div className="bn-app">
+      {showLanding ? (
+        <Home onSend={handleSend} disabled={busy} onOpenSidebar={() => setSidebarOpen(true)} />
+      ) : !hasSurface ? (
+        <Loading />
+      ) : (
+      <>
       <header className="bn-topbar">
         <button
           type="button"
@@ -498,6 +579,8 @@ export default function App() {
         </button>
       )}
       <Composer onSend={handleSend} disabled={busy || status !== "open"} />
+      </>
+      )}
       </div>
     </div>
     {mascotaOverlay}
