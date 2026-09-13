@@ -55,18 +55,17 @@ export default function Home({ onSend, disabled, theme = 'dark' }: HomeProps) {
     <div className="bn-home">
       <DotField
         style={{ position: "absolute", inset: 0 }}
-        dotRadius={1.5}
-        dotSpacing={16}
-        bulgeStrength={55}
-        glowRadius={140}
-        cursorRadius={480}
+        dotRadius={3}
+        dotSpacing={14}
+        bulgeStrength={60}
+        glowRadius={150}
+        cursorRadius={500}
         bulgeOnly
-        gradientFrom={isLight ? "rgba(235, 0, 41, 0.16)" : "rgba(235, 0, 41, 0.22)"}
-        gradientTo={isLight ? "rgba(160, 0, 20, 0.07)" : "rgba(120, 0, 20, 0.12)"}
+        gradientFrom={isLight ? "rgba(235, 0, 41, 0.35)" : "rgba(235, 0, 41, 0.40)"}
+        gradientTo={isLight ? "rgba(190, 0, 25, 0.15)" : "rgba(180, 0, 20, 0.20)"}
         glowColor={isLight ? "#f5f4f8" : "#0c0c10"}
       />
       <div className="bn-home__content">
-        <p className="bn-home__greeting">Bienvenido a Banky</p>
         <h1 className="bn-home__title">¿En qué te puedo ayudar?</h1>
         <p className="bn-home__subtitle">
           Tu asistente financiero inteligente, listo para analizar tus finanzas y ayudarte a tomar mejores decisiones.
