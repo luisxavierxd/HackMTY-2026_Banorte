@@ -12,7 +12,7 @@
  *   banky:         296×296px en canvas 1908px → ~240px a nuestro viewport
  */
 
-@import url("https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;600;700&display=swap");
 
 /* ── Contenedor principal ─────────────────────────────────────────────────── */
 .bn-landing {
@@ -52,7 +52,7 @@
 
 /* "Pregúntale a Banqui…" — Albert Sans SemiBold, ~52px */
 .bn-landing__title {
-  font-family: "Albert Sans", "Bricolage Grotesque", system-ui, sans-serif;
+  font-family: "Albert Sans", system-ui, sans-serif;
   font-size: clamp(32px, 5.5vw, 56px);
   font-weight: 600;
   color: var(--bn-ink-full);

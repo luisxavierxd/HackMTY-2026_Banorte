@@ -81,6 +81,11 @@ def extract_json(text: str) -> dict:
     return json.loads(text[start : end + 1])
 
 
+def _is_ui_plan(payload: dict) -> bool:
+    """Detecta cuando el reasoner generó un plan de UI en vez de tool_calls/final."""
+    return bool(payload.get("components") or payload.get("root"))
+
+
 def parse_prompted_calls(text: str) -> tuple[list[ToolCall], str]:
     """Interpreta la respuesta de un proveedor sin function calling nativo."""
     try:
@@ -99,6 +104,9 @@ def parse_prompted_calls(text: str) -> tuple[list[ToolCall], str]:
         ]
         if calls:
             return calls, ""
+    if _is_ui_plan(payload):
+        log.warning("reasoner generó un plan de UI en vez de tool_calls — descartado")
+        return [], payload.get("summary") or "Hubo un error, intenta de nuevo."
     return [], str(payload.get("final") or payload.get("text") or text).strip()
 
 

@@ -28,6 +28,22 @@ type AnyComponent = ComponentType<{ id: string; props: any; ctx: RenderCtx }>;
 
 const MAX_DEPTH = 12;
 
+const CONTAINERS = new Set(["Column", "Row"]);
+
+function componentLabel(component: string, props: Record<string, unknown>): string {
+  const p = props || {};
+  if (p.title) return String(p.title);
+  if (p.label) return String(p.label);
+  if (p.text && typeof p.text === "string") return p.text.length > 60 ? p.text.slice(0, 57) + "…" : p.text;
+  const fallback: Record<string, string> = {
+    LineChart: "Gráfica de líneas", BarChart: "Gráfica de barras",
+    PieChart: "Gráfica circular", ComparisonBars: "Comparación",
+    ProgressRing: "Indicador de progreso", Timeline: "Línea de tiempo",
+    DataTable: "Tabla de datos", Divider: "", Badge: "",
+  };
+  return fallback[component] ?? "";
+}
+
 /** Nombre del componente A2UI (catalog.py) -> renderer de React. */
 const REGISTRY: Record<string, AnyComponent> = {
   Column,
@@ -87,8 +103,14 @@ function renderComponent(
       )),
   };
 
+  const label = CONTAINERS.has(node.component) ? "" : componentLabel(node.component, node.props);
+
   if (CHART_ADAPTERS[node.component]) {
-    return <ChartHost key={id} node={node} data={data} ctx={ctx} />;
+    return (
+      <div key={id} data-bn-component={node.component} data-bn-label={label || undefined}>
+        <ChartHost node={node} data={data} ctx={ctx} />
+      </div>
+    );
   }
 
   const Comp = REGISTRY[node.component];
@@ -97,5 +119,13 @@ function renderComponent(
     return <UnknownComponent key={id} name={node.component} />;
   }
 
-  return <Comp key={id} id={id} props={node.props} ctx={ctx} />;
+  if (CONTAINERS.has(node.component) || !label) {
+    return <Comp key={id} id={id} props={node.props} ctx={ctx} />;
+  }
+
+  return (
+    <div key={id} data-bn-component={node.component} data-bn-label={label}>
+      <Comp id={id} props={node.props} ctx={ctx} />
+    </div>
+  );
 }
