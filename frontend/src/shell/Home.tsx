@@ -91,7 +91,7 @@ export default function Home({ onSend, disabled, theme = 'dark' }: HomeProps) {
             value={value}
             onChange={(e) => setValue(e.target.value)}
             onKeyDown={onKeyDown}
-            placeholder="Pregúntame sobre tus finanzas"
+            placeholder="¿En qué te ayudo?"
             disabled={disabled}
             aria-label="Mensaje para el asistente"
             autoFocus
@@ -99,8 +99,8 @@ export default function Home({ onSend, disabled, theme = 'dark' }: HomeProps) {
           <button
             type="submit"
             className="bn-home__send"
-            disabled={disabled || value.trim() === ""}
-            aria-label="Enviar mensaje"
+            disabled={disabled || !value.trim()}
+            aria-label="Enviar"
           >
             <SendIcon />
           </button>

@@ -92,6 +92,7 @@ export default function App() {
   // Mascota — ref para controlarla desde cualquier parte de la lógica
   // ------------------------------------------------------------------
   const mascotRef = useRef<MascotAsistenteRef>(null);
+  const [mascotTraveling, setMascotTraveling] = useState(false);
 
   const [surface, setSurface] = useState<SurfaceState>(null);
   // Espejo síncrono de `surface`, para poder calcular el siguiente estado
@@ -358,67 +359,103 @@ export default function App() {
   }, [surface, overrides]);
 
   // ------------------------------------------------------------------
-  // Mascota — reacciones a cambios de estado de la app
+  // Banqui — sistema de tutorial guiado (paso a paso por pantalla)
   // ------------------------------------------------------------------
 
-  // Saludo en ProfileGate: cuando el perfil aún no está capturado
+  // Pasos del tutorial por estado de la app
+  type TutorialStep = { texto: string; cara: string; bigote: string; manoI: string; manoD: string; cargando?: boolean; };
+  type ScreenId = "access" | "profile" | "landing" | "busy" | "surface" | "error";
+
+  const TUTORIAL: Record<ScreenId, TutorialStep[]> = {
+    access: [
+      { texto: "Hola, ingresa el código de acceso para entrar.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando" },
+    ],
+    profile: [
+      { texto: "Hola, soy Banqui, tu asistente financiero de Banorte.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando" },
+      { texto: "Cuéntame sobre ti — entre más sepa de ti, mejores consejos podré darte.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "normal" },
+      { texto: "Llena los campos y acepta el aviso de privacidad para comenzar.", cara: "normal", bigote: "normal", manoI: "enseñando", manoD: "enseñando" },
+    ],
+    landing: [
+      { texto: "Listo, ya sé quién eres. Esta es tu pantalla principal.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "pulgarArriba" },
+      { texto: "Puedo analizar tus ahorros, inversiones y ayudarte con metas financieras.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "normal" },
+      { texto: "Elige una sugerencia o escribe tu propia pregunta abajo.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "apuntando" },
+    ],
+    busy: [
+      { texto: "Déjame revisar eso…", cara: "pensativo", bigote: "ninguno", manoI: "ninguna", manoD: "ninguna", cargando: true },
+    ],
+    surface: [
+      { texto: title ? `Listo. ${title.slice(0, 60)}` : "Aquí está tu información.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "pulgarArriba" },
+      { texto: "Puedes interactuar con cada sección. ¿Tienes alguna duda? Escríbeme.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando" },
+    ],
+    error: [
+      { texto: "Algo salió mal. ¿Lo intentamos de nuevo?", cara: "preocupado", bigote: "ninguno", manoI: "ninguna", manoD: "ninguna" },
+    ],
+  };
+
+  const [tutorialStep, setTutorialStep] = useState(0);
+  const prevScreenRef = useRef<ScreenId | null>(null);
+
+  // Determina la pantalla actual para seleccionar los pasos del tutorial
+  // (calculado aquí para usarlo tanto en la lógica como en el JSX)
+  const currentScreenForTutorial: ScreenId = needsAccessKey ? "access"
+    : !profile ? "profile"
+    : error ? "error"
+    : busy ? "busy"
+    : !surface ? "landing"
+    : "surface";
+
+  // Detectar cambio de pantalla principal para activar el squish de viaje de Banqui
+  const prevMascotScreenRef = useRef<string>("");
   useEffect(() => {
-    if (!profile && !needsAccessKey && mascotRef.current) {
-      mascotRef.current.setPose({ cara: "normal", bigote: "normal", manoIzquierda: "normal", manoDerecha: "enseñando" });
-      // Pequeño delay para que el DOM ya esté pintado
-      const t = setTimeout(() => {
-        mascotRef.current?.hablar("¡Hola! Soy Bancho 👋 Cuéntame de ti para darte el mejor consejo financiero.");
-      }, 600);
-      return () => clearTimeout(t);
-    }
+    const screen = currentScreenForTutorial;
+    if (prevMascotScreenRef.current === "") { prevMascotScreenRef.current = screen; return; }
+    if (prevMascotScreenRef.current === screen) return;
+    prevMascotScreenRef.current = screen;
+    setMascotTraveling(true);
+    const t = setTimeout(() => setMascotTraveling(false), 620);
+    return () => clearTimeout(t);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile, needsAccessKey]);
+  }, [currentScreenForTutorial]);
 
-  // Saludo en pantalla vacía: perfil listo, sin conversación aún
+  // Cuando la pantalla cambia → reinicia el tutorial y aplica paso 0
   useEffect(() => {
-    if (profile && !surface && status === "open" && mascotRef.current) {
-      mascotRef.current.setPose({ cara: "normal", bigote: "normal", manoIzquierda: "normal", manoDerecha: "apuntando" });
-      const t = setTimeout(() => {
-        mascotRef.current?.hablar("¿En qué te ayudo hoy? Puedo revisar tus ahorros, deudas o metas 💡");
-      }, 800);
-      return () => clearTimeout(t);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profile, status]);
+    const screen = currentScreenForTutorial;
+    if (prevScreenRef.current === screen) return;
+    prevScreenRef.current = screen;
+    setTutorialStep(0);
 
-  // Estado "pensando": cuando el agente está procesando
-  useEffect(() => {
-    if (!mascotRef.current) return;
-    if (busy) {
-      mascotRef.current.setPose({ cara: "pensativo", bigote: "ninguno", manoIzquierda: "ninguna", manoDerecha: "ninguna" });
-      mascotRef.current.setCargando(true);
-      mascotRef.current.hablar("Déjame revisar eso…");
-    } else {
-      mascotRef.current.setCargando(false);
-    }
-  }, [busy]);
-
-  // Nueva respuesta del agente llegó
-  useEffect(() => {
-    if (!surface || !mascotRef.current) return;
+    const steps = TUTORIAL[screen];
+    const step = steps[0];
+    if (!step || !mascotRef.current) return;
     const m = mascotRef.current;
-    m.setCargando(false);
-    m.setPose({ cara: "normal", bigote: "normal", manoIzquierda: "normal", manoDerecha: "pulgarArriba" });
-    // Usa el title del turno si hay, si no un mensaje genérico
-    const texto = title
-      ? `¡Listo! ${title}`
-      : "¡Aquí está tu información! ¿Tienes alguna duda?";
-    m.hablar(texto.length > 80 ? texto.slice(0, 80) + "…" : texto);
+    const t = setTimeout(() => {
+      m.setPose({ cara: step.cara, bigote: step.bigote, manoIzquierda: step.manoI, manoDerecha: step.manoD });
+      m.setCargando(step.cargando ?? false);
+      m.hablar(step.texto);
+    }, 400);
+    return () => clearTimeout(t);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [surface]);
+  }, [currentScreenForTutorial, title]);
 
-  // Error
-  useEffect(() => {
-    if (!error || !mascotRef.current) return;
-    mascotRef.current.setCargando(false);
-    mascotRef.current.setPose({ cara: "preocupado", bigote: "ninguno", manoIzquierda: "ninguna", manoDerecha: "ninguna" });
-    mascotRef.current.hablar("Ups, algo salió mal. ¿Lo intentamos de nuevo?");
-  }, [error]);
+  // Avanza al siguiente paso del tutorial (botón "Continuar →" en el globo)
+  const handleContinuar = useCallback(() => {
+    const screen = currentScreenForTutorial;
+    const steps = TUTORIAL[screen];
+    const nextStep = tutorialStep + 1;
+    if (nextStep >= steps.length) {
+      // Último paso: callar a Banqui
+      mascotRef.current?.callar();
+      return;
+    }
+    setTutorialStep(nextStep);
+    const step = steps[nextStep];
+    if (!step || !mascotRef.current) return;
+    const m = mascotRef.current;
+    m.setPose({ cara: step.cara, bigote: step.bigote, manoIzquierda: step.manoI, manoDerecha: step.manoD });
+    m.setCargando(step.cargando ?? false);
+    m.hablar(step.texto);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentScreenForTutorial, tutorialStep, title]);
 
   // ------------------------------------------------------------------
 
@@ -450,19 +487,22 @@ export default function App() {
     ? renderSurface(surface, viewData, { setLocal, runAction })
     : null;
 
-  // La mascota acompaña al usuario en TODAS las pantallas — se renderiza
-  // siempre como overlay fijo; en landing se centra arriba del título en
-  // vez de la esquina inferior (ver mascot.css ".bn-mascot-overlay--landing").
+  // Banqui — siempre montado para ilusión de continuidad entre pantallas.
+  // Siempre en el lado izquierdo, centrado verticalmente, tamaño fijo 240px.
   const mascotaOverlay = (
-    <div className={`bn-mascot-overlay${showLanding && profile && !needsAccessKey ? " bn-mascot-overlay--landing" : ""}`}>
-      <MascotAsistente
-        ref={mascotRef}
-        size={160}
-        caraInicial="normal"
-        bigoteInicial="normal"
-        manoIzquierdaInicial="normal"
-        manoDerechaInicial="enseñando"
-      />
+    <div className="bn-mascot-overlay bn-mascot-overlay--landing">
+      {/* Wrapper interno para el squish de viaje sin conflicto con la transición de posición */}
+      <div className={mascotTraveling ? "bn-mascot-squish--active" : undefined}>
+        <MascotAsistente
+          ref={mascotRef}
+          size={240}
+          caraInicial="normal"
+          bigoteInicial="normal"
+          manoIzquierdaInicial="normal"
+          manoDerechaInicial="enseñando"
+          onContinuar={handleContinuar}
+        />
+      </div>
     </div>
   );
 
@@ -470,41 +510,20 @@ export default function App() {
     return (
       <>
         <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />
-        <AccessGate
-          wrongKey={hadWrongKey}
-          onSubmit={() => location.reload()}
-          mascot={
-            <MascotAsistente
-              ref={mascotRef}
-              size={160}
-              caraInicial="normal"
-              bigoteInicial="normal"
-              manoIzquierdaInicial="normal"
-              manoDerechaInicial="enseñando"
-            />
-          }
-        />
+        <AccessGate wrongKey={hadWrongKey} onSubmit={() => location.reload()} />
+        {mascotaOverlay}
       </>
     );
   }
 
   if (!profile) {
+    // Banqui como overlay (siempre el mismo) — no se pasa como prop interno
+    // para mantener la ilusión de continuidad (mismo componente montado).
     return (
       <>
         <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />
-        <ProfileGate
-          onSubmit={() => setProfileState(getProfile())}
-          mascot={
-            <MascotAsistente
-              ref={mascotRef}
-              size={160}
-              caraInicial="normal"
-              bigoteInicial="normal"
-              manoIzquierdaInicial="normal"
-              manoDerechaInicial="enseñando"
-            />
-          }
-        />
+        <ProfileGate onSubmit={() => setProfileState(getProfile())} />
+        {mascotaOverlay}
       </>
     );
   }
