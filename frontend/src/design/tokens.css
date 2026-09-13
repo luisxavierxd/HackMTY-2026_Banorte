@@ -34,8 +34,8 @@
   --bn-glass-glow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
 
   /* ---- typography ---- */
-  --bn-font-display: "Bricolage Grotesque", system-ui, sans-serif;
-  --bn-font-body: "Instrument Sans", system-ui, sans-serif;
+  --bn-font-display: "Albert Sans", system-ui, sans-serif;
+  --bn-font-body: "Albert Sans", system-ui, sans-serif;
 
   /* ---- shape ---- */
   --bn-radius-surface: 20px;

@@ -9,7 +9,7 @@
  *   banky: 220×220px inline en la columna izquierda
  */
 
-@import url("https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;600;700&display=swap");
 
 /* ── Fondo ─────────────────────────────────────────────────────────────── */
 .bn-pglass-outer {
@@ -18,9 +18,14 @@
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   padding: 16px;
+  overflow-y: auto;
+}
+
+.bn-pglass-outer > * {
+  margin-block: auto;
 }
 
 /* ── Glass card ─────────────────────────────────────────────────────────── */

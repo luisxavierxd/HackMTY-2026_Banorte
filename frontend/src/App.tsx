@@ -495,8 +495,8 @@ export default function App() {
     : null;
 
   const mascotModifier =
-    currentScreenForTutorial === "surface" || currentScreenForTutorial === "busy"
-      ? (manyCharts ? " bn-mascot-overlay--many-charts" : "")
+    currentScreenForTutorial === "surface"
+      ? (manyCharts ? " bn-mascot-overlay--many-charts" : " bn-mascot-overlay--surface")
       : currentScreenForTutorial === "profile"
       ? " bn-mascot-overlay--profile"
       : " bn-mascot-overlay--landing";

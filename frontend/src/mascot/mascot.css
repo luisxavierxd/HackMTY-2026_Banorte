@@ -2,9 +2,9 @@
    Mascot Overlay — Banqui flota entre pantallas
 
    Posiciones:
-     default (surface/busy) → bottom-left, small (scale 0.42)
-     --landing              → center-left, full size
+     default / --landing    → center-left, full size
      --profile              → center-left near glass card, full size
+     --surface              → bottom-left, small (scale 0.42)
      --many-charts          → center-left, medium (side-by-side with charts)
    ================================================================ */
 
@@ -16,40 +16,35 @@
   flex-direction: column;
   align-items: flex-start;
 
-  /* Default = surface/busy mode: bottom-left, small */
-  top: auto;
-  bottom: 16px;
-  left: 16px;
+  /* Default: center-left, full size */
+  top: 50%;
+  bottom: auto;
+  left: clamp(16px, 4vw, 48px);
   right: auto;
-  transform: scale(0.42);
-  transform-origin: bottom left;
+  transform: translateY(-50%);
 
   transition:
     top       400ms cubic-bezier(0.34, 1.56, 0.64, 1),
     bottom    400ms cubic-bezier(0.34, 1.56, 0.64, 1),
     left      600ms cubic-bezier(0.34, 1.56, 0.64, 1),
     transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
-  will-change: bottom, left, transform;
+  will-change: top, bottom, left, transform;
 }
 
-/* Desktop: account for sidebar */
-@media (min-width: 769px) {
-  .bn-mascot-overlay {
-    left: calc(280px + 16px);
-  }
-}
-
-/* Mobile: bottom-left, above composer */
+/* Mobile default: top-center */
 @media (max-width: 768px) {
   .bn-mascot-overlay {
-    bottom: 68px;
-    left: 4px;
-    transform: scale(0.35);
+    top: max(8px, env(safe-area-inset-top, 8px));
+    left: 50%;
+    bottom: auto;
+    right: auto;
+    transform: translateX(-50%) scale(0.62);
+    transform-origin: top center;
   }
 }
 
 /* ── Landing / Home ──
-   Banqui en la columna izquierda, centrado verticalmente */
+   Same as default — explicit so it overrides --surface when switching back */
 .bn-mascot-overlay--landing {
   top: 50%;
   bottom: auto;
@@ -87,6 +82,30 @@
     right: auto;
     transform: translateX(-50%) scale(0.62);
     transform-origin: top center;
+  }
+}
+
+/* ── Surface view (conversation) ──
+   Bottom-left, small */
+.bn-mascot-overlay--surface {
+  top: auto;
+  bottom: 16px;
+  left: 16px;
+  right: auto;
+  transform: scale(0.42);
+  transform-origin: bottom left;
+}
+@media (min-width: 769px) {
+  .bn-mascot-overlay--surface {
+    left: calc(280px + 16px);
+  }
+}
+@media (max-width: 768px) {
+  .bn-mascot-overlay--surface {
+    bottom: 68px;
+    left: 4px;
+    transform: scale(0.35);
+    transform-origin: bottom left;
   }
 }
 
