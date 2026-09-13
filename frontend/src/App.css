@@ -591,6 +591,20 @@
   background: var(--bn-bg);
   color: var(--bn-ink);
   font-size: 1rem;
+  transition: border-color 0.12s ease;
+}
+.bn-field input:focus {
+  border-color: var(--bn-red);
+  outline: none;
+}
+.bn-field__input--error {
+  border-color: var(--bn-red) !important;
+  background: var(--bn-red-wash) !important;
+}
+.bn-field__error {
+  font-size: 0.8125rem;
+  color: var(--bn-red-deep);
+  margin-top: 2px;
 }
 
 .bn-checkbox {
