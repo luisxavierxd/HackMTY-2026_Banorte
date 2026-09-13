@@ -475,14 +475,20 @@ export default function App() {
   }
 
   if (!profile) {
-    // Segundo paso del mismo "login": no hace falta recargar, el perfil se
-    // lee fresco en cada mensaje (net/useSocket.ts) — basta con actualizar
-    // el estado local para pasar a la app.
     return (
-      <>
-        <ProfileGate onSubmit={() => setProfileState(getProfile())} />
-        {mascotaOverlay}
-      </>
+      <ProfileGate
+        onSubmit={() => setProfileState(getProfile())}
+        mascot={
+          <MascotAsistente
+            ref={mascotRef}
+            size={160}
+            caraInicial="normal"
+            bigoteInicial="normal"
+            manoIzquierdaInicial="normal"
+            manoDerechaInicial="enseñando"
+          />
+        }
+      />
     );
   }
 

@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 import { setProfile, type UserProfile } from "../net/profile";
 import PrivacyNotice from "./PrivacyNotice";
 
@@ -30,7 +30,12 @@ function validarMonto(v: string, max: number): string | undefined {
 
 type Touched = Record<string, boolean>;
 
-export default function ProfileGate({ onSubmit }: { onSubmit: () => void }) {
+interface ProfileGateProps {
+  onSubmit: () => void;
+  mascot?: ReactNode;
+}
+
+export default function ProfileGate({ onSubmit, mascot }: ProfileGateProps) {
   const [nombre, setNombre] = useState("");
   const [ingresoMensual, setIngresoMensual] = useState("");
   const [ahorro, setAhorro] = useState("");
@@ -72,10 +77,10 @@ export default function ProfileGate({ onSubmit }: { onSubmit: () => void }) {
 
   if (showPrivacy) {
     return (
-      <div className="bn-access-gate">
-        <div className="bn-access-gate__card bn-access-gate__card--wide">
+      <div className="bn-profile-gate">
+        <div className="bn-profile-card" style={{ maxWidth: 520 }}>
           <PrivacyNotice />
-          <button type="button" onClick={() => setShowPrivacy(false)}>
+          <button type="button" className="bn-profile-card__submit" onClick={() => setShowPrivacy(false)}>
             Entendido, regresar
           </button>
         </div>
@@ -86,124 +91,125 @@ export default function ProfileGate({ onSubmit }: { onSubmit: () => void }) {
   return (
     <div className="bn-profile-gate">
       <form className="bn-profile-card" onSubmit={handleSubmit}>
-        <h1 className="bn-profile-card__title">Cuéntanos de ti</h1>
-        <p className="bn-profile-card__desc">
-          Esto le da contexto al asistente para personalizar la conversación.
-          Se guarda solo en tu navegador.
-        </p>
+        <div className="bn-profile-card__layout">
+          <div className="bn-profile-card__left">
+            <h1 className="bn-profile-card__title">Cuéntanos de ti</h1>
+            {mascot && <div className="bn-profile-card__mascot">{mascot}</div>}
+          </div>
 
-        <div className="bn-profile-card__fields">
-          <label className="bn-glass-field">
-            <span className="bn-glass-field__label">Nombre</span>
-            <input
-              type="text"
-              autoFocus
-              placeholder="¿Cómo te llamas?"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              onBlur={() => touch("nombre")}
-              className={touched.nombre && errores.nombre ? "bn-glass-field__input--error" : undefined}
-              maxLength={51}
-              autoComplete="given-name"
-            />
-            {touched.nombre && errores.nombre && (
-              <span className="bn-glass-field__error" role="alert">{errores.nombre}</span>
-            )}
-          </label>
+          <div className="bn-profile-card__right">
+            <label className="bn-glass-field">
+              <span className="bn-glass-field__label">Nombre</span>
+              <input
+                type="text"
+                autoFocus
+                placeholder="¿Cómo te llamas?"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                onBlur={() => touch("nombre")}
+                className={touched.nombre && errores.nombre ? "bn-glass-field__input--error" : undefined}
+                maxLength={51}
+                autoComplete="given-name"
+              />
+              {touched.nombre && errores.nombre && (
+                <span className="bn-glass-field__error" role="alert">{errores.nombre}</span>
+              )}
+            </label>
 
-          <label className="bn-glass-field">
-            <span className="bn-glass-field__label">Ingreso mensual</span>
-            <input
-              type="number"
-              inputMode="decimal"
-              min="0"
-              max={MAX_MENSUAL}
-              step="1"
-              placeholder="$0"
-              value={ingresoMensual}
-              onChange={(e) => setIngresoMensual(e.target.value)}
-              onBlur={() => touch("ingresoMensual")}
-              className={touched.ingresoMensual && errores.ingresoMensual ? "bn-glass-field__input--error" : undefined}
-            />
-            {touched.ingresoMensual && errores.ingresoMensual && (
-              <span className="bn-glass-field__error" role="alert">{errores.ingresoMensual}</span>
-            )}
-          </label>
+            <label className="bn-glass-field">
+              <span className="bn-glass-field__label">Ingreso mensual</span>
+              <input
+                type="number"
+                inputMode="decimal"
+                min="0"
+                max={MAX_MENSUAL}
+                step="1"
+                placeholder="$0"
+                value={ingresoMensual}
+                onChange={(e) => setIngresoMensual(e.target.value)}
+                onBlur={() => touch("ingresoMensual")}
+                className={touched.ingresoMensual && errores.ingresoMensual ? "bn-glass-field__input--error" : undefined}
+              />
+              {touched.ingresoMensual && errores.ingresoMensual && (
+                <span className="bn-glass-field__error" role="alert">{errores.ingresoMensual}</span>
+              )}
+            </label>
 
-          <label className="bn-glass-field">
-            <span className="bn-glass-field__label">Cantidad ahorrada (saldo total hoy, no lo que ahorras al mes)</span>
-            <input
-              type="number"
-              inputMode="decimal"
-              min="0"
-              max={MAX_TOTAL}
-              step="1"
-              placeholder="$0"
-              value={ahorro}
-              onChange={(e) => setAhorro(e.target.value)}
-              onBlur={() => touch("ahorro")}
-              className={touched.ahorro && errores.ahorro ? "bn-glass-field__input--error" : undefined}
-            />
-            {touched.ahorro && errores.ahorro && (
-              <span className="bn-glass-field__error" role="alert">{errores.ahorro}</span>
-            )}
-          </label>
+            <label className="bn-glass-field">
+              <span className="bn-glass-field__label">Cantidad ahorrada (saldo total hoy, no lo que ahorras al mes)</span>
+              <input
+                type="number"
+                inputMode="decimal"
+                min="0"
+                max={MAX_TOTAL}
+                step="1"
+                placeholder="$0"
+                value={ahorro}
+                onChange={(e) => setAhorro(e.target.value)}
+                onBlur={() => touch("ahorro")}
+                className={touched.ahorro && errores.ahorro ? "bn-glass-field__input--error" : undefined}
+              />
+              {touched.ahorro && errores.ahorro && (
+                <span className="bn-glass-field__error" role="alert">{errores.ahorro}</span>
+              )}
+            </label>
 
-          <label className="bn-glass-field">
-            <span className="bn-glass-field__label">Cantidad invertida (saldo total hoy)</span>
-            <input
-              type="number"
-              inputMode="decimal"
-              min="0"
-              max={MAX_TOTAL}
-              step="1"
-              placeholder="$0"
-              value={inversion}
-              onChange={(e) => setInversion(e.target.value)}
-              onBlur={() => touch("inversion")}
-              className={touched.inversion && errores.inversion ? "bn-glass-field__input--error" : undefined}
-            />
-            {touched.inversion && errores.inversion && (
-              <span className="bn-glass-field__error" role="alert">{errores.inversion}</span>
-            )}
-          </label>
+            <label className="bn-glass-field">
+              <span className="bn-glass-field__label">Cantidad invertida (saldo total hoy)</span>
+              <input
+                type="number"
+                inputMode="decimal"
+                min="0"
+                max={MAX_TOTAL}
+                step="1"
+                placeholder="$0"
+                value={inversion}
+                onChange={(e) => setInversion(e.target.value)}
+                onBlur={() => touch("inversion")}
+                className={touched.inversion && errores.inversion ? "bn-glass-field__input--error" : undefined}
+              />
+              {touched.inversion && errores.inversion && (
+                <span className="bn-glass-field__error" role="alert">{errores.inversion}</span>
+              )}
+            </label>
 
-          <label className="bn-glass-field">
-            <span className="bn-glass-field__label">Gastos mensuales aproximados</span>
-            <input
-              type="number"
-              inputMode="decimal"
-              min="0"
-              max={MAX_MENSUAL}
-              step="1"
-              placeholder="$0"
-              value={gastosMensuales}
-              onChange={(e) => setGastosMensuales(e.target.value)}
-              onBlur={() => touch("gastosMensuales")}
-              className={touched.gastosMensuales && errores.gastosMensuales ? "bn-glass-field__input--error" : undefined}
-            />
-            {touched.gastosMensuales && errores.gastosMensuales && (
-              <span className="bn-glass-field__error" role="alert">{errores.gastosMensuales}</span>
-            )}
-          </label>
+            <label className="bn-glass-field">
+              <span className="bn-glass-field__label">Gastos mensuales aproximados</span>
+              <input
+                type="number"
+                inputMode="decimal"
+                min="0"
+                max={MAX_MENSUAL}
+                step="1"
+                placeholder="$0"
+                value={gastosMensuales}
+                onChange={(e) => setGastosMensuales(e.target.value)}
+                onBlur={() => touch("gastosMensuales")}
+                className={touched.gastosMensuales && errores.gastosMensuales ? "bn-glass-field__input--error" : undefined}
+              />
+              {touched.gastosMensuales && errores.gastosMensuales && (
+                <span className="bn-glass-field__error" role="alert">{errores.gastosMensuales}</span>
+              )}
+            </label>
 
-          <label className="bn-checkbox">
-            <input
-              type="checkbox"
-              checked={accepted}
-              onChange={(e) => setAccepted(e.target.checked)}
-            />
-            <span>
-              Acepto el{" "}
-              <button type="button" className="bn-link" onClick={() => setShowPrivacy(true)}>
-                Aviso de Privacidad
-              </button>
-            </span>
-          </label>
+            <label className="bn-checkbox">
+              <input
+                type="checkbox"
+                checked={accepted}
+                onChange={(e) => setAccepted(e.target.checked)}
+              />
+              <span>
+                Acepto el{" "}
+                <button type="button" className="bn-link" onClick={() => setShowPrivacy(true)}>
+                  Aviso de Privacidad
+                </button>
+              </span>
+            </label>
 
-          <button type="submit" className="bn-profile-card__submit" disabled={!canSubmit}>
-            Empezar
-          </button>
+            <button type="submit" className="bn-profile-card__submit" disabled={!canSubmit}>
+              Empezar
+            </button>
+          </div>
         </div>
       </form>
     </div>
