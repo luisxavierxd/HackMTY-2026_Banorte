@@ -60,6 +60,14 @@ function SidebarIcon() {
   );
 }
 
+function CloseIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 function ChevronIcon({ open }: { open: boolean }) {
   return (
     <svg
@@ -480,6 +488,15 @@ export default function App() {
 
   return (
     <>
+    <button
+      type="button"
+      className="bn-sidebar-launcher"
+      aria-label={sidebarOpen ? "Cerrar menú" : "Ver tu contexto"}
+      aria-expanded={sidebarOpen}
+      onClick={() => setSidebarOpen((v) => !v)}
+    >
+      {sidebarOpen ? <CloseIcon /> : <SidebarIcon />}
+    </button>
     <div className="bn-shell">
       <ProfileSidebar
         profile={profile}
@@ -492,22 +509,14 @@ export default function App() {
         onSelectConversation={switchConversation}
         onDeleteConversation={deleteConversation}
       />
-      <div className="bn-app">
+      <div className={`bn-app${showLanding ? " bn-app--full" : ""}`}>
       {showLanding ? (
-        <Home onSend={handleSend} disabled={busy} onOpenSidebar={() => setSidebarOpen(true)} />
+        <Home onSend={handleSend} disabled={busy} />
       ) : !hasSurface ? (
         <Loading />
       ) : (
       <>
       <header className="bn-topbar">
-        <button
-          type="button"
-          className="bn-topbar__sidebar-toggle"
-          aria-label="Ver tu contexto"
-          onClick={() => setSidebarOpen(true)}
-        >
-          <SidebarIcon />
-        </button>
         <span className="bn-topbar__title">{title || "Banorte"}</span>
         <div className="bn-topbar__actions">
           <button

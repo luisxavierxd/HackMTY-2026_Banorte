@@ -3,7 +3,6 @@ import { useState, type FormEvent, type KeyboardEvent } from "react";
 interface HomeProps {
   onSend: (text: string) => void;
   disabled?: boolean;
-  onOpenSidebar: () => void;
 }
 
 const SUGGESTIONS = [
@@ -11,14 +10,6 @@ const SUGGESTIONS = [
   "Quiero pagar menos intereses en mi tarjeta",
   "Ayúdame a planear una meta de ahorro",
 ];
-
-function MenuIcon() {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-    </svg>
-  );
-}
 
 function SendIcon() {
   return (
@@ -36,10 +27,13 @@ function SendIcon() {
 
 /** Pantalla de arranque estilo "Liquid Glass" (Figma frame 2011:4): mascota +
  *  título + input glass-pill, que ES el composer real de este estado — no
- *  decorativo. Reemplaza a Empty.tsx; ver
+ *  decorativo. A pantalla completa (ver App.css ".bn-app--full"), no dentro
+ *  del marco angosto de la conversación. Reemplaza a Empty.tsx; ver
  *  docs/superpowers/specs/2026-09-12-landing-liquid-glass-design.md.
+ *  El botón para abrir el sidebar es el flotante global de App.tsx
+ *  (.bn-sidebar-launcher, arriba a la izquierda) — no uno propio aquí.
  *  Solo se muestra mientras no hay conversación activa (App.tsx). */
-export default function Home({ onSend, disabled, onOpenSidebar }: HomeProps) {
+export default function Home({ onSend, disabled }: HomeProps) {
   const [value, setValue] = useState("");
 
   function submit() {
@@ -63,10 +57,6 @@ export default function Home({ onSend, disabled, onOpenSidebar }: HomeProps) {
 
   return (
     <div className="bn-home">
-      <button type="button" className="bn-home__menu" aria-label="Ver tu contexto" onClick={onOpenSidebar}>
-        <MenuIcon />
-      </button>
-
       <div className="bn-home__content">
         <h1 className="bn-home__title">Pregúntale a Banqui...</h1>
 
