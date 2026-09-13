@@ -682,7 +682,9 @@ export default function App() {
     : null;
 
   const mascotModifier =
-    currentScreenForTutorial === "surface" || currentScreenForTutorial === "busy"
+    currentScreenForTutorial === "busy"
+      ? " bn-mascot-overlay--busy"
+      : currentScreenForTutorial === "surface"
       ? " bn-mascot-overlay--many-charts"
       : currentScreenForTutorial === "profile"
       ? " bn-mascot-overlay--profile"
@@ -721,7 +723,20 @@ export default function App() {
           gradientTo={isLight ? "rgba(190,0,25,0.14)" : "rgba(180,0,20,0.18)"}
         />
         <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />
-        <AccessGate wrongKey={hadWrongKey} onSubmit={() => location.reload()} />
+        <AccessGate
+          wrongKey={hadWrongKey}
+          onSubmit={() => location.reload()}
+          mascot={
+            <MascotAsistente
+              ref={mascotRef}
+              size={140}
+              caraInicial="normal"
+              bigoteInicial="normal"
+              manoIzquierdaInicial="normal"
+              manoDerechaInicial="enseñando"
+            />
+          }
+        />
         {mascotaOverlay}
       </>
     );

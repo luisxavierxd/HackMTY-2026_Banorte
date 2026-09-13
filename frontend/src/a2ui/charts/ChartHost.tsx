@@ -76,6 +76,7 @@ export default function ChartHost({ node, data }: ChartHostProps) {
   const canvasRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
   const [width, setWidth] = useState(0);
+  const [cssTheme, setCssTheme] = useState(() => document.documentElement.getAttribute("data-theme") || "");
 
   const adapter = CHART_ADAPTERS[node.component];
   const props = resolveTopLevelProps(node.props, data);
@@ -90,6 +91,14 @@ export default function ChartHost({ node, data }: ChartHostProps) {
     });
     ro.observe(el);
     return () => ro.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const mo = new MutationObserver(() => {
+      setCssTheme(document.documentElement.getAttribute("data-theme") || "");
+    });
+    mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    return () => mo.disconnect();
   }, []);
 
   useEffect(() => {
@@ -113,7 +122,7 @@ export default function ChartHost({ node, data }: ChartHostProps) {
       console.warn(`[a2ui] fallo al graficar "${node.component}"`, err);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [adapter, node.component, JSON.stringify(props), data, width, isEmpty]);
+  }, [adapter, node.component, JSON.stringify(props), data, width, isEmpty, cssTheme]);
 
   useEffect(
     () => () => {

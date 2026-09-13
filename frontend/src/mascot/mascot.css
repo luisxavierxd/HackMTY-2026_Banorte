@@ -55,12 +55,7 @@
 }
 @media (max-width: 768px) {
   .bn-mascot-overlay--landing {
-    top: max(16px, env(safe-area-inset-top, 16px));
-    bottom: auto;
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%) scale(0.62);
-    transform-origin: top center;
+    display: none;
   }
 }
 
@@ -76,12 +71,7 @@
 }
 @media (max-width: 768px) {
   .bn-mascot-overlay--profile {
-    top: max(60px, calc(env(safe-area-inset-top, 12px) + 48px));
-    bottom: auto;
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%) scale(0.52);
-    transform-origin: top center;
+    display: none;
   }
 }
 
@@ -117,6 +107,31 @@
   }
 }
 
+/* ── Busy / thinking ──
+   Desktop: same as many-charts (centered in 35% left).
+   Mobile: visible and centered so user sees Banky thinking. */
+.bn-mascot-overlay--busy {
+  top: 50%;
+  bottom: auto;
+  left: 17.5vw;
+  right: auto;
+  width: auto;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 768px) {
+  .bn-mascot-overlay--busy {
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.7);
+    transform-origin: center center;
+  }
+}
+
 /* ── Surface guide / many charts ──
    Banqui centrado en el 35% izquierdo */
 .bn-mascot-overlay--many-charts {
@@ -140,7 +155,9 @@
 
 /* Limita el ancho del bubble en la mitad izquierda */
 .bn-mascot-overlay--many-charts .bn-mascot-bubble,
-.bn-mascot-overlay--many-charts .bn-mascot-bubble > * {
+.bn-mascot-overlay--many-charts .bn-mascot-bubble > *,
+.bn-mascot-overlay--busy .bn-mascot-bubble,
+.bn-mascot-overlay--busy .bn-mascot-bubble > * {
   max-width: 220px !important;
 }
 

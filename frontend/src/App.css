@@ -8,6 +8,13 @@
   display: flex;
   position: relative;
 }
+@media (max-width: 768px) {
+  .bn-shell {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+}
 
 .bn-app {
   height: 100%;
@@ -252,7 +259,7 @@
   justify-content: center;
   gap: var(--bn-space-2);
   padding: var(--bn-space-2);
-  z-index: 250;
+  z-index: 200;
 }
 @media (max-width: 768px) {
   .bn-nav-strip {
@@ -732,9 +739,18 @@
 }
 
 @media (max-width: 768px) {
+  .bn-app--many-charts {
+    overflow: visible;
+    height: auto;
+  }
   .bn-app--many-charts .bn-surface-area {
-    overflow-y: auto;
-    margin-top: 56px;
+    flex: 0 0 auto;
+    overflow-y: visible;
+    min-height: auto;
+    margin-top: 72px;
+  }
+  .bn-app--many-charts .bn-surface-area > .bn-col {
+    overflow: visible;
   }
   .bn-app--many-charts .bn-composer,
   .bn-app--many-charts .bn-trace,
@@ -1086,6 +1102,19 @@
 
 .bn-access-screen__mascot {
   pointer-events: none;
+  display: none;
+}
+@media (max-width: 768px) {
+  .bn-access-screen {
+    justify-content: flex-start;
+    padding-top: max(var(--bn-space-5), calc(env(safe-area-inset-top, 0px) + var(--bn-space-4)));
+    overflow-y: auto;
+  }
+  .bn-access-screen__mascot {
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+  }
 }
 
 .bn-access-card {
