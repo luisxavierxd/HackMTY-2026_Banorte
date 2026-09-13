@@ -169,9 +169,16 @@ export default function App() {
   const mascotNarrate = useCallback((texto: string, cara = "pensativo", cargando = true) => {
     const m = mascotRef.current;
     if (!m) return;
-    m.setPose({ cara, bigote: "ninguno", manoIzquierda: "ninguna", manoDerecha: "ninguna" });
+    m.setPose({ cara, bigote: "normal", manoIzquierda: "ninguna", manoDerecha: "ninguna" });
     m.setCargando(cargando);
     m.hablar(texto);
+  }, []);
+
+  const mascotResetPose = useCallback(() => {
+    const m = mascotRef.current;
+    if (!m) return;
+    m.setPose({ cara: "normal", bigote: "normal", manoIzquierda: "normal", manoDerecha: "enseñando" });
+    m.setCargando(false);
   }, []);
 
   // Banky narra lo que el usuario señala con el mouse en la surface
@@ -246,12 +253,14 @@ export default function App() {
         setOverrides({});
         setBusy(false);
         setError(null);
+        mascotResetPose();
         addTranscript("agent", event.summary || event.title || "", { surface: next, title: event.title });
         break;
       }
       case "turn_end":
         setTrace({ kind: "done", latencyMs: event.latency_ms, provider: event.provider, model: event.model });
         setBusy(false);
+        mascotResetPose();
         break;
       case "error":
         setError(event.message);
@@ -267,7 +276,7 @@ export default function App() {
       default:
         break;
     }
-  }, [addTranscript, mascotNarrate, humanizeToolName]);
+  }, [addTranscript, mascotNarrate, mascotResetPose, humanizeToolName]);
 
   // Código de acceso: gate a nivel de app (no HTTP Basic Auth, ver
   // net/accessKey.ts) — si el harness rechaza la key (o no hay una puesta),

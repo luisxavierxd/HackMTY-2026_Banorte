@@ -455,15 +455,13 @@ const Mascot = forwardRef<{ pulseSquish: () => void }, MascotProps>(
           alt=""
           style={{ ...layer(LAYOUT.face), transform: "translate(-50%, -50%)" }}
         />
-        {BIGOTES[bigote] && (
-          <img
-            ref={mustacheRef}
-            src={BIGOTES[bigote]!}
-            draggable={false}
-            alt=""
-            style={layer(LAYOUT.mustache)}
-          />
-        )}
+        <img
+          ref={mustacheRef}
+          src={BIGOTES[bigote] || BIGOTES.normal!}
+          draggable={false}
+          alt=""
+          style={layer(LAYOUT.mustache)}
+        />
         {MANOS[manoIzquierda] && (
           <img
             ref={handLRef}

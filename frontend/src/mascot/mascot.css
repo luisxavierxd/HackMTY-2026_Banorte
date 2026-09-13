@@ -76,12 +76,44 @@
 }
 @media (max-width: 768px) {
   .bn-mascot-overlay--profile {
-    top: max(12px, env(safe-area-inset-top, 12px));
+    top: max(60px, calc(env(safe-area-inset-top, 12px) + 48px));
     bottom: auto;
     left: 50%;
     right: auto;
-    transform: translateX(-50%) scale(0.62);
+    transform: translateX(-50%) scale(0.52);
     transform-origin: top center;
+  }
+}
+
+/* ── Surface view (conversation) ──
+   Bottom-left, small */
+.bn-mascot-overlay--surface {
+  top: auto;
+  bottom: 16px;
+  left: 16px;
+  right: auto;
+  transform: scale(0.42);
+  transform-origin: bottom left;
+}
+@media (min-width: 769px) {
+  .bn-mascot-overlay--surface {
+    left: calc(280px + 16px);
+  }
+}
+@media (max-width: 768px) {
+  .bn-mascot-overlay--surface {
+    bottom: 60px;
+    left: 4px;
+    transform: scale(0.32);
+    transform-origin: bottom left;
+  }
+}
+@media (max-width: 480px) {
+  .bn-mascot-overlay--surface {
+    bottom: 52px;
+    left: 2px;
+    transform: scale(0.28);
+    transform-origin: bottom left;
   }
 }
 
@@ -130,6 +162,23 @@
 .bn-mascot-overlay--landing .bn-mascot-bubble > * {
   max-width: 180px !important;
   font-size: 12px !important;
+}
+@media (max-width: 480px) {
+  .bn-mascot-overlay--surface .bn-mascot-bubble {
+    max-width: 150px !important;
+  }
+  .bn-mascot-overlay--surface .bn-mascot-bubble > * {
+    font-size: 10px !important;
+  }
+  .bn-mascot-overlay--profile .bn-mascot-bubble,
+  .bn-mascot-overlay--landing .bn-mascot-bubble {
+    max-width: 160px !important;
+  }
+  .bn-mascot-overlay--profile .bn-mascot-bubble > *,
+  .bn-mascot-overlay--landing .bn-mascot-bubble > * {
+    max-width: 160px !important;
+    font-size: 11px !important;
+  }
 }
 
 /* ================================================================

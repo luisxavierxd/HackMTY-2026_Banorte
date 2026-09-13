@@ -403,6 +403,110 @@
 .bn-surface-area::-webkit-scrollbar {
   display: none;
 }
+@media (max-width: 480px) {
+  .bn-surface-area {
+    padding: var(--bn-space-3);
+    margin: var(--bn-space-2);
+    margin-bottom: var(--bn-space-1);
+    border-radius: var(--bn-radius-control);
+    gap: var(--bn-space-3);
+  }
+}
+
+/* ── Mobile topbar compact ── */
+@media (max-width: 480px) {
+  .bn-topbar {
+    padding: max(var(--bn-space-2), env(safe-area-inset-top, var(--bn-space-2))) var(--bn-space-3) var(--bn-space-2);
+    min-height: 48px;
+  }
+  .bn-topbar__title {
+    font-size: 0.9375rem;
+    padding-left: calc(44px + var(--bn-space-2));
+  }
+}
+
+/* ── Mobile trace compact ── */
+@media (max-width: 480px) {
+  .bn-trace {
+    padding: var(--bn-space-1) var(--bn-space-3);
+    font-size: 0.75rem;
+  }
+  .bn-trace-cancel {
+    padding: 8px var(--bn-space-3);
+    font-size: 0.75rem;
+    min-height: 36px;
+  }
+}
+
+/* ── Mobile composer compact ── */
+@media (max-width: 480px) {
+  .bn-composer {
+    padding: var(--bn-space-2) var(--bn-space-3);
+    padding-bottom: max(var(--bn-space-2), calc(env(safe-area-inset-bottom, 0px) + var(--bn-space-1)));
+    gap: var(--bn-space-2);
+  }
+  .bn-composer__input {
+    padding: 10px 14px;
+  }
+  .bn-composer__send {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* ── Mobile home adjustments ── */
+@media (max-width: 480px) {
+  .bn-home {
+    padding: var(--bn-space-3);
+  }
+  .bn-home__content {
+    margin-top: 160px;
+    gap: var(--bn-space-3);
+  }
+  .bn-home__title {
+    font-size: clamp(1.5rem, 7vw, 2rem);
+  }
+  .bn-home__subtitle {
+    font-size: 0.875rem;
+  }
+  .bn-home__form {
+    padding: 6px 6px 6px 16px;
+  }
+  .bn-home__input {
+    padding: 10px 0;
+  }
+  .bn-home__send {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* ── Mobile sidebar launcher ── */
+@media (max-width: 480px) {
+  .bn-sidebar-launcher {
+    width: 40px;
+    height: 40px;
+    left: var(--bn-space-3);
+  }
+}
+
+/* ── Mobile transcript compact ── */
+@media (max-width: 480px) {
+  .bn-transcript {
+    padding: var(--bn-space-2) var(--bn-space-3);
+    max-height: 35vh;
+    font-size: 0.75rem;
+  }
+}
+
+/* ── Mobile error banner ── */
+@media (max-width: 480px) {
+  .bn-error {
+    margin: 0 var(--bn-space-3) var(--bn-space-1);
+    padding: var(--bn-space-2) var(--bn-space-3);
+    font-size: 0.8125rem;
+  }
+}
 
 /* ================================================================
    Landing — Banky welcome screen
@@ -907,6 +1011,20 @@
   background: var(--bn-hover-lg);
 }
 
+@media (max-width: 480px) {
+  .bn-access-screen {
+    padding: var(--bn-space-3);
+  }
+  .bn-access-card {
+    padding: var(--bn-space-5);
+    gap: var(--bn-space-4);
+    border-radius: 24px;
+  }
+  .bn-access-card__title {
+    font-size: 1.125rem;
+  }
+}
+
 /* ================================================================
    Profile gate — large glass card (matches Figma frame 2047:5)
    ================================================================ */
@@ -979,6 +1097,18 @@
   .bn-profile-card__mascot {
     max-height: 120px;
     overflow: hidden;
+  }
+}
+@media (max-width: 480px) {
+  .bn-profile-card {
+    padding: var(--bn-space-4);
+    border-radius: 20px;
+  }
+  .bn-profile-card__mascot {
+    max-height: 80px;
+  }
+  .bn-profile-card__title {
+    font-size: clamp(1.25rem, 5vw, 1.5rem);
   }
 }
 

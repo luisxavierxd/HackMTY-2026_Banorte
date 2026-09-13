@@ -257,6 +257,9 @@
 
 /* ── Responsive: apilar en móvil ────────────────────────────────────────── */
 @media (max-width: 680px) {
+  .bn-pglass-outer {
+    padding-top: 220px;
+  }
   .bn-pglass-card {
     flex-direction: column;
     align-items: center;
@@ -277,5 +280,40 @@
   }
   .bn-pglass-title {
     font-size: clamp(26px, 8vw, 36px);
+  }
+}
+@media (max-width: 480px) {
+  .bn-pglass-outer {
+    padding: 12px;
+    padding-top: 190px;
+  }
+  .bn-pglass-card {
+    padding: 20px 16px;
+    gap: 14px;
+    border-radius: 24px;
+  }
+  .bn-pglass-left {
+    gap: 12px;
+  }
+  .bn-pglass-mascot {
+    width: 80px;
+    height: 80px;
+  }
+  .bn-pglass-title {
+    font-size: clamp(22px, 7vw, 28px);
+  }
+  .bn-pglass-input {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+  .bn-pglass-submit {
+    padding: 11px 16px;
+    font-size: 14px;
+  }
+  .bn-pglass-label {
+    font-size: 12px;
+  }
+  .bn-pglass-field {
+    gap: 3px;
   }
 }
