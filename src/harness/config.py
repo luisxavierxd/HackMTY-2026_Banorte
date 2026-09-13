@@ -69,7 +69,7 @@ PROVIDER_PROFILES: dict[str, dict[str, Any]] = {
 }
 
 #: perfil por defecto del despliegue. Cambiarlo aquí es la decisión de código.
-DEFAULT_PROFILE = "anthropic"
+DEFAULT_PROFILE = "claude_code"
 
 
 @dataclass
