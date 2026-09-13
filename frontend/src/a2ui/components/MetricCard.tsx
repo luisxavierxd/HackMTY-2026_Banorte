@@ -37,9 +37,18 @@ export default function MetricCard({ props, ctx }: A2UIComponentProps<MetricCard
       {delta !== "" && delta !== undefined && delta !== null && (
         <span className={clsx("bn-badge", "bn-metric__delta", `bn-tone-${tone}`)}>{String(delta)}</span>
       )}
-      {caption !== "" && caption !== undefined && caption !== null && (
-        <p className="bn-metric__caption">{String(caption)}</p>
-      )}
+      {caption !== "" && caption !== undefined && caption !== null && (() => {
+        const text = String(caption);
+        const parts = text.split(/(?<=\.)\s+/).filter(Boolean);
+        if (parts.length > 1) {
+          return (
+            <ul className="bn-metric__bullets">
+              {parts.map((p, i) => <li key={i}>{p.replace(/\.$/, "")}</li>)}
+            </ul>
+          );
+        }
+        return <p className="bn-metric__caption">{text}</p>;
+      })()}
     </div>
   );
 }

@@ -207,20 +207,20 @@ export default function App() {
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const COMPONENT_HINTS: Record<string, string> = {
-    MetricCard: "Esta cifra muestra",
-    Card: "Esta sección es",
-    ActionButton: "Este botón te permite",
-    LineChart: "Esta gráfica muestra",
-    BarChart: "Esta gráfica muestra",
-    PieChart: "Este gráfico muestra",
-    ComparisonBars: "Esta comparación muestra",
-    ProgressRing: "Este indicador muestra",
-    Slider: "Aquí puedes ajustar",
-    TextField: "Aquí puedes escribir",
-    OptionList: "Aquí puedes elegir",
+    MetricCard: "Esta cifra indica tu",
+    Card: "Esta sección contiene información sobre tu",
+    ActionButton: "Este botón te permite realizar una acción sobre tu",
+    LineChart: "Esta gráfica visualiza la tendencia de tus",
+    BarChart: "Esta gráfica compara tus",
+    PieChart: "Este gráfico desglosa la distribución de tus",
+    ComparisonBars: "Esta comparación contrasta tus",
+    ProgressRing: "Este indicador refleja el avance de tu",
+    Slider: "Aquí puedes ajustar el valor de tu",
+    TextField: "Aquí puedes escribir información sobre tu",
+    OptionList: "Aquí puedes elegir entre opciones de",
     Callout: "",
-    Timeline: "Esta línea de tiempo muestra",
-    DataTable: "Esta tabla muestra",
+    Timeline: "Esta línea de tiempo detalla el historial de tus",
+    DataTable: "Esta tabla detalla tus",
   };
 
   const handleSurfaceHover = useCallback((e: React.MouseEvent) => {

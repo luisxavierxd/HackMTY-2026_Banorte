@@ -1,16 +1,17 @@
 # GenUI Harness — LLM + MCP + A2UI
 
-Backend de una experiencia financiera donde **el agente construye la interfaz**,
-no solo la respuesta. Reto Banorte × Tec de Monterrey.
+Backend + frontend de una experiencia financiera donde **el agente construye la
+interfaz**, no solo la respuesta. Reto Banorte × Tec de Monterrey.
 
 ```
-Usuario ──▶ Agente (Gemini) ──▶ MCP (datos + acciones) ──▶ A2UI ──▶ Componentes
+Usuario ──▶ Agente (LLM) ──▶ MCP (datos + acciones) ──▶ A2UI ──▶ Componentes
    ▲                                                                    │
    └──────────────── la interacción regresa como contexto ──────────────┘
 ```
 
-Este repo contiene el **harness completo**: agente, servidores MCP de dominio,
-catálogo de componentes y la capa A2UI. El frontend se conecta por WebSocket y
+Este repo contiene el **harness completo**: agente, servidor MCP de educación
+financiera, catálogo de 19 componentes A2UI, la capa de composición y el
+**frontend React** con la mascota Banqui. El frontend se conecta por WebSocket y
 renderiza; el contrato está en `GET /a2ui/catalog.json`.
 
 ---
@@ -21,6 +22,12 @@ renderiza; el contrato está en `GET /a2ui/catalog.json`.
 cp .env.example .env          # pega la API key del perfil que vayas a usar
 pip install -e ".[dev]"
 make demo                     # http://localhost:8080
+```
+
+Frontend (en otra terminal):
+
+```bash
+cd frontend && npm install && npm run dev   # http://localhost:5173
 ```
 
 ## El modelo es un flag de despliegue
@@ -40,7 +47,7 @@ hay endpoint ni campo del WebSocket que los cambie (ver `documentacion/adr/0005`
 
 `make providers` los lista. `GET /readyz` reporta cuál está activo.
 
-Los cuatro perfiles corren **el mismo ciclo**: mismo MCP, mismo catálogo, mismo
+Los perfiles corren **el mismo ciclo**: mismo MCP, mismo catálogo, mismo
 validador, mismos envelopes A2UI. Con los CLIs el modelo solo *decide* qué
 herramienta llamar; **ejecutarla sigue siendo del harness**, así que la traza y la
 auditoría no cambian.
@@ -56,7 +63,7 @@ Verificar:
 ```bash
 curl localhost:8080/readyz                      # MCP + proveedor y modelo activos
 python scripts/smoke_turn.py "¿Qué es el interés compuesto?"
-make test                                       # 60 tests, sin red
+make test                                       # 94 tests, sin red
 ```
 
 ---
@@ -69,7 +76,7 @@ make test                                       # 60 tests, sin red
 | `GET` | `/readyz` | estado por servidor MCP + herramientas montadas |
 | `GET` | `/a2ui/catalog.json` | **catálogo de componentes** — el frontend lo lee al arrancar |
 | `GET` | `/a2ui/tools` | herramientas MCP expuestas al modelo |
-| `WS` | `/ws/{session_id}` | canal principal (bidireccional) |
+| `WS` | `/ws/{session_id}` | canal principal (bidireccional, con código de acceso) |
 | `POST` | `/v1/turn` | mismo ciclo vía SSE (curl, serverless) |
 | `DELETE` | `/v1/session/{id}` | reinicia la conversación |
 
@@ -88,6 +95,7 @@ Servidor → cliente (stream de eventos):
 | `type` | contenido |
 |---|---|
 | `tool_call` / `tool_result` | para mostrar "consultando tu saldo…" |
+| `thinking` | texto parcial de razonamiento del agente |
 | `surface` | `title`, `summary` y `a2ui`: envelopes **A2UI v0.9.1** listos para render |
 | `turn_end` | `latency_ms`, `tools_used`, `provider`, `model`, `usage` |
 | `error` | el turno falló; la conexión sigue viva |
@@ -100,18 +108,51 @@ Los envelopes son estándar A2UI: `createSurface` → `updateDataModel` → `upd
 
 ```
 src/harness/
-  a2ui/        catálogo propio, validador, composer, envelopes v0.9.1
+  a2ui/        catálogo (19 componentes), validador, composer, envelopes v0.9.1
   agent/       ciclo agnóstico de proveedor y prompts
-  providers/   gemini · anthropic · claude_code · antigravity · fake
+  providers/   gemini · anthropic · cli_agent (claude_code / antigravity) · fake
   mcpx/        cliente multi-servidor MCP + sanitizador de esquemas
   session/     estado (memoria | Redis)
+  auth.py      código de acceso (ACCESS_CODE env var)
   app.py       FastAPI: WS, SSE, catálogo, health
 mcp_servers/
-  educacion_financiera/  interés compuesto, pago mínimo vs fijo, meta ahorro, CAT, inflación, regla 50/30/20
+  educacion_financiera/  interés compuesto, pago mínimo vs fijo, meta ahorro,
+                         CAT, inflación, regla 50/30/20 (6 tools, 0 acciones mutantes)
   common/                almacén sintético persistente
+frontend/
+  src/
+    a2ui/        renderer de componentes A2UI + gráficas ECharts (5 adapters)
+    contract/    tipos TypeScript del protocolo (a2ui.ts, events.ts)
+    design/      tokens CSS (dark/light), base.css
+    mascot/      Banqui — mascota animada con poses, bubble y tutorial guiado
+    net/         WebSocket, perfil de usuario, conversaciones, código de acceso
+    shell/       Home, Composer, Trace, ProfileGate, AccessGate, Sidebar, ThemeToggle
+    lab/         galería offline de fixtures (?lab=1)
+    App.tsx      orquestador principal
 ```
 
-## Agregar un dominio (inversiones, pagos, seguros, educación financiera)
+## Catálogo A2UI (19 componentes)
+
+Column · Row · Card · MetricCard · Text · Badge · Divider · Callout ·
+ActionButton · OptionList · Slider · TextField · DataTable · Timeline ·
+LineChart · BarChart · PieChart · ComparisonBars · ProgressRing
+
+## Frontend — Banqui
+
+SPA en React + Vite + TypeScript. Se conecta al harness por WebSocket con
+código de acceso y perfil de usuario (nombre, ingreso, ahorro, inversión).
+
+Características:
+- Mascota Banqui animada con poses, tutorial guiado paso a paso y narración
+- Tema dark/light con tokens CSS y toggle
+- Layout bento grid adaptativo para gráficas
+- Gráficas interactivas ECharts con tema Banorte (se adaptan al tema dark/light)
+- Historial de conversaciones persistente en localStorage
+- Sidebar con perfil, conversaciones y logout
+- Responsive mobile: mini Banqui junto al composer, Banqui centrado visible
+  durante estados de "pensando", nav strip bajo el sidebar
+
+## Agregar un dominio (inversiones, pagos, seguros)
 
 1. `mcp_servers/<dominio>/server.py` con `MCPServer("<dominio>")` y sus `@mcp.tool()`.
 2. Agregar la entrada en `mcp_servers.json` (o dejar stdio por defecto en `config.py`).
@@ -119,7 +160,10 @@ mcp_servers/
 
 ## Stack
 
-Python 3.11+ · FastAPI · `mcp` 2.x · `google-genai` · `anthropic` ·
+**Backend:** Python 3.11+ · FastAPI · `mcp` 2.x · `google-genai` · `anthropic` ·
 CLIs `claude` / `agy` en modo headless · A2UI v0.9.1 · Docker.
+
+**Frontend:** React 18 · Vite · TypeScript · ECharts · CSS custom (no framework) ·
+diseño liquid glass · mascota SVG animada.
 
 Los datos son **sintéticos** y viven en `data/state.json`. `make reset` los reinicia.
