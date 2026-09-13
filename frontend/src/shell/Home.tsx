@@ -55,15 +55,14 @@ export default function Home({ onSend, disabled, theme = 'dark' }: HomeProps) {
     <div className="bn-home">
       <DotField
         style={{ position: "absolute", inset: 0 }}
-        dotRadius={3}
-        dotSpacing={14}
+        dotRadius={1.6}
+        dotSpacing={16}
         bulgeStrength={60}
-        glowRadius={150}
-        cursorRadius={500}
+        cursorRadius={480}
         bulgeOnly
-        gradientFrom={isLight ? "rgba(235, 0, 41, 0.35)" : "rgba(235, 0, 41, 0.40)"}
-        gradientTo={isLight ? "rgba(190, 0, 25, 0.15)" : "rgba(180, 0, 20, 0.20)"}
-        glowColor={isLight ? "#f5f4f8" : "#0c0c10"}
+        noGlow
+        gradientFrom={isLight ? "rgba(235, 0, 41, 0.32)" : "rgba(235, 0, 41, 0.38)"}
+        gradientTo={isLight ? "rgba(190, 0, 25, 0.14)" : "rgba(180, 0, 20, 0.18)"}
       />
       <div className="bn-home__content">
         <h1 className="bn-home__title">¿En qué te puedo ayudar?</h1>

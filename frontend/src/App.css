@@ -308,6 +308,17 @@
 .bn-topbar__history-toggle:disabled {
   opacity: 0.4;
 }
+@media (max-width: 539px) {
+  .bn-topbar__history-toggle {
+    font-size: 0;
+    padding: 0 var(--bn-space-1);
+    min-width: 44px;
+    justify-content: center;
+  }
+  .bn-topbar__history-toggle svg {
+    font-size: initial;
+  }
+}
 .bn-topbar__refresh {
   background: none;
   border: none;
@@ -424,12 +435,6 @@
   margin-top: 96px;
 }
 
-.bn-home__greeting {
-  font-size: 0.9rem;
-  color: var(--bn-mute);
-  letter-spacing: 0.02em;
-}
-
 .bn-home__title {
   font-family: var(--bn-font-display);
   font-weight: 700;
@@ -537,8 +542,13 @@
 
 @media (max-width: 539px) {
   .bn-home__content {
-    margin-top: 64px;
+    margin-top: 130px;
     gap: var(--bn-space-4);
+  }
+  .bn-home__form {
+    box-shadow:
+      var(--bn-glass-glow),
+      0 6px 20px rgba(0, 0, 0, 0.25);
   }
 }
 

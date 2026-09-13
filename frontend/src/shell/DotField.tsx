@@ -11,6 +11,7 @@ interface DotFieldProps {
   bulgeOnly?: boolean;
   bulgeStrength?: number;
   glowRadius?: number;
+  noGlow?: boolean;
   sparkle?: boolean;
   waveAmplitude?: number;
   gradientFrom?: string;
@@ -28,6 +29,7 @@ const DotField = memo(({
   bulgeOnly = true,
   bulgeStrength = 67,
   glowRadius = 160,
+  noGlow = false,
   sparkle = false,
   waveAmplitude = 0,
   gradientFrom = 'rgba(168, 85, 247, 0.35)',
@@ -44,8 +46,8 @@ const DotField = memo(({
   const sizeRef = useRef({ w: 0, h: 0, offsetX: 0, offsetY: 0 });
   const glowOpacity = useRef(0);
   const engagement = useRef(0);
-  const propsRef = useRef({ dotRadius, dotSpacing, cursorRadius, cursorForce, bulgeOnly, bulgeStrength, sparkle, waveAmplitude, gradientFrom, gradientTo });
-  propsRef.current = { dotRadius, dotSpacing, cursorRadius, cursorForce, bulgeOnly, bulgeStrength, sparkle, waveAmplitude, gradientFrom, gradientTo };
+  const propsRef = useRef({ dotRadius, dotSpacing, cursorRadius, cursorForce, bulgeOnly, bulgeStrength, sparkle, waveAmplitude, gradientFrom, gradientTo, noGlow });
+  propsRef.current = { dotRadius, dotSpacing, cursorRadius, cursorForce, bulgeOnly, bulgeStrength, sparkle, waveAmplitude, gradientFrom, gradientTo, noGlow };
   const rebuildRef = useRef<(() => void) | null>(null);
   const glowIdRef = useRef(`dot-field-glow-${Math.random().toString(36).slice(2, 9)}`);
 
@@ -109,6 +111,19 @@ const DotField = memo(({
       mouseRef.current.y = e.pageY - s.offsetY;
     }
 
+    function onTouchMove(e: TouchEvent) {
+      const touch = e.touches[0];
+      if (!touch) return;
+      const s = sizeRef.current;
+      mouseRef.current.x = touch.pageX - s.offsetX;
+      mouseRef.current.y = touch.pageY - s.offsetY;
+    }
+
+    function onTouchEnd() {
+      mouseRef.current.x = -9999;
+      mouseRef.current.y = -9999;
+    }
+
     function updateMouseSpeed() {
       const m = mouseRef.current;
       const dx = m.prevX - m.x;
@@ -138,12 +153,13 @@ const DotField = memo(({
       if (engagement.current < 0.001) engagement.current = 0;
       const eng = engagement.current;
 
-      glowOpacity.current += (eng - glowOpacity.current) * 0.08;
-
-      if (glowEl) {
-        glowEl.setAttribute('cx', String(m.x));
-        glowEl.setAttribute('cy', String(m.y));
-        glowEl.style.opacity = String(glowOpacity.current);
+      if (!p.noGlow) {
+        glowOpacity.current += (eng - glowOpacity.current) * 0.08;
+        if (glowEl) {
+          glowEl.setAttribute('cx', String(m.x));
+          glowEl.setAttribute('cy', String(m.y));
+          glowEl.style.opacity = String(glowOpacity.current);
+        }
       }
 
       ctx.clearRect(0, 0, w, h);
@@ -224,6 +240,8 @@ const DotField = memo(({
     doResize();
     window.addEventListener('resize', resize);
     window.addEventListener('mousemove', onMouseMove, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
+    window.addEventListener('touchend', onTouchEnd, { passive: true });
     rafRef.current = requestAnimationFrame(tick);
 
     rebuildRef.current = () => {
@@ -237,6 +255,8 @@ const DotField = memo(({
       clearTimeout(resizeTimer);
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('touchend', onTouchEnd);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -257,31 +277,33 @@ const DotField = memo(({
           pointerEvents: 'none',
         }}
       />
-      <svg
-        ref={svgRef}
-        style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          pointerEvents: 'none',
-        }}
-      >
-        <defs>
-          <radialGradient id={glowIdRef.current}>
-            <stop offset="0%" stopColor={glowColor} />
-            <stop offset="100%" stopColor="transparent" />
-          </radialGradient>
-        </defs>
-        <circle
-          ref={glowRef}
-          cx="-9999"
-          cy="-9999"
-          r={glowRadius}
-          fill={`url(#${glowIdRef.current})`}
-          style={{ opacity: 0, willChange: 'opacity' }}
-        />
-      </svg>
+      {!noGlow && (
+        <svg
+          ref={svgRef}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            pointerEvents: 'none',
+          }}
+        >
+          <defs>
+            <radialGradient id={glowIdRef.current}>
+              <stop offset="0%" stopColor={glowColor} />
+              <stop offset="100%" stopColor="transparent" />
+            </radialGradient>
+          </defs>
+          <circle
+            ref={glowRef}
+            cx="-9999"
+            cy="-9999"
+            r={glowRadius}
+            fill={`url(#${glowIdRef.current})`}
+            style={{ opacity: 0, willChange: 'opacity' }}
+          />
+        </svg>
+      )}
     </div>
   );
 });

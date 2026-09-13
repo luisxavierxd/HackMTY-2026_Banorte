@@ -192,7 +192,7 @@
   width: 100%;
 }
 .bn-option:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bn-active-bg);
 }
 .bn-option--selected {
   border-color: var(--bn-red);
@@ -244,7 +244,7 @@
   border-radius: var(--bn-radius-control);
   padding: 10px 12px;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bn-field-bg);
   color: var(--bn-ink);
   width: 100%;
   transition: border-color 200ms ease;
@@ -282,7 +282,7 @@
   color: var(--bn-ink);
 }
 .bn-btn--secondary:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--bn-hover-sm);
 }
 .bn-btn--ghost {
   background: transparent;
@@ -417,7 +417,7 @@
   padding: var(--bn-space-3);
   color: var(--bn-mute);
   font-size: 0.875rem;
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bn-surface-subtle);
 }
 
 .bn-empty-inline {
