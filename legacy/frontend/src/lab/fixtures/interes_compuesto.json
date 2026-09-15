@@ -1,0 +1,227 @@
+{
+  "type": "surface",
+  "title": "Tu deuda con interés compuesto",
+  "summary": "Con una tasa anual de 30%, una deuda de $10,000 se convierte en $18,087 en 24 meses si no se paga nada — el interés genera más interés.",
+  "a2ui": [
+    {
+      "createSurface": {
+        "surfaceId": "main",
+        "catalogId": "fin-catalog"
+      }
+    },
+    {
+      "updateDataModel": {
+        "surfaceId": "main",
+        "path": "/",
+        "value": {
+          "datos": {
+            "explicar_interes_compuesto": {
+              "concepto": "interes_compuesto",
+              "parametros": {
+                "capital": 10000,
+                "tasa_anual": 0.3,
+                "meses": 24
+              },
+              "serie": [
+                {
+                  "mes": 1,
+                  "saldo": 10250.0,
+                  "interes_acumulado": 250.0
+                },
+                {
+                  "mes": 2,
+                  "saldo": 10506.25,
+                  "interes_acumulado": 506.25
+                },
+                {
+                  "mes": 3,
+                  "saldo": 10768.91,
+                  "interes_acumulado": 768.91
+                },
+                {
+                  "mes": 4,
+                  "saldo": 11038.13,
+                  "interes_acumulado": 1038.13
+                },
+                {
+                  "mes": 5,
+                  "saldo": 11314.08,
+                  "interes_acumulado": 1314.08
+                },
+                {
+                  "mes": 6,
+                  "saldo": 11596.93,
+                  "interes_acumulado": 1596.93
+                },
+                {
+                  "mes": 7,
+                  "saldo": 11886.86,
+                  "interes_acumulado": 1886.86
+                },
+                {
+                  "mes": 8,
+                  "saldo": 12184.03,
+                  "interes_acumulado": 2184.03
+                },
+                {
+                  "mes": 9,
+                  "saldo": 12488.63,
+                  "interes_acumulado": 2488.63
+                },
+                {
+                  "mes": 10,
+                  "saldo": 12800.85,
+                  "interes_acumulado": 2800.85
+                },
+                {
+                  "mes": 11,
+                  "saldo": 13120.87,
+                  "interes_acumulado": 3120.87
+                },
+                {
+                  "mes": 12,
+                  "saldo": 13448.89,
+                  "interes_acumulado": 3448.89
+                },
+                {
+                  "mes": 13,
+                  "saldo": 13785.11,
+                  "interes_acumulado": 3785.11
+                },
+                {
+                  "mes": 14,
+                  "saldo": 14129.74,
+                  "interes_acumulado": 4129.74
+                },
+                {
+                  "mes": 15,
+                  "saldo": 14482.98,
+                  "interes_acumulado": 4482.98
+                },
+                {
+                  "mes": 16,
+                  "saldo": 14845.06,
+                  "interes_acumulado": 4845.06
+                },
+                {
+                  "mes": 17,
+                  "saldo": 15216.18,
+                  "interes_acumulado": 5216.18
+                },
+                {
+                  "mes": 18,
+                  "saldo": 15596.59,
+                  "interes_acumulado": 5596.59
+                },
+                {
+                  "mes": 19,
+                  "saldo": 15986.5,
+                  "interes_acumulado": 5986.5
+                },
+                {
+                  "mes": 20,
+                  "saldo": 16386.16,
+                  "interes_acumulado": 6386.16
+                },
+                {
+                  "mes": 21,
+                  "saldo": 16795.82,
+                  "interes_acumulado": 6795.82
+                },
+                {
+                  "mes": 22,
+                  "saldo": 17215.71,
+                  "interes_acumulado": 7215.71
+                },
+                {
+                  "mes": 23,
+                  "saldo": 17646.11,
+                  "interes_acumulado": 7646.11
+                },
+                {
+                  "mes": 24,
+                  "saldo": 18087.26,
+                  "interes_acumulado": 8087.26
+                }
+              ],
+              "resumen": {
+                "saldo_final": 18087.26,
+                "interes_total": 8087.26,
+                "factor_crecimiento": 1.8087
+              },
+              "explicacion": "Con una tasa anual de 30%, una deuda de $10,000 se convierte en $18,087 en 24 meses si no se paga nada — el interés genera más interés."
+            }
+          }
+        }
+      }
+    },
+    {
+      "updateComponents": {
+        "surfaceId": "main",
+        "components": [
+          {
+            "id": "root",
+            "component": "Column",
+            "props": {
+              "children": [
+                "metric",
+                "chart",
+                "opts"
+              ],
+              "gap": "md"
+            }
+          },
+          {
+            "id": "metric",
+            "component": "MetricCard",
+            "props": {
+              "label": "Saldo final en 24 meses",
+              "value": "$18,087",
+              "delta": "+181%",
+              "tone": "danger"
+            }
+          },
+          {
+            "id": "chart",
+            "component": "LineChart",
+            "props": {
+              "title": "Crecimiento de la deuda",
+              "series": [
+                {
+                  "label": "Saldo",
+                  "path": "/datos/explicar_interes_compuesto/serie",
+                  "key": "saldo",
+                  "tone": "costo",
+                  "emphasis": true
+                },
+                {
+                  "label": "Interés acumulado",
+                  "path": "/datos/explicar_interes_compuesto/serie",
+                  "key": "interes_acumulado",
+                  "tone": "neutral"
+                }
+              ],
+              "xKey": "mes",
+              "xLabel": "meses",
+              "format": "currency"
+            }
+          },
+          {
+            "id": "opts",
+            "component": "ActionButton",
+            "props": {
+              "text": "Ver opciones de pago",
+              "action": {
+                "event": {
+                  "name": "ver_opciones_pago",
+                  "params": {}
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": []
+}

@@ -1,0 +1,1453 @@
+/* ================================================================
+   Shell — Banky liquid glass theme (dark + light)
+   ================================================================ */
+
+.bn-shell {
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  position: relative;
+}
+@media (max-width: 768px) {
+  .bn-shell {
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+}
+
+.bn-app {
+  height: 100%;
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+}
+
+
+@media (min-width: 769px) {
+  .bn-app {
+    margin-left: 280px;
+    border-left: 1px solid var(--bn-glass-border);
+  }
+}
+
+.bn-app--full {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+  backdrop-filter: none;
+  margin: 0;
+}
+
+/* ================================================================
+   Sidebar — frosted glass drawer
+   ================================================================ */
+
+.bn-sidebar__scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 210;
+}
+
+.bn-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  height: 100dvh;
+  width: min(82vw, 300px);
+  background: var(--bn-sidebar-bg);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border-right: 1px solid var(--bn-glass-border);
+  color: var(--bn-ink-full);
+  z-index: 220;
+  transform: translateX(-100%);
+  transition: transform 220ms ease;
+  overflow-y: auto;
+}
+.bn-sidebar--open {
+  transform: translateX(0);
+}
+
+@media (min-width: 880px) {
+  .bn-sidebar {
+    width: 320px;
+  }
+}
+
+.bn-sidebar-launcher {
+  position: fixed;
+  top: max(var(--bn-space-3), env(safe-area-inset-top, var(--bn-space-3)));
+  left: var(--bn-space-4);
+  z-index: 230;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--bn-radius-pill);
+  border: 1px solid var(--bn-glass-border);
+  background: var(--bn-glass-bg);
+  backdrop-filter: blur(var(--bn-glass-blur));
+  -webkit-backdrop-filter: blur(var(--bn-glass-blur));
+  color: var(--bn-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 150ms ease;
+}
+.bn-sidebar-launcher:hover {
+  background: var(--bn-hover-md);
+}
+
+.bn-sidebar__card {
+  padding: var(--bn-space-5) var(--bn-space-4);
+  padding-top: calc(max(var(--bn-space-3), env(safe-area-inset-top, var(--bn-space-3))) + 44px + var(--bn-space-3));
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-space-4);
+  height: 100%;
+}
+.bn-sidebar__eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--bn-ink-dim-3);
+  text-transform: uppercase;
+}
+.bn-sidebar__name {
+  font-family: var(--bn-font-display);
+  font-size: 1.375rem;
+  color: var(--bn-ink-full);
+  margin: 0;
+}
+.bn-sidebar__stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-space-3);
+  margin: 0;
+  padding: var(--bn-space-3);
+  border-radius: var(--bn-radius-control);
+  background: var(--bn-hover-xs);
+  border: 1px solid var(--bn-border-soft);
+}
+.bn-sidebar__stats dt {
+  font-size: 0.7rem;
+  color: var(--bn-ink-dim-2);
+}
+.bn-sidebar__stats dd {
+  margin: 0;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--bn-ink-full);
+}
+
+.bn-sidebar__new {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--bn-glass-border);
+  border-radius: var(--bn-radius-pill);
+  padding: 10px var(--bn-space-3);
+  background: var(--bn-glass-bg);
+  color: var(--bn-ink-full);
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: background 150ms ease;
+}
+.bn-sidebar__new:hover {
+  background: var(--bn-hover-lg);
+}
+
+.bn-sidebar__conversations {
+  flex: 1 1 auto;
+  min-height: 64px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0 calc(var(--bn-space-2) * -1);
+}
+.bn-sidebar__conversation {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: var(--bn-radius-control);
+}
+.bn-sidebar__conversation--active {
+  background: var(--bn-active-bg);
+  box-shadow: inset 3px 0 0 var(--bn-red);
+}
+.bn-sidebar__conversation-select {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: var(--bn-space-2);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: var(--bn-ink-full);
+  border-radius: var(--bn-radius-control);
+  transition: background 150ms ease;
+}
+.bn-sidebar__conversation-select:hover {
+  background: var(--bn-hover-sm);
+}
+.bn-sidebar__conversation-title {
+  font-size: 0.875rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bn-sidebar__conversation-date {
+  font-size: 0.6875rem;
+  color: var(--bn-ink-dim-3);
+}
+.bn-sidebar__conversation-delete {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  margin-right: 2px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  color: var(--bn-ink-dim-4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 150ms ease, background 150ms ease;
+}
+.bn-sidebar__conversation-delete:hover {
+  color: var(--bn-red);
+  background: var(--bn-hover-sm);
+}
+
+.bn-sidebar__logout {
+  background: none;
+  border: 1px solid var(--bn-glass-border);
+  border-radius: var(--bn-radius-control);
+  padding: var(--bn-space-3);
+  color: var(--bn-red-deep);
+  font-weight: 600;
+  transition: background 150ms ease;
+}
+.bn-sidebar__logout:hover {
+  background: var(--bn-hover-sm);
+}
+
+/* ================================================================
+   Topbar — glass header
+   ================================================================ */
+
+/* ================================================================
+   Nav strip — above Banky title, left-aligned
+   ================================================================ */
+
+.bn-nav-strip {
+  position: fixed;
+  top: var(--bn-space-3);
+  left: 60px;
+  width: calc(35vw - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--bn-space-2);
+  padding: var(--bn-space-2);
+  z-index: 200;
+}
+@media (max-width: 768px) {
+  .bn-nav-strip {
+    position: fixed;
+    top: var(--bn-space-2);
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
+  }
+}
+.bn-nav-strip__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bn-glass-bg);
+  border: 1px solid var(--bn-glass-border);
+  border-radius: var(--bn-radius-pill);
+  padding: 10px 16px;
+  min-height: 44px;
+  color: var(--bn-mute);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 150ms ease, background 150ms ease, border-color 150ms ease;
+}
+.bn-nav-strip__btn:not(:disabled):hover {
+  color: var(--bn-ink);
+  background: var(--bn-hover-md);
+  border-color: var(--bn-focus-border);
+}
+.bn-nav-strip__btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.bn-nav-strip__btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ================================================================
+   Transcript overlay — floats over content
+   ================================================================ */
+
+.bn-transcript-overlay {
+  position: fixed;
+  top: 92px;
+  left: 2vw;
+  width: 31vw;
+  max-height: min(50vh, calc(100vh - 120px));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-space-2);
+  padding: var(--bn-space-3);
+  background: var(--bn-sidebar-bg);
+  border: 1px solid var(--bn-glass-border);
+  border-radius: var(--bn-radius-control);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  z-index: 300;
+}
+@media (max-width: 768px) {
+  .bn-transcript-overlay {
+    left: var(--bn-space-3);
+    right: var(--bn-space-3);
+    width: auto;
+  }
+}
+.bn-transcript__item {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--bn-ink);
+}
+.bn-transcript__item--agent {
+  color: var(--bn-mute);
+}
+.bn-transcript__role {
+  font-weight: 600;
+  margin-right: 6px;
+}
+.bn-transcript__item--user .bn-transcript__role {
+  color: var(--bn-red-deep);
+}
+.bn-transcript__item--clickable {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: var(--bn-radius-control);
+  padding: 6px 8px;
+  margin: -6px -8px;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+.bn-transcript__item--clickable:hover {
+  background: var(--bn-hover-sm);
+}
+.bn-transcript__hint {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--bn-red-deep);
+  margin-top: 2px;
+}
+
+/* ================================================================
+   Surface area (conversation content)
+   ================================================================ */
+
+.bn-surface-area {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: var(--bn-space-5);
+  margin: var(--bn-space-4);
+  margin-bottom: var(--bn-space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-space-4);
+
+  background: var(--bn-glass-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--bn-glass-border);
+  border-radius: var(--bn-radius-surface);
+  box-shadow: var(--bn-glass-glow), 0 8px 48px rgba(0, 0, 0, 0.3);
+}
+.bn-surface-area::-webkit-scrollbar {
+  display: none;
+}
+@media (max-width: 480px) {
+  .bn-surface-area {
+    padding: var(--bn-space-3);
+    margin: var(--bn-space-2);
+    margin-bottom: var(--bn-space-1);
+    border-radius: var(--bn-radius-control);
+    gap: var(--bn-space-3);
+  }
+}
+/* ── Mobile topbar compact ── */
+@media (max-width: 480px) {
+  .bn-topbar {
+    padding: max(var(--bn-space-2), env(safe-area-inset-top, var(--bn-space-2))) var(--bn-space-3) var(--bn-space-2);
+    min-height: 48px;
+  }
+  .bn-topbar__title {
+    font-size: 0.9375rem;
+    padding-left: calc(44px + var(--bn-space-2));
+  }
+}
+
+/* ── Mobile trace compact ── */
+@media (max-width: 480px) {
+  .bn-trace {
+    padding: var(--bn-space-1) var(--bn-space-3);
+    font-size: 0.75rem;
+  }
+  .bn-trace-cancel {
+    padding: 8px var(--bn-space-3);
+    font-size: 0.75rem;
+    min-height: 36px;
+  }
+}
+
+/* ── Mobile composer compact ── */
+@media (max-width: 480px) {
+  .bn-composer {
+    padding: var(--bn-space-2) var(--bn-space-3);
+    padding-bottom: max(var(--bn-space-2), calc(env(safe-area-inset-bottom, 0px) + var(--bn-space-1)));
+    gap: var(--bn-space-2);
+  }
+  .bn-composer__input {
+    padding: 10px 14px;
+  }
+  .bn-composer__send {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* ── Mobile home adjustments ── */
+@media (max-width: 480px) {
+  .bn-home {
+    padding: var(--bn-space-3);
+  }
+  .bn-home__content {
+    margin-top: clamp(100px, 22vh, 160px);
+    gap: var(--bn-space-3);
+  }
+  .bn-home__title {
+    font-size: clamp(1.5rem, 7vw, 2rem);
+  }
+  .bn-home__subtitle {
+    font-size: 0.875rem;
+  }
+  .bn-home__form {
+    padding: 6px 6px 6px 16px;
+  }
+  .bn-home__input {
+    padding: 10px 0;
+  }
+  .bn-home__send {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* ── Mobile sidebar launcher ── */
+@media (max-width: 480px) {
+  .bn-sidebar-launcher {
+    width: 44px;
+    height: 44px;
+    left: var(--bn-space-3);
+  }
+}
+
+/* ── Mobile transcript compact ── */
+@media (max-width: 480px) {
+  .bn-transcript {
+    padding: var(--bn-space-2) var(--bn-space-3);
+    max-height: 35vh;
+    font-size: 0.75rem;
+  }
+}
+
+/* ── Mobile error banner ── */
+@media (max-width: 480px) {
+  .bn-error {
+    margin: 0 var(--bn-space-3) var(--bn-space-1);
+    padding: var(--bn-space-2) var(--bn-space-3);
+    font-size: 0.8125rem;
+  }
+}
+
+/* ================================================================
+   Landing — Banky welcome screen
+   ================================================================ */
+
+.bn-home {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--bn-space-5) var(--bn-space-4);
+  overflow: hidden;
+  color: var(--bn-ink-full);
+}
+
+.bn-home__content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--bn-space-5);
+  text-align: center;
+  margin-top: 96px;
+}
+
+.bn-home__title {
+  font-family: var(--bn-font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 6vw, 3.25rem);
+  line-height: 1.1;
+  margin: 0;
+  color: var(--bn-ink-full);
+}
+
+.bn-home__subtitle {
+  font-size: 1.0625rem;
+  color: var(--bn-ink-dim-1);
+  line-height: 1.5;
+  max-width: 440px;
+}
+
+.bn-home__chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--bn-space-2);
+}
+@media (max-width: 480px) {
+  .bn-home__chips {
+    display: none;
+  }
+}
+.bn-home__chip {
+  border: 1px solid var(--bn-glass-border);
+  border-radius: var(--bn-radius-pill);
+  padding: 10px 18px;
+  background: var(--bn-glass-bg);
+  backdrop-filter: blur(var(--bn-glass-blur));
+  -webkit-backdrop-filter: blur(var(--bn-glass-blur));
+  color: var(--bn-ink-near);
+  font-size: 0.875rem;
+  transition: background 150ms ease;
+  box-shadow: var(--bn-glass-glow);
+}
+.bn-home__chip:hover:not(:disabled) {
+  background: var(--bn-hover-lg);
+}
+.bn-home__chip:disabled {
+  opacity: 0.5;
+}
+
+.bn-home__form {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--bn-space-2);
+  padding: 8px 8px 8px 22px;
+  border-radius: var(--bn-radius-pill);
+  border: 1px solid var(--bn-glass-border);
+  background: var(--bn-glass-bg);
+  backdrop-filter: blur(var(--bn-glass-blur));
+  -webkit-backdrop-filter: blur(var(--bn-glass-blur));
+  box-shadow:
+    var(--bn-glass-glow),
+    0 12px 40px rgba(0, 0, 0, 0.4);
+  transition: border-color 200ms ease;
+}
+.bn-home__form:focus-within {
+  border-color: var(--bn-focus-border);
+}
+.bn-home__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--bn-ink-full);
+  font-size: max(1rem, 16px);
+  padding: 12px 0;
+}
+.bn-home__input::placeholder {
+  color: var(--bn-ink-dim-3);
+}
+.bn-home__input:focus {
+  outline: none;
+}
+.bn-home__input:disabled {
+  opacity: 0.6;
+}
+.bn-home__send {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bn-red);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  transition: background 150ms ease, transform 100ms ease;
+}
+.bn-home__send:disabled {
+  background: var(--bn-disabled-bg);
+  color: var(--bn-disabled-ink);
+}
+.bn-home__send:not(:disabled):active {
+  background: var(--bn-red-deep);
+  transform: scale(0.95);
+}
+
+@media (max-width: 768px) {
+  .bn-home__content {
+    margin-top: 150px;
+    gap: var(--bn-space-4);
+  }
+  .bn-home__form {
+    box-shadow:
+      var(--bn-glass-glow),
+      0 6px 20px rgba(0, 0, 0, 0.25);
+  }
+}
+
+/* ================================================================
+   Loading
+   ================================================================ */
+
+.bn-loading {
+  margin: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--bn-space-2);
+  color: var(--bn-mute);
+  font-size: 0.9rem;
+}
+.bn-loading__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--bn-dot-bg);
+  animation: bn-pulse 1.2s ease-in-out infinite;
+}
+
+/* ================================================================
+   Error banner
+   ================================================================ */
+
+.bn-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--bn-space-3);
+  margin: 0 var(--bn-space-4) var(--bn-space-2);
+  padding: var(--bn-space-3) var(--bn-space-4);
+  background: var(--bn-alerta-wash);
+  color: var(--bn-alerta);
+  border-radius: var(--bn-radius-control);
+  border: 1px solid rgba(245, 166, 35, 0.3);
+  font-size: 0.875rem;
+  flex-shrink: 0;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.bn-error__msg {
+  flex: 1 1 auto;
+}
+.bn-error__retry {
+  background: none;
+  border: 1px solid var(--bn-alerta);
+  color: var(--bn-alerta);
+  border-radius: var(--bn-radius-control);
+  padding: 6px 12px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+/* ================================================================
+   Surface-guide layout — Bento grid, Banqui pequeño abajo-izquierda
+   ================================================================ */
+
+/* En desktop: el contenido ocupa el 65% derecho, Banky el 35% izquierdo */
+@media (min-width: 769px) {
+  .bn-app--many-charts {
+    margin-left: 35vw;
+    border-left: none;
+  }
+}
+
+/* Surface area: scrollable, sin fondo extra */
+.bn-app--many-charts .bn-surface-area {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  margin: var(--bn-space-3);
+  margin-bottom: var(--bn-space-2);
+  padding: var(--bn-space-3);
+  background: none;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Composer / trace: padding normal (Banky está en la otra mitad) */
+.bn-app--many-charts .bn-composer {
+  padding-left: var(--bn-space-4);
+}
+.bn-app--many-charts .bn-trace,
+.bn-app--many-charts .bn-trace-cancel {
+  padding-left: var(--bn-space-4);
+}
+
+@media (max-width: 768px) {
+  .bn-app--many-charts {
+    overflow: visible;
+    height: auto;
+  }
+  .bn-app--many-charts .bn-surface-area {
+    flex: 0 0 auto;
+    overflow-y: visible;
+    min-height: auto;
+    margin-top: 72px;
+  }
+  .bn-app--many-charts .bn-surface-area > .bn-col {
+    overflow: visible;
+  }
+  .bn-app--many-charts .bn-composer,
+  .bn-app--many-charts .bn-trace,
+  .bn-app--many-charts .bn-trace-cancel {
+    padding-left: var(--bn-space-3);
+  }
+}
+
+/* ── Surface title bar ── */
+.bn-surface-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--bn-ink-full);
+  margin: 0 0 var(--bn-space-3) 0;
+  padding: 0;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+
+/* ── Bento grid base — card unificada con borde exterior ── */
+.bn-app--many-charts .bn-surface-area > .bn-col {
+  display: grid;
+  gap: 1px;
+  grid-auto-rows: min-content;
+  min-height: 0;
+  background: var(--bn-card-bg);
+  border: 1px solid var(--bn-card-border);
+  border-radius: 20px;
+  box-shadow:
+    var(--bn-glass-glow),
+    0 6px 36px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+/* 1 elemento: full width */
+.bn-app--many-charts .bn-surface-area > .bn-bento-1 {
+  grid-template-columns: 1fr;
+}
+
+/* 2 elementos: dos columnas */
+.bn-app--many-charts .bn-surface-area > .bn-bento-2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* 3 elementos: 2 arriba lado a lado + 1 abajo ancho completo */
+.bn-app--many-charts .bn-surface-area > .bn-bento-3 {
+  grid-template-columns: 1fr 1fr;
+}
+.bn-app--many-charts .bn-surface-area > .bn-bento-3 > .bn-bento-cell:nth-child(3) {
+  grid-column: 1 / -1;
+}
+
+/* 4+ elementos: 2 columnas, filas auto */
+.bn-app--many-charts .bn-surface-area > .bn-bento-4 {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* Mobile: columna simple */
+@media (max-width: 768px) {
+  .bn-app--many-charts .bn-surface-area > .bn-col {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    gap: 1px;
+    border-radius: 14px;
+  }
+  .bn-bento-cell {
+    overflow: visible;
+    min-height: auto;
+  }
+  .bn-surface-title {
+    font-size: 1.1rem;
+  }
+}
+
+/* ── Bento cell — sección interna sin borde propio ── */
+.bn-bento-cell {
+  background: var(--bn-surface-subtle);
+  border: none;
+  border-radius: 0;
+  overflow: hidden;
+  min-height: 0;
+  min-width: 0;
+  padding: var(--bn-space-2) var(--bn-space-3);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Separador sutil entre celdas via gap de 1px + fondo del grid */
+
+/* Suprimir el fondo de los componentes A2UI dentro del bento */
+.bn-bento-cell .bn-card {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.bn-bento-cell .bn-metric {
+  flex: 0 0 auto;
+}
+
+/* Utilidades (Callout, ActionButton): ancho completo */
+.bn-bento-span {
+  grid-column: 1 / -1;
+  padding: var(--bn-space-1, 4px) var(--bn-space-3);
+  background: var(--bn-surface-subtle);
+}
+
+/* ── Pop-in animación ── */
+@keyframes bn-surface-pop {
+  0%   { opacity: 0; transform: scale(0.96) translateY(10px); }
+  100% { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+.bn-app--many-charts .bn-surface-area > .bn-col {
+  animation: bn-surface-pop 400ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ================================================================
+   Trace bar
+   ================================================================ */
+
+.bn-trace {
+  display: flex;
+  align-items: center;
+  gap: var(--bn-space-2);
+  padding: var(--bn-space-2) var(--bn-space-4);
+  padding-left: 120px;
+  color: var(--bn-mute);
+  font-size: 0.8125rem;
+  min-height: 20px;
+  flex-shrink: 0;
+}
+@media (max-width: 768px) {
+  .bn-trace {
+    padding-left: var(--bn-space-4);
+  }
+}
+.bn-trace__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--bn-red);
+  animation: bn-pulse 1.2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+.bn-trace__text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bn-trace-cancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--bn-red-wash);
+  border: 1px solid rgba(235, 0, 41, 0.25);
+  border-radius: var(--bn-radius-pill);
+  padding: 10px 20px;
+  margin: 0 var(--bn-space-4);
+  margin-left: 120px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--bn-red-deep);
+  cursor: pointer;
+  flex-shrink: 0;
+  min-height: 44px;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+@media (max-width: 768px) {
+  .bn-trace-cancel {
+    margin-left: var(--bn-space-4);
+    margin-right: var(--bn-space-4);
+  }
+}
+.bn-trace-cancel:hover {
+  background: rgba(235, 0, 41, 0.14);
+  border-color: rgba(235, 0, 41, 0.40);
+}
+
+@keyframes bn-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ================================================================
+   Composer — glass input bar
+   ================================================================ */
+
+.bn-composer {
+  display: flex;
+  align-items: center;
+  gap: var(--bn-space-2);
+  padding: var(--bn-space-3) var(--bn-space-4);
+  padding-bottom: max(var(--bn-space-3), calc(env(safe-area-inset-bottom, 0px) + var(--bn-space-2)));
+  padding-left: 120px;
+  flex-shrink: 0;
+}
+@media (max-width: 768px) {
+  .bn-composer {
+    padding-left: var(--bn-space-4);
+  }
+}
+.bn-composer__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 1px solid var(--bn-glass-border);
+  border-radius: var(--bn-radius-pill);
+  padding: 12px 18px;
+  font-size: max(1rem, 16px);
+  background: var(--bn-glass-bg);
+  color: var(--bn-ink);
+  transition: border-color 200ms ease;
+}
+.bn-composer__input::placeholder {
+  color: var(--bn-mute);
+}
+.bn-composer__input:focus {
+  outline: none;
+  border-color: var(--bn-focus-border);
+}
+.bn-composer__input:disabled {
+  opacity: 0.6;
+}
+.bn-composer__send {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bn-red);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  transition: background 150ms ease, transform 100ms ease;
+}
+.bn-composer__send:disabled {
+  background: var(--bn-disabled-bg);
+  color: var(--bn-disabled-ink);
+}
+.bn-composer__send:not(:disabled):active {
+  background: var(--bn-red-deep);
+  transform: scale(0.95);
+}
+
+/* ================================================================
+   Mini Banky — mobile only, next to composer
+   ================================================================ */
+
+.bn-composer-row {
+  display: contents;
+}
+
+.bn-mini-banky {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .bn-composer-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 0;
+    flex-shrink: 0;
+    padding-left: var(--bn-space-2);
+    padding-bottom: max(var(--bn-space-2), calc(env(safe-area-inset-bottom, 0px) + var(--bn-space-1)));
+  }
+  .bn-composer-row .bn-composer {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding-left: 0;
+    padding-bottom: 0;
+  }
+  .bn-mini-banky {
+    display: flex;
+    align-items: flex-end;
+    flex-shrink: 0;
+    pointer-events: auto;
+    margin-bottom: 2px;
+  }
+}
+
+/* ================================================================
+   Theme toggle button
+   ================================================================ */
+
+.bn-theme-toggle {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--bn-radius-control);
+  border: none;
+  background: none;
+  color: var(--bn-mute);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 150ms ease, background 150ms ease;
+}
+.bn-theme-toggle:hover {
+  color: var(--bn-ink);
+  background: var(--bn-hover-sm);
+}
+.bn-theme-toggle--fixed {
+  position: fixed;
+  top: max(var(--bn-space-3), env(safe-area-inset-top, var(--bn-space-3)));
+  right: var(--bn-space-4);
+  z-index: 230;
+  border-radius: var(--bn-radius-pill);
+  border: 1px solid var(--bn-glass-border);
+  background: var(--bn-glass-bg);
+  backdrop-filter: blur(var(--bn-glass-blur));
+  -webkit-backdrop-filter: blur(var(--bn-glass-blur));
+  color: var(--bn-ink);
+  box-shadow: var(--bn-glass-glow);
+}
+.bn-theme-toggle--fixed:hover {
+  background: var(--bn-hover-md);
+}
+
+/* ================================================================
+   Access screen — mascot above centered glass card
+   ================================================================ */
+
+.bn-access-screen {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--bn-space-4);
+  gap: var(--bn-space-4);
+}
+
+.bn-access-screen__mascot {
+  pointer-events: none;
+  display: none;
+}
+@media (max-width: 768px) {
+  .bn-access-screen {
+    justify-content: flex-start;
+    padding-top: max(var(--bn-space-5), calc(env(safe-area-inset-top, 0px) + var(--bn-space-4)));
+    overflow-y: auto;
+  }
+  .bn-access-screen__mascot {
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+}
+
+.bn-access-card {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--bn-space-5);
+  background: var(--bn-card-bg);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid var(--bn-card-border);
+  border-radius: 28px;
+  padding: var(--bn-space-6);
+  box-shadow:
+    inset 0 1px 0 var(--bn-hover-lg),
+    inset 0 -1px 0 var(--bn-hover-xs),
+    0 24px 64px rgba(0, 0, 0, 0.5),
+    0 0 0 1px var(--bn-border-soft);
+}
+
+.bn-access-card__title {
+  font-family: var(--bn-font-display);
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--bn-ink-full);
+  margin: 0;
+  text-align: center;
+}
+
+.bn-access-card__desc {
+  color: var(--bn-mute);
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.bn-access-card .bn-glass-field {
+  width: 100%;
+}
+
+.bn-access-card__error {
+  color: var(--bn-red-deep);
+  font-size: 0.875rem;
+  margin: 0;
+  text-align: center;
+}
+
+.bn-access-card__submit {
+  padding: var(--bn-space-3) var(--bn-space-6);
+  border-radius: var(--bn-radius-pill);
+  border: 1px solid var(--bn-glass-border);
+  background: var(--bn-active-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--bn-ink-full);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  transition: background 150ms ease;
+  box-shadow: var(--bn-glass-glow);
+}
+.bn-access-card__submit:hover {
+  background: var(--bn-hover-lg);
+}
+
+@media (max-width: 480px) {
+  .bn-access-screen {
+    padding: var(--bn-space-3);
+  }
+  .bn-access-card {
+    padding: var(--bn-space-5);
+    gap: var(--bn-space-4);
+    border-radius: 24px;
+  }
+  .bn-access-card__title {
+    font-size: 1.125rem;
+  }
+}
+
+/* ================================================================
+   Profile gate — large glass card (matches Figma frame 2047:5)
+   ================================================================ */
+
+.bn-profile-gate {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--bn-space-4);
+}
+
+.bn-profile-card {
+  width: 100%;
+  max-width: 860px;
+  background: var(--bn-card-bg);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid var(--bn-card-border);
+  border-radius: 28px;
+  padding: var(--bn-space-6);
+  box-shadow:
+    inset 0 1px 0 var(--bn-hover-lg),
+    inset 0 -1px 0 var(--bn-hover-xs),
+    0 24px 64px rgba(0, 0, 0, 0.5),
+    0 0 0 1px var(--bn-border-soft);
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.bn-profile-card__layout {
+  display: flex;
+  gap: var(--bn-space-5);
+}
+
+.bn-profile-card__left {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--bn-space-4);
+  padding-top: var(--bn-space-2);
+}
+
+.bn-profile-card__mascot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.bn-profile-card__right {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-space-3);
+}
+
+@media (max-width: 639px) {
+  .bn-profile-card__layout {
+    flex-direction: column;
+    align-items: center;
+  }
+  .bn-profile-card__left {
+    align-items: center;
+    text-align: center;
+  }
+  .bn-profile-card__mascot {
+    max-height: 120px;
+    overflow: hidden;
+  }
+}
+@media (max-width: 480px) {
+  .bn-profile-card {
+    padding: var(--bn-space-4);
+    border-radius: 20px;
+  }
+  .bn-profile-card__mascot {
+    max-height: 80px;
+  }
+  .bn-profile-card__title {
+    font-size: clamp(1.25rem, 5vw, 1.5rem);
+  }
+}
+
+.bn-profile-card__title {
+  font-family: var(--bn-font-display);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--bn-ink-full);
+  margin: 0;
+}
+
+.bn-profile-card__submit {
+  padding: var(--bn-space-3) var(--bn-space-5);
+  border-radius: var(--bn-radius-pill);
+  border: 1px solid var(--bn-glass-border);
+  background: var(--bn-active-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--bn-ink-full);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  margin-top: var(--bn-space-2);
+  transition: background 150ms ease;
+  box-shadow: var(--bn-glass-glow);
+}
+.bn-profile-card__submit:hover:not(:disabled) {
+  background: var(--bn-hover-lg);
+}
+.bn-profile-card__submit:disabled {
+  opacity: 0.4;
+}
+
+/* Glass field — pill-shaped inputs matching Figma */
+.bn-glass-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.bn-glass-field__label {
+  font-size: 0.8125rem;
+  color: var(--bn-mute);
+  padding-left: 4px;
+}
+.bn-glass-field input {
+  padding: 12px 18px;
+  border-radius: var(--bn-radius-pill);
+  border: 1px solid var(--bn-field-border);
+  background: var(--bn-field-bg);
+  color: var(--bn-ink);
+  font-size: max(1rem, 16px);
+  transition: border-color 200ms ease, background 200ms ease;
+  box-shadow: inset 0 1px 0 var(--bn-hover-xs);
+}
+.bn-glass-field input:focus {
+  outline: none;
+  border-color: var(--bn-focus-border);
+  background: var(--bn-field-bg-focus);
+}
+.bn-glass-field input::placeholder {
+  color: var(--bn-field-placeholder);
+}
+.bn-glass-field__input--error {
+  border-color: var(--bn-red) !important;
+  background: var(--bn-red-wash) !important;
+}
+.bn-glass-field__error {
+  font-size: 0.8125rem;
+  color: var(--bn-red-deep);
+  padding-left: 4px;
+}
+
+/* Legacy .bn-field used by A2UI components */
+.bn-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.bn-field span {
+  font-size: 0.8125rem;
+  color: var(--bn-mute);
+}
+.bn-field input {
+  padding: var(--bn-space-3);
+  border-radius: var(--bn-radius-control);
+  border: 1px solid var(--bn-glass-border);
+  background: var(--bn-hover-xs);
+  color: var(--bn-ink);
+  font-size: 1rem;
+  transition: border-color 200ms ease;
+}
+.bn-field input:focus {
+  border-color: var(--bn-red);
+  outline: none;
+}
+.bn-field input::placeholder {
+  color: var(--bn-mute);
+}
+.bn-field__input--error {
+  border-color: var(--bn-red) !important;
+  background: var(--bn-red-wash) !important;
+}
+.bn-field__error {
+  font-size: 0.8125rem;
+  color: var(--bn-red-deep);
+  margin-top: 2px;
+}
+
+.bn-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--bn-mute);
+}
+.bn-checkbox input {
+  margin-top: 3px;
+  accent-color: var(--bn-red);
+}
+
+button.bn-link {
+  display: inline;
+  width: auto;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--bn-red-deep);
+  text-decoration: underline;
+  font: inherit;
+  font-weight: inherit;
+  cursor: pointer;
+}
+
+/* ================================================================
+   Privacy notice
+   ================================================================ */
+
+.bn-privacy h2 {
+  font-family: var(--bn-font-display);
+  font-size: 1.125rem;
+  color: var(--bn-ink);
+  margin: 0 0 var(--bn-space-2);
+}
+.bn-privacy h3 {
+  font-size: 0.9375rem;
+  color: var(--bn-ink);
+  margin: var(--bn-space-3) 0 4px;
+}
+.bn-privacy p {
+  font-size: 0.85rem;
+  color: var(--bn-mute);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ================================================================
+   Light mode — adjust card shadows (dark shadows are too heavy)
+   ================================================================ */
+
+[data-theme="light"] .bn-access-card,
+[data-theme="light"] .bn-profile-card {
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.10),
+    0 0 0 1px rgba(0, 0, 0, 0.07);
+}
+
+[data-theme="light"] .bn-home__form {
+  box-shadow:
+    var(--bn-glass-glow),
+    0 8px 24px rgba(0, 0, 0, 0.10);
+}

@@ -1,0 +1,130 @@
+{
+  "type": "surface",
+  "title": "Inflación y tu dinero",
+  "summary": "$10,000 de hoy equivalen a $8,025 en 5 años con inflación de 4.5%. Si no inviertes, pierdes poder de compra cada año.",
+  "a2ui": [
+    {
+      "createSurface": {
+        "surfaceId": "main",
+        "catalogId": "fin-catalog"
+      }
+    },
+    {
+      "updateDataModel": {
+        "surfaceId": "main",
+        "path": "/",
+        "value": {
+          "datos": {
+            "visualizar_inflacion": {
+              "concepto": "inflacion",
+              "parametros": {
+                "monto": 10000,
+                "anios": 5,
+                "inflacion_anual": 0.045
+              },
+              "serie": [
+                {
+                  "anio": 1,
+                  "valor_nominal": 10000,
+                  "poder_compra_real": 9569.38,
+                  "perdida_porcentual": 4.31
+                },
+                {
+                  "anio": 2,
+                  "valor_nominal": 10000,
+                  "poder_compra_real": 9157.3,
+                  "perdida_porcentual": 8.43
+                },
+                {
+                  "anio": 3,
+                  "valor_nominal": 10000,
+                  "poder_compra_real": 8762.97,
+                  "perdida_porcentual": 12.37
+                },
+                {
+                  "anio": 4,
+                  "valor_nominal": 10000,
+                  "poder_compra_real": 8385.61,
+                  "perdida_porcentual": 16.14
+                },
+                {
+                  "anio": 5,
+                  "valor_nominal": 10000,
+                  "poder_compra_real": 8024.51,
+                  "perdida_porcentual": 19.75
+                }
+              ],
+              "resumen": {
+                "poder_compra_final": 8024.51,
+                "perdida_total": 1975.49
+              },
+              "explicacion": "$10,000 de hoy equivalen a $8,025 en 5 años con inflación de 4.5%. Si no inviertes, pierdes poder de compra cada año."
+            }
+          }
+        }
+      }
+    },
+    {
+      "updateComponents": {
+        "surfaceId": "main",
+        "components": [
+          {
+            "id": "root",
+            "component": "Column",
+            "props": {
+              "children": [
+                "metric",
+                "chart",
+                "btn"
+              ],
+              "gap": "md"
+            }
+          },
+          {
+            "id": "metric",
+            "component": "MetricCard",
+            "props": {
+              "label": "Poder de compra en 5 años",
+              "value": "$8,025",
+              "delta": "-$1,975",
+              "tone": "danger"
+            }
+          },
+          {
+            "id": "chart",
+            "component": "LineChart",
+            "props": {
+              "title": "Poder de compra real",
+              "series": [
+                {
+                  "label": "Poder de compra",
+                  "path": "/datos/visualizar_inflacion/serie",
+                  "key": "poder_compra_real",
+                  "tone": "costo",
+                  "emphasis": true
+                }
+              ],
+              "xKey": "anio",
+              "xLabel": "años",
+              "format": "currency"
+            }
+          },
+          {
+            "id": "btn",
+            "component": "ActionButton",
+            "props": {
+              "text": "Ver opciones de inversión",
+              "action": {
+                "event": {
+                  "name": "ver_inversiones",
+                  "params": {}
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "warnings": []
+}

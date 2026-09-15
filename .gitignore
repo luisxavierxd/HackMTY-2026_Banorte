@@ -6,6 +6,7 @@ AGENTS.md
 notes/
 .superpowers/
 docs/
+review/
 
 # --- python ---
 __pycache__/
@@ -21,7 +22,11 @@ venv/
 data/
 *.log
 
-# --- frontend (Vite/React) ---
-frontend/node_modules/
-frontend/dist/
-frontend/.vite/
+# --- node / vite (ambos targets) ---
+node_modules/
+dist/
+.vite/
+
+# --- restos del árbol viejo antes del split (ver legacy/) ---
+/frontend/
+/src/

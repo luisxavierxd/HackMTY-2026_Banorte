@@ -1,0 +1,194 @@
+/*
+ * Landing page — estilo glass extraído del Figma
+ * Source of truth: Liquid Glass iOS 26 Community, frame "ios26 liquid glass"
+ *
+ * Valores clave del Figma:
+ *   bg:            gradiente radial charcoal → negro
+ *   glass fill:    rgba(255,255,255,0.15–0.18) + backdrop-blur 20–75px
+ *   border glass:  1px solid rgba(255,255,255,0.25)
+ *   inner glow:    box-shadow inset 0 0 60px rgba(255,255,255,0.12)
+ *   font-display:  Albert Sans (SemiBold 88px canvas → ~52px / Regular 32px canvas → ~18px)
+ *   text-shadow:   0 24px 20.8px rgba(211,211,211,0.4)
+ *   banky:         296×296px en canvas 1908px → ~240px a nuestro viewport
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;600;700&display=swap");
+
+/* ── Contenedor principal ─────────────────────────────────────────────────── */
+.bn-landing {
+  /* Ocupa todo el espacio disponible dentro del bn-app--full */
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 4vw, 48px);
+  padding: 32px clamp(16px, 4vw, 48px);
+  background: transparent;
+  overflow: hidden;
+}
+
+/* ── Columna izquierda: espacio reservado para Banqui overlay ────────────── */
+.bn-landing__left {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Espaciador que coincide con el tamaño del overlay de Banqui (240px) */
+.bn-landing__mascot-spacer {
+  width: 240px;
+  height: 280px; /* alto de Banqui + burbuja de diálogo */
+}
+
+/* ── Columna derecha: título + chips + input ─────────────────────────────── */
+.bn-landing__right {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+/* "Pregúntale a Banqui…" — Albert Sans SemiBold, ~52px */
+.bn-landing__title {
+  font-family: "Albert Sans", system-ui, sans-serif;
+  font-size: clamp(32px, 5.5vw, 56px);
+  font-weight: 600;
+  color: var(--bn-ink-full);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+/* ── Suggestion chips glass ─────────────────────────────────────────────── */
+.bn-landing__chips {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.bn-landing__chip {
+  /* Glass pill */
+  background: var(--bn-glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--bn-gray-soft);
+  border-radius: 999px;
+  box-shadow:
+    var(--bn-glass-glow),
+    0 2px 8px rgba(0, 0, 0, 0.3);
+
+  padding: 12px 22px;
+  text-align: left;
+
+  font-family: "Albert Sans", system-ui, sans-serif;
+  font-size: clamp(13px, 1.3vw, 15px);
+  font-weight: 400;
+  color: var(--bn-ink-dim-1);
+  line-height: 1.35;
+
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+
+.bn-landing__chip:hover:not(:disabled) {
+  background: var(--bn-hover-lg);
+  border-color: var(--bn-focus-border);
+  color: var(--bn-ink-near);
+}
+
+.bn-landing__chip:active:not(:disabled) {
+  background: var(--bn-hover-lg);
+}
+
+.bn-landing__chip:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ── Input pill glass ─────────────────────────────────────────────────────── */
+.bn-landing__form {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.bn-landing__input {
+  width: 100%;
+  max-width: 540px;
+
+  background: var(--bn-field-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--bn-gray-soft);
+  border-radius: 999px;
+  padding: 14px 26px;
+
+  font-family: "Albert Sans", system-ui, sans-serif;
+  font-size: clamp(14px, 1.4vw, 16px);
+  font-weight: 400;
+  color: var(--bn-ink-near);
+  line-height: 1.4;
+
+  box-shadow:
+    var(--bn-glass-glow),
+    0 4px 24px rgba(0, 0, 0, 0.4);
+  outline: none;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.bn-landing__input::placeholder {
+  color: var(--bn-field-placeholder);
+}
+
+.bn-landing__input:focus {
+  border-color: var(--bn-focus-border);
+  background: var(--bn-field-bg-focus);
+}
+
+.bn-landing__input:disabled {
+  opacity: 0.5;
+}
+
+/* ── Responsive: apilar en móvil ────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .bn-landing {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px 16px;
+    gap: 16px;
+    padding-top: calc(max(16px, env(safe-area-inset-top, 16px)) + 200px);
+  }
+
+  .bn-landing__left {
+    display: none;
+  }
+
+  .bn-landing__title {
+    font-size: clamp(28px, 8vw, 36px);
+  }
+
+  .bn-landing__input {
+    max-width: 100%;
+    padding: 13px 20px;
+  }
+}
+@media (max-width: 480px) {
+  .bn-landing {
+    padding: 12px;
+    padding-top: calc(max(12px, env(safe-area-inset-top, 12px)) + 170px);
+    gap: 12px;
+  }
+  .bn-landing__title {
+    font-size: clamp(24px, 7vw, 30px);
+  }
+  .bn-landing__chip {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+  .bn-landing__input {
+    padding: 11px 16px;
+    font-size: max(1rem, 16px);
+  }
+}

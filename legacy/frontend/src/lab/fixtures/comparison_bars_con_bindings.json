@@ -1,0 +1,79 @@
+{
+  "type": "surface",
+  "title": "Ajusta tu regla 50/30/20",
+  "summary": "Regresión: ComparisonBars con bindings anidados dentro de categories[].a/.b (no literales) — el modelo real los usa así y antes se quedaban sin resolver, mostrando barras vacías.",
+  "a2ui": [
+    {
+      "createSurface": {
+        "surfaceId": "main",
+        "catalogId": "fin-catalog"
+      }
+    },
+    {
+      "updateDataModel": {
+        "surfaceId": "main",
+        "path": "/",
+        "value": {
+          "datos": {
+            "regla_50_30_20": {
+              "comparacion": [
+                { "grupo": "necesidades", "ideal": 3500.0, "real": 13310.0 },
+                { "grupo": "deseos", "ideal": 2100.0, "real": 1210.0 },
+                { "grupo": "ahorro_e_inversion", "ideal": 1400.0, "real": -9360.6 }
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "updateComponents": {
+        "surfaceId": "main",
+        "components": [
+          {
+            "id": "root",
+            "component": "Column",
+            "props": { "children": ["comparacion", "btn"], "gap": "md" }
+          },
+          {
+            "id": "comparacion",
+            "component": "ComparisonBars",
+            "props": {
+              "title": "Ideal vs. real (regla 50/30/20)",
+              "labelA": "Ideal",
+              "labelB": "Real",
+              "toneB": "costo",
+              "format": "currency",
+              "categories": [
+                {
+                  "label": "Necesidades",
+                  "a": { "path": "/datos/regla_50_30_20/comparacion/0/ideal" },
+                  "b": { "path": "/datos/regla_50_30_20/comparacion/0/real" }
+                },
+                {
+                  "label": "Deseos",
+                  "a": { "path": "/datos/regla_50_30_20/comparacion/1/ideal" },
+                  "b": { "path": "/datos/regla_50_30_20/comparacion/1/real" }
+                },
+                {
+                  "label": "Ahorro e inversión",
+                  "a": { "path": "/datos/regla_50_30_20/comparacion/2/ideal" },
+                  "b": { "path": "/datos/regla_50_30_20/comparacion/2/real" }
+                }
+              ]
+            }
+          },
+          {
+            "id": "btn",
+            "component": "ActionButton",
+            "props": {
+              "text": "Confirmar",
+              "action": { "event": { "name": "confirmar", "params": {} } },
+              "variant": "primary"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

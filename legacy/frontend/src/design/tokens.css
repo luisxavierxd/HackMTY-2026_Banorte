@@ -1,0 +1,130 @@
+:root {
+  /* ---- Banky dark palette ---- */
+  --bn-bg: #0c0c10;
+  --bn-bg-gradient: radial-gradient(ellipse 120% 80% at 50% 10%, #1a1a2e 0%, #0f0f14 50%, #0c0c10 100%);
+  --bn-surface: rgba(255, 255, 255, 0.05);
+  --bn-surface-raised: rgba(255, 255, 255, 0.08);
+  --bn-line: rgba(255, 255, 255, 0.10);
+  --bn-ink: #eeedf2;
+  --bn-mute: rgba(255, 255, 255, 0.50);
+  --bn-red: #eb0029;
+  --bn-red-deep: #ff2d4f;
+  --bn-red-wash: rgba(235, 0, 41, 0.18);
+  --bn-gray: #8a8494;
+  --bn-gray-soft: rgba(255, 255, 255, 0.18);
+  --bn-ahorro: #1dd3b0;
+  --bn-ahorro-wash: rgba(29, 211, 176, 0.14);
+  --bn-alerta: #f5a623;
+  --bn-alerta-wash: rgba(245, 166, 35, 0.14);
+
+  /* ---- semantic tones (Badge / MetricCard) ---- */
+  --bn-tone-neutral: var(--bn-gray);
+  --bn-tone-neutral-wash: rgba(138, 132, 148, 0.14);
+  --bn-tone-success: var(--bn-ahorro);
+  --bn-tone-success-wash: var(--bn-ahorro-wash);
+  --bn-tone-warning: var(--bn-alerta);
+  --bn-tone-warning-wash: var(--bn-alerta-wash);
+  --bn-tone-danger: var(--bn-red-deep);
+  --bn-tone-danger-wash: var(--bn-red-wash);
+
+  /* ---- glass ---- */
+  --bn-glass-bg: rgba(255, 255, 255, 0.06);
+  --bn-glass-border: rgba(255, 255, 255, 0.12);
+  --bn-glass-blur: 20px;
+  --bn-glass-glow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+
+  /* ---- typography ---- */
+  --bn-font-display: "Albert Sans", system-ui, sans-serif;
+  --bn-font-body: "Albert Sans", system-ui, sans-serif;
+
+  /* ---- shape ---- */
+  --bn-radius-surface: 20px;
+  --bn-radius-control: 12px;
+  --bn-radius-pill: 999px;
+
+  /* ---- spacing scale ---- */
+  --bn-space-1: 4px;
+  --bn-space-2: 8px;
+  --bn-space-3: 12px;
+  --bn-space-4: 16px;
+  --bn-space-5: 24px;
+  --bn-space-6: 32px;
+
+  /* ---- layout ---- */
+  --bn-max-width: 580px;
+
+  /* ---- major surface backgrounds ---- */
+  --bn-topbar-bg: rgba(12, 12, 16, 0.70);
+  --bn-app-bg: rgba(12, 12, 16, 0.60);
+  --bn-sidebar-bg: rgba(18, 16, 22, 0.82);
+  --bn-card-bg: rgba(32, 30, 36, 0.65);
+  --bn-card-border: rgba(255, 255, 255, 0.14);
+  --bn-surface-subtle: rgba(255, 255, 255, 0.03);
+  --bn-ink-full: #ffffff;
+
+  /* ---- interactive overlays ---- */
+  --bn-hover-xs: rgba(255, 255, 255, 0.04);
+  --bn-hover-sm: rgba(255, 255, 255, 0.06);
+  --bn-active-bg: rgba(255, 255, 255, 0.08);
+  --bn-hover-md: rgba(255, 255, 255, 0.12);
+  --bn-hover-lg: rgba(255, 255, 255, 0.14);
+  --bn-disabled-bg: rgba(255, 255, 255, 0.10);
+  --bn-disabled-ink: rgba(255, 255, 255, 0.30);
+
+  /* ---- dim text levels ---- */
+  --bn-ink-dim-1: rgba(255, 255, 255, 0.55);
+  --bn-ink-dim-2: rgba(255, 255, 255, 0.45);
+  --bn-ink-dim-3: rgba(255, 255, 255, 0.40);
+  --bn-ink-dim-4: rgba(255, 255, 255, 0.35);
+  --bn-ink-near: rgba(255, 255, 255, 0.85);
+
+  /* ---- borders / misc ---- */
+  --bn-border-soft: rgba(255, 255, 255, 0.06);
+  --bn-focus-border: rgba(255, 255, 255, 0.25);
+  --bn-field-border: rgba(255, 255, 255, 0.10);
+  --bn-field-bg: rgba(255, 255, 255, 0.08);
+  --bn-field-bg-focus: rgba(255, 255, 255, 0.10);
+  --bn-field-placeholder: rgba(255, 255, 255, 0.35);
+  --bn-dot-bg: rgba(255, 255, 255, 0.20);
+}
+
+[data-theme="light"] {
+  --bn-bg: #f5f4f8;
+  --bn-bg-gradient: radial-gradient(ellipse 120% 80% at 50% 10%, #ede8f5 0%, #f0edf8 50%, #f5f4f8 100%);
+  --bn-surface: rgba(0, 0, 0, 0.04);
+  --bn-surface-raised: rgba(0, 0, 0, 0.07);
+  --bn-line: rgba(0, 0, 0, 0.10);
+  --bn-ink: #1a1820;
+  --bn-mute: rgba(26, 24, 32, 0.50);
+  --bn-gray: #6b6578;
+  --bn-gray-soft: rgba(0, 0, 0, 0.10);
+  --bn-glass-bg: rgba(255, 255, 255, 0.60);
+  --bn-glass-border: rgba(0, 0, 0, 0.09);
+  --bn-glass-glow: inset 0 1px 0 rgba(255, 255, 255, 0.90);
+  --bn-topbar-bg: rgba(245, 244, 248, 0.88);
+  --bn-app-bg: rgba(245, 244, 248, 0.72);
+  --bn-sidebar-bg: rgba(240, 238, 248, 0.93);
+  --bn-card-bg: rgba(255, 255, 255, 0.78);
+  --bn-card-border: rgba(0, 0, 0, 0.09);
+  --bn-surface-subtle: rgba(0, 0, 0, 0.02);
+  --bn-ink-full: #1a1820;
+  --bn-hover-xs: rgba(0, 0, 0, 0.03);
+  --bn-hover-sm: rgba(0, 0, 0, 0.04);
+  --bn-active-bg: rgba(0, 0, 0, 0.05);
+  --bn-hover-md: rgba(0, 0, 0, 0.07);
+  --bn-hover-lg: rgba(0, 0, 0, 0.09);
+  --bn-disabled-bg: rgba(0, 0, 0, 0.08);
+  --bn-disabled-ink: rgba(26, 24, 32, 0.30);
+  --bn-ink-dim-1: rgba(26, 24, 32, 0.55);
+  --bn-ink-dim-2: rgba(26, 24, 32, 0.45);
+  --bn-ink-dim-3: rgba(26, 24, 32, 0.40);
+  --bn-ink-dim-4: rgba(26, 24, 32, 0.35);
+  --bn-ink-near: rgba(26, 24, 32, 0.88);
+  --bn-border-soft: rgba(0, 0, 0, 0.05);
+  --bn-focus-border: rgba(0, 0, 0, 0.22);
+  --bn-field-border: rgba(0, 0, 0, 0.10);
+  --bn-field-bg: rgba(0, 0, 0, 0.04);
+  --bn-field-bg-focus: rgba(0, 0, 0, 0.06);
+  --bn-field-placeholder: rgba(26, 24, 32, 0.35);
+  --bn-dot-bg: rgba(26, 24, 32, 0.18);
+}

@@ -1,0 +1,210 @@
+/* ================================================================
+   Mascot Overlay — Banqui flota entre pantallas
+
+   Posiciones:
+     default / --landing    → center-left, full size
+     --profile              → center-left near glass card, full size
+     --surface              → bottom-left, small (scale 0.42)
+     --many-charts          → center-left, medium (side-by-side with charts)
+   ================================================================ */
+
+.bn-mascot-overlay {
+  position: fixed;
+  z-index: 200;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  /* Default: center-left, full size */
+  top: 50%;
+  bottom: auto;
+  left: clamp(16px, 4vw, 48px);
+  right: auto;
+  transform: translateY(-50%);
+
+  transition:
+    top       400ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    bottom    400ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    left      600ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 600ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: top, bottom, left, transform;
+}
+
+/* Mobile default: top-center */
+@media (max-width: 768px) {
+  .bn-mascot-overlay {
+    top: max(8px, env(safe-area-inset-top, 8px));
+    left: 50%;
+    bottom: auto;
+    right: auto;
+    transform: translateX(-50%) scale(0.62);
+    transform-origin: top center;
+  }
+}
+
+/* ── Landing / Home ──
+   Same as default — explicit so it overrides --surface when switching back */
+.bn-mascot-overlay--landing {
+  top: 50%;
+  bottom: auto;
+  left: clamp(16px, 4vw, 48px);
+  right: auto;
+  transform: translateY(-50%);
+  transform-origin: center center;
+}
+@media (max-width: 768px) {
+  .bn-mascot-overlay--landing {
+    display: none;
+  }
+}
+
+/* ── Profile gate ──
+   Banqui en la columna izquierda de la tarjeta glass */
+.bn-mascot-overlay--profile {
+  top: 50%;
+  bottom: auto;
+  left: max(20px, calc(50vw - 430px + 40px));
+  right: auto;
+  transform: translateY(-50%);
+  transform-origin: center center;
+}
+@media (max-width: 768px) {
+  .bn-mascot-overlay--profile {
+    display: none;
+  }
+}
+
+/* ── Surface view (conversation) ──
+   Bottom-left, small */
+.bn-mascot-overlay--surface {
+  top: auto;
+  bottom: 16px;
+  left: 16px;
+  right: auto;
+  transform: scale(0.42);
+  transform-origin: bottom left;
+}
+@media (min-width: 769px) {
+  .bn-mascot-overlay--surface {
+    left: calc(280px + 16px);
+  }
+}
+@media (max-width: 768px) {
+  .bn-mascot-overlay--surface {
+    bottom: 60px;
+    left: 4px;
+    transform: scale(0.32);
+    transform-origin: bottom left;
+  }
+}
+@media (max-width: 480px) {
+  .bn-mascot-overlay--surface {
+    bottom: 52px;
+    left: 2px;
+    transform: scale(0.28);
+    transform-origin: bottom left;
+  }
+}
+
+/* ── Busy / thinking ──
+   Desktop: same as many-charts (centered in 35% left).
+   Mobile: visible and centered so user sees Banky thinking. */
+.bn-mascot-overlay--busy {
+  top: 50%;
+  bottom: auto;
+  left: 17.5vw;
+  right: auto;
+  width: auto;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 768px) {
+  .bn-mascot-overlay--busy {
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.7);
+    transform-origin: center center;
+  }
+}
+
+/* ── Surface guide / many charts ──
+   Banqui centrado en el 35% izquierdo */
+.bn-mascot-overlay--many-charts {
+  top: 50%;
+  bottom: auto;
+  left: 17.5vw;
+  right: auto;
+  width: auto;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 768px) {
+  .bn-mascot-overlay--many-charts {
+    display: none;
+  }
+}
+
+/* Limita el ancho del bubble en la mitad izquierda */
+.bn-mascot-overlay--many-charts .bn-mascot-bubble,
+.bn-mascot-overlay--many-charts .bn-mascot-bubble > *,
+.bn-mascot-overlay--busy .bn-mascot-bubble,
+.bn-mascot-overlay--busy .bn-mascot-bubble > * {
+  max-width: 220px !important;
+}
+
+/* ================================================================
+   Speech bubble — constrain on profile/landing/access so it
+   doesn't visually cover the form fields
+   ================================================================ */
+
+.bn-mascot-overlay--profile .bn-mascot-bubble,
+.bn-mascot-overlay--landing .bn-mascot-bubble {
+  max-width: 180px !important;
+}
+.bn-mascot-overlay--profile .bn-mascot-bubble > *,
+.bn-mascot-overlay--landing .bn-mascot-bubble > * {
+  max-width: 180px !important;
+  font-size: 12px !important;
+}
+@media (max-width: 480px) {
+  .bn-mascot-overlay--surface .bn-mascot-bubble {
+    max-width: 150px !important;
+  }
+  .bn-mascot-overlay--surface .bn-mascot-bubble > * {
+    font-size: 10px !important;
+  }
+  .bn-mascot-overlay--profile .bn-mascot-bubble,
+  .bn-mascot-overlay--landing .bn-mascot-bubble {
+    max-width: 160px !important;
+  }
+  .bn-mascot-overlay--profile .bn-mascot-bubble > *,
+  .bn-mascot-overlay--landing .bn-mascot-bubble > * {
+    max-width: 160px !important;
+    font-size: 11px !important;
+  }
+}
+
+/* ================================================================
+   Squish de viaje
+   ================================================================ */
+
+.bn-mascot-squish--active {
+  animation: bn-mascot-travel 560ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes bn-mascot-travel {
+  0%   { transform: scaleX(1.00) scaleY(1.00) rotate(0deg); }
+  20%  { transform: scaleX(1.14) scaleY(0.88) rotate(-6deg); }
+  60%  { transform: scaleX(0.88) scaleY(1.14) rotate(5deg); }
+  82%  { transform: scaleX(1.05) scaleY(0.96) rotate(-2deg); }
+  100% { transform: scaleX(1.00) scaleY(1.00) rotate(0deg); }
+}

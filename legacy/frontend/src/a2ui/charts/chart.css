@@ -1,0 +1,41 @@
+/* Contenedor genérico para cualquier gráfica ECharts. Consistente con
+   bn-card / bn-chart-placeholder de components.css. */
+.bn-chart {
+  display: flex;
+  flex-direction: column;
+  gap: var(--bn-space-2);
+  width: 100%;
+  min-width: 180px;
+  flex: 1 0 auto;
+}
+.bn-chart__title {
+  font-family: var(--bn-font-display);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--bn-ink);
+  margin: 0;
+}
+.bn-chart__body {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+.bn-chart__canvas {
+  width: 100%;
+  height: 100%;
+}
+.bn-chart__empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  color: var(--bn-mute);
+  font-size: 0.875rem;
+  text-align: center;
+  background: var(--bn-surface);
+  border: 1px dashed var(--bn-line);
+  border-radius: var(--bn-radius-control);
+}

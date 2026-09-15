@@ -1,3 +1,24 @@
+> ## ⚠️ Estado congelado — no se modifica
+>
+> Esta carpeta es el **proyecto tal como quedó al cerrar HackMTY 2026**: finalista
+> del reto Banorte, íntegro y funcionando. Se conserva completo a propósito.
+>
+> - **No se borra, no se degrada, no se refactoriza.** Es el respaldo de la versión
+>   que sí corrió en la demo en vivo.
+> - Todo lo que está aquí funciona como el último día del hackatón: `make test`
+>   (94 tests, sin red), `make demo`, `make demo-code`, `docker compose up`.
+> - Los comandos de abajo se corren **desde esta carpeta** (`cd legacy`), no desde
+>   la raíz del repo.
+>
+> El trabajo nuevo vive en `web/` en la raíz: una demo permanente que corre entera
+> en el navegador, sin backend hospedado. Ver el README de la raíz.
+>
+> El despliegue de Railway se retiró a propósito en sep-2026 (`railway.toml` se
+> conserva aquí como referencia). Este target sigue siendo hospedable y corre local
+> sin cambios.
+
+---
+
 # GenUI Harness — LLM + MCP + A2UI
 
 Backend + frontend de una experiencia financiera donde **el agente construye la
