@@ -63,13 +63,26 @@ function chartHeights(container: HTMLElement): number[] {
     .filter((n) => Number.isFinite(n));
 }
 
-function mount(file: string) {
+/** Altura de un tipo concreto — el renderer marca cada gráfica con
+ *  `data-bn-component`, así no hay que adivinar por posición. */
+function heightOfType(container: HTMLElement, component: string): number | null {
+  const body = container.querySelector<HTMLElement>(
+    `[data-bn-component="${component}"] .bn-chart__body`,
+  );
+  return body ? parseInt(body.style.height, 10) : null;
+}
+
+function mountRaw(file: string): HTMLElement {
   const surface = surfaceOf(file);
   const data = surface && typeof surface.data === "object" ? surface.data : {};
   const { container } = render(
     <>{renderSurface(surface, data, { setLocal: () => {}, runAction: () => {} })}</>,
   );
-  return chartHeights(container);
+  return container;
+}
+
+function mount(file: string) {
+  return chartHeights(mountRaw(file));
 }
 
 afterEach(cleanup);
@@ -88,8 +101,9 @@ describe("compactación de gráficas en el bento", () => {
     // ancho completo. Hay gráfica en las dos filas, así que ceden las dos.
     const heights = mount("cat.json");
     expect(heights).toHaveLength(2);
-    // PieChart 240 y BarChart 220, ambos al 62%.
-    expect(heights).toEqual([149, 136]);
+    // PieChart 240 al 62% = 149. BarChart 220 al 62% daría 136, pero su
+    // `minHeight` lo detiene en 150: abajo lleva las etiquetas de categoría.
+    expect(heights).toEqual([149, 150]);
     expect(Math.max(...heights)).toBeLessThan(240);
   });
 
@@ -100,6 +114,15 @@ describe("compactación de gráficas en el bento", () => {
       }
       cleanup();
     }
+  });
+
+  it("la de barras nunca baja de su mínimo, aunque el bento pida espacio", () => {
+    // Sus etiquetas de categoría van abajo y son parte del dato, no
+    // decoración: comprimida por debajo de 150 se recortaban.
+    const container = mountRaw("cat.json");
+    expect(heightOfType(container, "BarChart")).toBeGreaterThanOrEqual(150);
+    // y el pastel, que no las lleva, sí cede por debajo de eso
+    expect(heightOfType(container, "PieChart")).toBeLessThan(150);
   });
 
   it("todas las grabaciones renderizan sin tronar", () => {

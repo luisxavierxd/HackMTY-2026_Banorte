@@ -151,11 +151,12 @@ export default function ChartHost({ node, data }: ChartHostProps) {
   // Con gráficas en las dos filas del bento la suma se pasa del alto fijo del
   // dashboard; la Column raíz avisa y aquí se cede (ver ChartScaleContext).
   //
-  // El piso de 130 lo pone la gráfica de línea: es la más baja de origen (180),
-  // así que el mismo porcentaje se la come más en absoluto que a las demás y
-  // la curva empieza a aplanarse. Las que salen por arriba del piso (barras
-  // 136, pastel y comparativa 149) no lo tocan.
-  const height = isEmpty ? 60 : Math.max(Math.round(fullHeight * chartScale), 130);
+  // Cada tipo declara hasta dónde aguanta comprimirse (`minHeight`): la de
+  // barras necesita más porque abajo lleva las etiquetas de categoría. 130 es
+  // el piso de las que no lo declaran, puesto por la de línea — es la más
+  // baja de origen, así que el mismo porcentaje se la come más en absoluto.
+  const floor = adapter.minHeight ?? 130;
+  const height = isEmpty ? 60 : Math.max(Math.round(fullHeight * chartScale), floor);
   const title = (props.title as string | undefined) ?? undefined;
 
   return (

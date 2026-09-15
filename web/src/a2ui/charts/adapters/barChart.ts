@@ -20,6 +20,9 @@ export interface BarChartProps {
 export const barChart: ChartAdapter<BarChartProps> = {
   name: "BarChart",
   height: 220,
+  // Abajo van las etiquetas de categoría (`interval: 0`, todas visibles): son
+  // parte del dato, no decoración, y por debajo de esto se recortan.
+  minHeight: 150,
   isEmpty(props) {
     return !props.series || props.series.length === 0;
   },
@@ -85,7 +88,9 @@ export const barChart: ChartAdapter<BarChartProps> = {
     };
 
     return {
-      grid: { left: 8, right: 20, top: 20, bottom: 28, containLabel: true },
+      // `top` ajustado: 20px de aire arriba se notan poco y a poca altura es
+      // justo lo que les falta abajo a las etiquetas de categoría.
+      grid: { left: 8, right: 20, top: 12, bottom: 28, containLabel: true },
       tooltip: {
         trigger: "axis",
         confine: true,

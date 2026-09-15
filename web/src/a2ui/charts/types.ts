@@ -43,4 +43,13 @@ export interface ChartAdapter<P = Record<string, unknown>> {
   toOption(props: P, data: unknown, ctx: ChartCtx): EChartsOption;
   isEmpty?(props: P, data: unknown): boolean;
   height?: number | ((props: P) => number);
+  /**
+   * Hasta dónde se puede comprimir esta gráfica antes de dejar de servir.
+   *
+   * No es lo mismo para todas: la de barras reserva abajo las etiquetas de
+   * categoría y al apretarla se recortan, mientras que la de línea aguanta
+   * más porque solo pierde amplitud de curva. Cada adapter sabe su límite;
+   * `ChartHost` nunca baja de aquí por más que el bento pida espacio.
+   */
+  minHeight?: number;
 }
