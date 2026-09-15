@@ -22,6 +22,9 @@ export interface RenderCtx {
   renderChildren: (ids: string[] | undefined) => ReactNode;
   /** Devuelve el tipo de componente A2UI ("Callout", "ActionButton", …) de un ID hijo. */
   getComponentType: (id: string) => string | undefined;
+  /** ¿El subárbol de este hijo contiene una gráfica? Las gráficas suelen venir
+   *  dentro de una Card, así que el tipo del hijo directo no alcanza. */
+  hasChartDescendant: (id: string) => boolean;
 }
 
 export interface A2UIComponentProps<P = Record<string, unknown>> {

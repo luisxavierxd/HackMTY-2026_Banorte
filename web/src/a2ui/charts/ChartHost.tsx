@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import * as echarts from "echarts/core";
 import { LineChart as ELine, BarChart as EBar, PieChart as EPie } from "echarts/charts";
 import {
@@ -13,6 +13,7 @@ import { CanvasRenderer } from "echarts/renderers";
 import type { ComponentNode } from "../../contract/a2ui";
 import type { RenderCtx } from "../types";
 import { resolveDeep } from "../resolve";
+import { ChartScaleContext } from "../surfaceRevealContext";
 import { CHART_ADAPTERS } from "./registry";
 import type { FormatKind, Theme } from "./types";
 import { formatNumber } from "./lib/format";
@@ -73,6 +74,7 @@ function readTheme(el: HTMLElement): Theme {
 /** Único componente React que toca ECharts. Cada gráfica es un adapter puro
  *  (./adapters/*) que sólo produce la `option`; aquí se monta/mide/anima. */
 export default function ChartHost({ node, data }: ChartHostProps) {
+  const chartScale = useContext(ChartScaleContext);
   const canvasRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<echarts.ECharts | null>(null);
   const [width, setWidth] = useState(0);
@@ -146,7 +148,11 @@ export default function ChartHost({ node, data }: ChartHostProps) {
   }
 
   const fullHeight = typeof adapter.height === "function" ? adapter.height(props) : adapter.height ?? 220;
-  const height = isEmpty ? 60 : fullHeight;
+  // Con gráficas en las dos filas del bento la suma se pasa del alto fijo del
+  // dashboard; la Column raíz avisa y aquí se cede un poco (ver
+  // ChartScaleContext). El piso evita que una gráfica quede ilegible si algún
+  // día se apilan más filas.
+  const height = isEmpty ? 60 : Math.max(Math.round(fullHeight * chartScale), 120);
   const title = (props.title as string | undefined) ?? undefined;
 
   return (

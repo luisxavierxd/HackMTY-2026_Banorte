@@ -77,6 +77,34 @@ export function renderSurface(surface: Surface | null, data: unknown, actions: S
   return renderComponent(surface.root, surface, data, 0, actions);
 }
 
+/**
+ * ¿Este subárbol contiene una gráfica?
+ *
+ * Las gráficas casi siempre vienen envueltas en una Card, así que mirar el
+ * tipo del hijo directo no alcanza. Los ids de hijos viajan en props con
+ * nombres distintos según el componente (`child`, `children`), así que en vez
+ * de enumerarlos se toma cualquier string de los props que sea un id real del
+ * surface — funciona igual si mañana se agrega un contenedor nuevo.
+ */
+function hasChartDescendant(id: string, surface: Surface, seen = new Set<string>()): boolean {
+  if (seen.has(id)) return false; // un ciclo no debe colgar el render
+  seen.add(id);
+
+  const node = surface.components[id];
+  if (!node) return false;
+  if (CHART_ADAPTERS[node.component]) return true;
+
+  for (const value of Object.values(node.props ?? {})) {
+    const ids = typeof value === "string" ? [value] : Array.isArray(value) ? value : [];
+    for (const candidate of ids) {
+      if (typeof candidate === "string" && candidate in surface.components) {
+        if (hasChartDescendant(candidate, surface, seen)) return true;
+      }
+    }
+  }
+  return false;
+}
+
 function renderComponent(
   id: string,
   surface: Surface,
@@ -103,6 +131,7 @@ function renderComponent(
         <React.Fragment key={cid}>{renderComponent(cid, surface, data, depth + 1, actions)}</React.Fragment>
       )),
     getComponentType: (childId) => surface.components[childId]?.component,
+    hasChartDescendant: (childId) => hasChartDescendant(childId, surface),
   };
 
   const label = CONTAINERS.has(node.component) ? "" : componentLabel(node.component, node.props);

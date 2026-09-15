@@ -214,6 +214,13 @@
    bloque de perfil. En móvil vive en el nav strip (§6).
    ================================================================ */
 
+/* El chip abre la columna del sidebar, así que necesita aire antes del
+   "Tu contexto" que le sigue; sin esto los dos eyebrows se pegan y parecen
+   el mismo bloque. */
+.bn-chip-wrap--sidebar {
+  margin-bottom: var(--bn-space-3);
+}
+
 .bn-chip-wrap {
   position: relative;
 }
@@ -298,7 +305,11 @@
   position: absolute;
   top: calc(100% + var(--bn-space-2));
   left: 0;
-  width: min(380px, calc(100vw - 2 * var(--bn-space-4)));
+  /* Nunca más ancho que su contenedor: el sidebar mide 300px y un popover de
+     380px se salía por la derecha, fuera de la pantalla. `100%` lo amarra al
+     ancho del chip, que ya ocupa la columna. */
+  width: 100%;
+  max-width: calc(100vw - 2 * var(--bn-space-4));
   max-height: min(70vh, 560px);
   overflow-y: auto;
   z-index: 300;
@@ -315,9 +326,14 @@
 .bn-chip-wrap--strip .bn-chip {
   width: auto;
 }
+/* En el strip el chip es una píldora angosta, así que amarrar el popover a su
+   ancho lo dejaría ilegible: ahí sí se le da ancho propio, centrado. */
 .bn-chip-wrap--strip .bn-chip__popover {
   left: 50%;
   transform: translateX(-50%);
+  width: min(360px, calc(100vw - 2 * var(--bn-space-3)));
+  bottom: calc(100% + var(--bn-space-2));
+  top: auto;
 }
 
 /* El chip vive en UN solo lugar según el ancho: en la columna del sidebar en

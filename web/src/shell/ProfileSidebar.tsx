@@ -65,7 +65,12 @@ export default function ProfileSidebar({
       {open && <div className="bn-sidebar__scrim" onClick={onClose} aria-hidden="true" />}
       <aside className={`bn-sidebar${open ? " bn-sidebar--open" : ""}`}>
         <div className="bn-sidebar__card">
-          {providerChip}
+          {providerChip && (
+            <>
+              <span className="bn-sidebar__eyebrow">Proveedor</span>
+              {providerChip}
+            </>
+          )}
           <span className="bn-sidebar__eyebrow">Tu contexto</span>
           <h2 className="bn-sidebar__name">{profile.nombre}</h2>
           <dl className="bn-sidebar__stats">

@@ -94,7 +94,7 @@ describe("popover del chip", () => {
     fireEvent.click(screen.getByRole("button", { name: /cambiar/i }));
 
     expect(props.onSubmit).toHaveBeenCalled();
-    const [choice] = props.onSubmit.mock.calls[0];
+    const [choice] = vi.mocked(props.onSubmit).mock.calls[0];
     expect(choice.kind).toBe("gemini");
   });
 
