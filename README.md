@@ -3,6 +3,10 @@
 Finalista del reto Banorte en HackMTY 2026. El agente no responde con texto:
 llama herramientas reales y **compone la pantalla** que las explica.
 
+<p align="center">
+  <img src="web/public/screenshots/landing.jpg" alt="Pantalla principal de Banky en modo oscuro" width="100%">
+</p>
+
 ```
 Usuario ──▶ Agente (LLM) ──▶ Herramientas (datos) ──▶ A2UI ──▶ Componentes
    ▲                                                              │
@@ -10,6 +14,41 @@ Usuario ──▶ Agente (LLM) ──▶ Herramientas (datos) ──▶ A2UI ─
 ```
 
 **[Ver demo](https://banky.mx)** — corre entera en el navegador, sin backend.
+
+---
+
+## Qué hace distinto
+
+Casi cualquier asistente financiero te contesta con un párrafo. Este decide
+**qué forma tiene la respuesta**: si conviene una curva, una comparación lado a
+lado, un anillo de avance o una tabla, y arma esa pantalla con un catálogo de
+19 componentes propios.
+
+El modelo no dibuja: emite un plan A2UI que un validador acepta o rechaza
+contra el catálogo. Si el plan no valida, se repara con los errores del
+validador y, si aun así falla, cae a una pantalla de respaldo. **Nunca se
+renderiza HTML del modelo.**
+
+Las herramientas las ejecuta el harness, no el modelo — así la traza de qué se
+consultó y con qué argumentos sigue siendo auditable, sin importar qué
+proveedor esté detrás.
+
+## Banqui, la mascota
+
+<p align="center">
+  <img src="web/public/mascota/cara_normal.png" alt="Banqui normal" width="90">
+  <img src="web/public/mascota/cara_pensativo.png" alt="Banqui pensativo" width="90">
+  <img src="web/public/mascota/cara_preocupado.png" alt="Banqui preocupado" width="90">
+</p>
+
+Narra lo que está pasando mientras el agente trabaja — qué herramienta está
+consultando, cuándo terminó, qué señala el cursor — y cambia de gesto según el
+contexto: se pone pensativo mientras razona y preocupado si detecta números en
+rojo en tu pantalla. Es la cara visible de la traza.
+
+<p align="center">
+  <img src="web/public/screenshots/perfil.png" alt="Banqui pidiendo el perfil del usuario" width="80%">
+</p>
 
 ---
 
@@ -147,6 +186,18 @@ web/                  demo permanente (GitHub Pages)
 scripts/              exportadores del contrato (corren en build, no en runtime)
 legacy/               el proyecto del hackatón, congelado
 ```
+
+## El diseño
+
+<p align="center">
+  <img src="web/public/screenshots/concepto-bento.jpg" alt="Estudio de diseño del bento con gráfica de barras" width="80%">
+</p>
+
+Estudio original del bento — de ahí salieron el vidrio esmerilado, el rojo
+Banorte sobre fondo oscuro y la regla de una idea por tarjeta. El layout se
+adapta al número de tarjetas que mande el agente (1, 2, 3 o 4+), y cuando
+reparte gráficas en dos filas las comprime para que todo quepa sin que el
+dashboard crezca.
 
 ## Stack
 
