@@ -17,6 +17,7 @@ JS, que es justo lo que queremos que el test atrape.
 from __future__ import annotations
 
 import argparse
+import difflib
 import importlib.util
 import json
 import sys
@@ -95,6 +96,24 @@ def _dump(doc: Any) -> str:
     return json.dumps(doc, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
 
 
+def _print_diff(name: str, current: str, generated: str) -> None:
+    """Igual que en export_contract.py: saber QUÉ cambió, no solo que cambió."""
+    diff = list(
+        difflib.unified_diff(
+            current.splitlines(keepends=True),
+            generated.splitlines(keepends=True),
+            fromfile=f"{name} (commiteado)",
+            tofile=f"{name} (generado ahora)",
+            n=1,
+        )
+    )
+    print(f"\n--- diferencias en {name} ---", file=sys.stderr)
+    for line in diff[:60]:
+        print(line.rstrip("\n"), file=sys.stderr)
+    if len(diff) > 60:
+        print(f"… y {len(diff) - 60} líneas más", file=sys.stderr)
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true",
@@ -122,6 +141,7 @@ def main() -> int:
             current = path.read_text(encoding="utf-8") if path.exists() else ""
             if current != payload:
                 drift.append(path.name)
+                _print_diff(path.name, current, payload)
         else:
             path.write_text(payload, encoding="utf-8")
             print(f"escrito {path.relative_to(ROOT)} ({len(cases)} casos)")

@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import asyncio
+import difflib
 import json
 import sys
 from pathlib import Path
@@ -41,6 +42,26 @@ OUT_DIR = ROOT / "web" / "public" / "contract"
 def _dump(doc: dict) -> str:
     """Serialización estable: sin ella el --check de CI marca drift fantasma."""
     return json.dumps(doc, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+
+
+def _print_diff(name: str, current: str, generated: str) -> None:
+    """Sin esto, `--check` dice QUE hay drift pero no CUÁL, y cuando solo se
+    reproduce en CI no queda de dónde agarrarse. Se acota a las primeras
+    líneas: basta para ver el patrón y no ahoga el log."""
+    diff = list(
+        difflib.unified_diff(
+            current.splitlines(keepends=True),
+            generated.splitlines(keepends=True),
+            fromfile=f"{name} (commiteado)",
+            tofile=f"{name} (generado ahora)",
+            n=1,
+        )
+    )
+    print(f"\n--- diferencias en {name} ---", file=sys.stderr)
+    for line in diff[:60]:
+        print(line.rstrip("\n"), file=sys.stderr)
+    if len(diff) > 60:
+        print(f"… y {len(diff) - 60} líneas más", file=sys.stderr)
 
 
 async def main() -> int:
@@ -93,6 +114,7 @@ async def main() -> int:
             current = path.read_text(encoding="utf-8") if path.exists() else ""
             if current != payload:
                 drift.append(name)
+                _print_diff(name, current, payload)
         else:
             path.write_text(payload, encoding="utf-8")
             print(f"escrito {path.relative_to(ROOT)}")
