@@ -13,9 +13,12 @@ const NON_CARD = new Set(["Callout", "ActionButton", "Divider", "Text", "Badge",
 
 /** Cuánto se aplastan las gráficas cuando hay en las dos filas del bento.
  *  El bento no crece — su alto es el del dashboard y así se queda — así que
- *  lo que cede es la gráfica. 0.72 es lo que hace que dos filas quepan en el
- *  alto de una sin que la curva deje de leerse. */
-const STACKED_CHART_SCALE = 0.72;
+ *  lo que cede es la gráfica.
+ *
+ *  Con 0.72 las dos filas seguían pasándose lo suficiente para cortar a la
+ *  mitad el ActionButton, que va debajo del grid a ancho completo. 0.62 le
+ *  devuelve ese renglón sin que la curva deje de leerse. */
+const STACKED_CHART_SCALE = 0.62;
 
 export default function Column({ props, ctx }: A2UIComponentProps<ColumnProps>) {
   const gap = props.gap ?? "md";

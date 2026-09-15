@@ -88,15 +88,15 @@ describe("compactación de gráficas en el bento", () => {
     // ancho completo. Hay gráfica en las dos filas, así que ceden las dos.
     const heights = mount("cat.json");
     expect(heights).toHaveLength(2);
-    // PieChart 240 y BarChart 220, ambos al 72%.
-    expect(heights).toEqual([173, 158]);
+    // PieChart 240 y BarChart 220, ambos al 62%.
+    expect(heights).toEqual([149, 136]);
     expect(Math.max(...heights)).toBeLessThan(240);
   });
 
   it("nunca deja una gráfica ilegible por aplastarla", () => {
     for (const file of ["cat.json", "inflacion.json", "meta_ahorro.json", "regla_50_30_20.json"]) {
       for (const h of mount(file)) {
-        expect(h, `${file} dejó una gráfica de ${h}px`).toBeGreaterThanOrEqual(120);
+        expect(h, `${file} dejó una gráfica de ${h}px`).toBeGreaterThanOrEqual(110);
       }
       cleanup();
     }

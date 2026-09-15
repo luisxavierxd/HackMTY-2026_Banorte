@@ -149,10 +149,13 @@ export default function ChartHost({ node, data }: ChartHostProps) {
 
   const fullHeight = typeof adapter.height === "function" ? adapter.height(props) : adapter.height ?? 220;
   // Con gráficas en las dos filas del bento la suma se pasa del alto fijo del
-  // dashboard; la Column raíz avisa y aquí se cede un poco (ver
-  // ChartScaleContext). El piso evita que una gráfica quede ilegible si algún
-  // día se apilan más filas.
-  const height = isEmpty ? 60 : Math.max(Math.round(fullHeight * chartScale), 120);
+  // dashboard; la Column raíz avisa y aquí se cede (ver ChartScaleContext).
+  //
+  // El piso está en 110 y no más arriba para que la compactación se aplique
+  // pareja: LineChart es la más baja (180) y con un piso de 120 se quedaba
+  // sin comprimir mientras las demás sí cedían, que es justo el caso —dos
+  // LineChart apiladas— donde más falta hace el espacio.
+  const height = isEmpty ? 60 : Math.max(Math.round(fullHeight * chartScale), 110);
   const title = (props.title as string | undefined) ?? undefined;
 
   return (
