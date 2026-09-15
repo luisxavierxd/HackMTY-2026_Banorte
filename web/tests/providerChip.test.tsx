@@ -98,6 +98,35 @@ describe("popover del chip", () => {
     expect(choice.kind).toBe("gemini");
   });
 
+  it("si no deja cambiar, dice por qué", () => {
+    // Bug real: a media conversación abrías el chip, elegías Anthropic y el
+    // botón quedaba muerto sin explicar que faltaba la key.
+    mount({ open: true });
+    const anthropic = screen
+      .getAllByRole("radio")
+      .find((o) => /Anthropic/.test(o.textContent ?? ""));
+    fireEvent.click(anthropic!);
+
+    const submit = screen.getByRole("button", { name: /cambiar/i }) as HTMLButtonElement;
+    expect(submit.disabled).toBe(true);
+    expect(document.body.textContent).toMatch(/API key de Anthropic/i);
+  });
+
+  it("con la key puesta el motivo desaparece y deja cambiar", () => {
+    mount({ open: true });
+    const anthropic = screen
+      .getAllByRole("radio")
+      .find((o) => /Anthropic/.test(o.textContent ?? ""));
+    fireEvent.click(anthropic!);
+
+    const key = document.querySelector<HTMLInputElement>('input[type="password"]')!;
+    fireEvent.change(key, { target: { value: "sk-ant-FAKE-PARA-EL-TEST" } });
+
+    const submit = screen.getByRole("button", { name: /cambiar/i }) as HTMLButtonElement;
+    expect(submit.disabled).toBe(false);
+    expect(document.querySelector(".bn-picker__blocked")).toBeNull();
+  });
+
   it("Escape lo cierra: es un popover, no un modal", () => {
     const { props } = mount({ open: true });
     fireEvent.keyDown(document, { key: "Escape" });

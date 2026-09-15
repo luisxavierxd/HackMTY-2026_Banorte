@@ -97,6 +97,21 @@ describe("ProviderGate — opción de CLI local", () => {
     }
   });
 
+  it("el bloque copiable no encima el botón sobre el comando", () => {
+    pickCli();
+    const block = document.querySelector(".bn-copyblock")!;
+    const head = block.querySelector(".bn-copyblock__head");
+    const code = block.querySelector(".bn-copyblock__code");
+
+    // El botón vive en su propio renglón, no dentro del <pre>: encimado tapaba
+    // el final del comando, que es justo lo que hay que leer antes de copiar.
+    expect(head, "falta el renglón de cabecera").not.toBeNull();
+    expect(head!.querySelector(".bn-copyblock__btn")).not.toBeNull();
+    expect(code!.querySelector("button")).toBeNull();
+    // y la cabecera va ANTES del código
+    expect(head!.compareDocumentPosition(code!) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
   it("el comando cambia según el CLI elegido", () => {
     pickCli();
     expect(document.body.textContent).toContain("make demo-code");

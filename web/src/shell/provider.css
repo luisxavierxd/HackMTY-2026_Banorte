@@ -46,13 +46,18 @@
 /* Selector de CLI dentro de la opción "CLI local". Son píldoras, no tarjetas:
    la elección de arriba es la que importa, esta solo ajusta el comando que se
    muestra — el WebSocket es el mismo para los cuatro. */
+/* Claude Code ocupa la fila completa y los otros tres van debajo, igual que
+   "Ver sesión grabada" manda en el selector principal: es el default y el que
+   no pide credencial, así que se lee primero. */
 .bn-picker__clis {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--bn-space-1);
 }
+.bn-picker__cli:first-child {
+  grid-column: 1 / -1;
+}
 .bn-picker__cli {
-  flex: 1 1 auto;
   min-width: 0;
   padding: 6px 12px;
   font-size: 0.8125rem;
@@ -76,6 +81,19 @@
 }
 .bn-picker__hint--tight {
   margin-top: calc(var(--bn-space-1) * -1);
+}
+
+/* Por qué el botón está apagado. Sin esto la acción simplemente no ocurría y
+   no había nada que leer. */
+.bn-picker__blocked {
+  margin: 0;
+  padding: var(--bn-space-2) var(--bn-space-3);
+  border-radius: var(--bn-radius-control);
+  border: 1px solid var(--bn-warn-border, var(--bn-border-soft));
+  background: var(--bn-warn-bg, var(--bn-hover-xs));
+  color: var(--bn-ink);
+  font-size: 0.8125rem;
+  line-height: 1.45;
 }
 
 .bn-picker__option-head {
@@ -177,16 +195,34 @@
 
 /* bloque copiable del CLI local */
 .bn-copyblock {
-  position: relative;
   border-radius: var(--bn-radius-control);
   border: 1px solid var(--bn-border-soft);
   background: var(--bn-hover-xs);
   overflow: hidden;
 }
+/* Renglón propio para la etiqueta y el botón. Antes el botón iba absoluto
+   encima del `<pre>` y tapaba el final del comando — justo lo que hay que
+   poder leer antes de copiarlo. */
+.bn-copyblock__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--bn-space-2);
+  padding: 6px 8px 6px var(--bn-space-3);
+  border-bottom: 1px solid var(--bn-border-soft);
+}
+.bn-copyblock__label {
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--bn-ink-dim-3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .bn-copyblock__code {
   margin: 0;
   padding: var(--bn-space-3);
-  padding-right: 76px;
   font-size: 0.75rem;
   line-height: 1.6;
   color: var(--bn-ink);
@@ -194,9 +230,7 @@
   overflow-x: auto;
 }
 .bn-copyblock__btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
+  flex-shrink: 0;
   padding: 5px 10px;
   border-radius: var(--bn-radius-pill);
   border: 1px solid var(--bn-glass-border);

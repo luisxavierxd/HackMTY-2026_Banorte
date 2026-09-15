@@ -60,7 +60,10 @@ const OPTIONS: Option[] = [
   },
 ];
 
-function CopyBlock({ text }: { text: string }) {
+/** El botón de copiar vive en su propio renglón, arriba del código: encimado
+ *  sobre el `<pre>` tapaba justo el final del comando, que es lo que hay que
+ *  poder leer para saber qué se va a copiar. */
+function CopyBlock({ label, text }: { label: string; text: string }) {
   const [copied, setCopied] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -81,10 +84,13 @@ function CopyBlock({ text }: { text: string }) {
 
   return (
     <div className="bn-copyblock">
+      <div className="bn-copyblock__head">
+        <span className="bn-copyblock__label">{label}</span>
+        <button type="button" className="bn-copyblock__btn" onClick={copy}>
+          {copied ? "Copiado" : "Copiar"}
+        </button>
+      </div>
       <pre className="bn-copyblock__code">{text}</pre>
-      <button type="button" className="bn-copyblock__btn" onClick={copy}>
-        {copied ? "Copiado" : "Copiar"}
-      </button>
     </div>
   );
 }
@@ -152,7 +158,15 @@ export default function ProviderPicker({
     onClearKey?.();
   }
 
-  const blocked = (providerId !== null && !apiKey.trim()) || (kind === "remote" && !url.trim());
+  // Por qué no se puede enviar todavía. Antes el botón simplemente se quedaba
+  // muerto: a media conversación abrías el chip, elegías Anthropic y no pasaba
+  // nada ni se decía que faltaba la key.
+  const blockedReason = providerId !== null && !apiKey.trim()
+    ? `Pega tu API key de ${PROVIDERS[providerId].label} para continuar.`
+    : kind === "remote" && !url.trim()
+      ? "Pon la URL del harness que tienes corriendo."
+      : null;
+  const blocked = blockedReason !== null;
 
   return (
     <form className="bn-picker" onSubmit={handleSubmit}>
@@ -230,7 +244,7 @@ export default function ProviderPicker({
             {LOCAL_CLIS[cli].note} Necesitas <code>{LOCAL_CLIS[cli].binary}</code> en el PATH.
           </p>
 
-          <CopyBlock text={cliCommand(cli)} />
+          <CopyBlock label="Córrelo en tu terminal" text={cliCommand(cli)} />
           <label className="bn-glass-field">
             <span className="bn-glass-field__label">URL del harness</span>
             <input
@@ -262,8 +276,19 @@ export default function ProviderPicker({
         </div>
       )}
 
+      {blockedReason && (
+        <p className="bn-picker__blocked" role="status">
+          {blockedReason}
+        </p>
+      )}
+
       <div className="bn-picker__actions">
-        <button type="submit" className="bn-picker__submit" disabled={blocked}>
+        <button
+          type="submit"
+          className="bn-picker__submit"
+          disabled={blocked}
+          title={blockedReason ?? undefined}
+        >
           {submitLabel}
         </button>
         {onCancel && (
