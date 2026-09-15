@@ -17,6 +17,7 @@ import { PROVIDERS } from "./provider";
 import {
   getChoice,
   isChoiceReady,
+  isDifferentProvider,
   labelOf,
   needsApiKey,
   providerIdOf,
@@ -360,7 +361,7 @@ export default function App() {
       if (providerId && apiKey) setKey(providerId, apiKey);
       setChoice(next);
 
-      const changed = next.kind !== choice.kind;
+      const changed = isDifferentProvider(choice, next);
       if (changed && entered) {
         cancel();
         setBusy(false);
@@ -379,7 +380,7 @@ export default function App() {
       setEntered(true);
       setChipOpen(false);
     },
-    [choice.kind, entered, cancel]
+    [choice, entered, cancel]
   );
 
   // Perfil que da contexto al agente (nombre/ingreso/ahorro/inversión) —

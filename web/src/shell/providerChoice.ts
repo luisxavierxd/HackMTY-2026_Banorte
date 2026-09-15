@@ -198,9 +198,28 @@ export function isChoiceReady(choice: ProviderChoice): boolean {
   return true;
 }
 
-/** Nombre visible, para el chip y el separador del transcript. */
+/** Nombre visible, para el chip y el separador del transcript.
+ *
+ *  Para `remote` incluye cuál CLI: "CLI local" a secas no distingue entre
+ *  Claude Code y Codex, y cambiar de uno a otro sí cambia quién responde. */
 export function labelOf(choice: ProviderChoice, providers: Record<ProviderId, { label: string }>): string {
   const provider = providerIdOf(choice.kind);
   if (provider) return providers[provider].label;
-  return choice.kind === "remote" ? "CLI local" : "Sesión grabada";
+  if (choice.kind === "remote") {
+    return `CLI local · ${LOCAL_CLIS[choice.cli ?? DEFAULT_CLI].label}`;
+  }
+  return "Sesión grabada";
+}
+
+/** ¿Cambió lo que de verdad corre el turno?
+ *
+ *  Cambiar de CLI cuenta: el WebSocket es el mismo, pero del otro lado
+ *  responde otro modelo, y la traza tiene que decirlo. Reponer la misma key
+ *  no cuenta. */
+export function isDifferentProvider(a: ProviderChoice, b: ProviderChoice): boolean {
+  if (a.kind !== b.kind) return true;
+  if (a.kind === "remote") {
+    return (a.cli ?? DEFAULT_CLI) !== (b.cli ?? DEFAULT_CLI) || a.url.trim() !== b.url.trim();
+  }
+  return false;
 }

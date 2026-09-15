@@ -9,7 +9,13 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import ProviderChip from "../src/shell/ProviderChip";
-import { DEFAULT_CHOICE, type ProviderChoice } from "../src/shell/providerChoice";
+import {
+  DEFAULT_CHOICE,
+  isDifferentProvider,
+  labelOf,
+  type ProviderChoice,
+} from "../src/shell/providerChoice";
+import { PROVIDERS } from "../src/provider";
 
 vi.mock("echarts", () => ({ init: () => ({ setOption() {}, dispose() {}, resize() {} }) }));
 
@@ -125,6 +131,28 @@ describe("popover del chip", () => {
     const submit = screen.getByRole("button", { name: /cambiar/i }) as HTMLButtonElement;
     expect(submit.disabled).toBe(false);
     expect(document.querySelector(".bn-picker__blocked")).toBeNull();
+  });
+
+  it("distingue qué CLI corre, no solo que es local", () => {
+    // "CLI local" a secas no dice si responde Claude Code o Codex, y cambiar
+    // de uno a otro sí cambia quién contesta.
+    const a = labelOf({ ...DEFAULT_CHOICE, kind: "remote", cli: "claude_code" }, PROVIDERS);
+    const b = labelOf({ ...DEFAULT_CHOICE, kind: "remote", cli: "codex" }, PROVIDERS);
+
+    expect(a).toContain("Claude Code");
+    expect(b).toContain("Codex");
+    expect(a).not.toBe(b);
+  });
+
+  it("cambiar de CLI cuenta como cambio de proveedor", () => {
+    const claude = { ...DEFAULT_CHOICE, kind: "remote" as const, cli: "claude_code" as const };
+    const codex = { ...claude, cli: "codex" as const };
+
+    expect(isDifferentProvider(claude, codex)).toBe(true);
+    // el mismo CLI no dispara separador aunque se reponga la misma elección
+    expect(isDifferentProvider(claude, { ...claude })).toBe(false);
+    // apuntar a otro harness también cuenta
+    expect(isDifferentProvider(claude, { ...claude, url: "ws://127.0.0.1:9999" })).toBe(true);
   });
 
   it("Escape lo cierra: es un popover, no un modal", () => {
