@@ -21,6 +21,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import difflib
+import inspect
 import json
 import sys
 from pathlib import Path
@@ -37,6 +38,23 @@ from harness.config import load_mcp_servers  # noqa: E402
 from harness.mcpx.manager import McpManager  # noqa: E402
 
 OUT_DIR = ROOT / "web" / "public" / "contract"
+
+
+def _clean(description: str) -> str:
+    """Normaliza el docstring que el SDK de MCP entrega como `description`.
+
+    Hace falta porque **Python 3.13 empezó a quitarle la sangría a los
+    docstrings al compilar**. Con 3.12 la descripción llega con sus 4 espacios
+    y cerrando en `\\n    `; con 3.13+ llega ya dedentada. Mismo código fuente,
+    dos bytes distintos, y el anti-drift marcaba diferencia solo porque quien
+    generó el artefacto usó otra versión que CI — un falso positivo que no dice
+    nada sobre Python vs TS, que es lo único que ese check debe vigilar.
+
+    `cleandoc` colapsa las dos formas a la misma, así que el contrato deja de
+    depender de con qué Python se generó. De paso el modelo recibe el texto sin
+    sangría sobrante, que es como conviene leerlo en el prompt.
+    """
+    return inspect.cleandoc(description or "")
 
 
 def _dump(doc: dict) -> str:
@@ -81,7 +99,11 @@ async def main() -> int:
             "catalog.json": catalog_document(),
             "tools.json": {
                 "tools": [
-                    {"name": t.qualified, "server": t.server, "description": t.description}
+                    {
+                        "name": t.qualified,
+                        "server": t.server,
+                        "description": _clean(t.description),
+                    }
                     for t in mcp.tools.values()
                 ]
             },

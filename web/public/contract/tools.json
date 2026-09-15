@@ -1,32 +1,32 @@
 {
   "tools": [
     {
-      "description": "Simula cómo crece una deuda con interés compuesto mes a mes.\n\nDevuelve la serie completa para animar la curva de crecimiento.\n\nArgs:\n    capital: monto inicial de la deuda.\n    tasa_anual: tasa nominal anual (ej. 0.30 = 30%).\n    meses: horizonte de simulación.\n\nForma de la serie:\n    [{\"mes\": 1, \"saldo\": ..., \"interes_acumulado\": ...}, ...]\n",
+      "description": "Simula cómo crece una deuda con interés compuesto mes a mes.\n\nDevuelve la serie completa para animar la curva de crecimiento.\n\nArgs:\n    capital: monto inicial de la deuda.\n    tasa_anual: tasa nominal anual (ej. 0.30 = 30%).\n    meses: horizonte de simulación.\n\nForma de la serie:\n    [{\"mes\": 1, \"saldo\": ..., \"interes_acumulado\": ...}, ...]",
       "name": "educacion_financiera__explicar_interes_compuesto",
       "server": "educacion_financiera"
     },
     {
-      "description": "Compara pagar solo el mínimo vs. un pago fijo mayor en la tarjeta del cliente.\n\nDevuelve dos series paralelas para animar lado a lado.\n\nArgs:\n    pago_fijo: pago mensual fijo a comparar. Si se omite, se usa 2× el mínimo.\n\nForma de cada serie:\n    [{\"mes\": 1, \"saldo\": ..., \"pagado_acumulado\": ...}, ...]\n",
+      "description": "Compara pagar solo el mínimo vs. un pago fijo mayor en la tarjeta del cliente.\n\nDevuelve dos series paralelas para animar lado a lado.\n\nArgs:\n    pago_fijo: pago mensual fijo a comparar. Si se omite, se usa 2× el mínimo.\n\nForma de cada serie:\n    [{\"mes\": 1, \"saldo\": ..., \"pagado_acumulado\": ...}, ...]",
       "name": "educacion_financiera__comparar_pago_minimo_vs_fijo",
       "server": "educacion_financiera"
     },
     {
-      "description": "Simula cuánto ahorrar al mes para alcanzar una meta, con y sin rendimiento.\n\nDevuelve dos series: con rendimiento y sin rendimiento, para mostrar el\nefecto de invertir vs. guardar bajo el colchón.\n\nArgs:\n    meta: cantidad objetivo.\n    plazo_meses: en cuántos meses quieres llegar.\n    tasa_ahorro_anual: tasa de rendimiento anual esperada.\n\nForma de cada serie:\n    [{\"mes\": 1, \"acumulado\": ..., \"aportacion_mes\": ...}, ...]\n",
+      "description": "Simula cuánto ahorrar al mes para alcanzar una meta, con y sin rendimiento.\n\nDevuelve dos series: con rendimiento y sin rendimiento, para mostrar el\nefecto de invertir vs. guardar bajo el colchón.\n\nArgs:\n    meta: cantidad objetivo.\n    plazo_meses: en cuántos meses quieres llegar.\n    tasa_ahorro_anual: tasa de rendimiento anual esperada.\n\nForma de cada serie:\n    [{\"mes\": 1, \"acumulado\": ..., \"aportacion_mes\": ...}, ...]",
       "name": "educacion_financiera__simular_meta_ahorro",
       "server": "educacion_financiera"
     },
     {
-      "description": "Explica qué es el CAT y por qué es mayor que la tasa de interés.\n\nDesglosa los componentes del costo total del crédito y calcula un CAT\naproximado, devolviendo la serie de flujos para visualizar de dónde\nsale cada peso.\n\nArgs:\n    monto: principal del crédito.\n    plazo_meses: número de pagos.\n    tasa_anual: tasa nominal anual.\n    comision_apertura: proporción cobrada al inicio (ej. 0.01 = 1%).\n    seguro_mensual: costo del seguro mensual asociado al crédito.\n\nForma de la serie:\n    [{\"mes\": 1, \"pago_base\": ..., \"interes\": ..., \"capital\": ...,\n      \"seguro\": ..., \"pago_total\": ..., \"saldo\": ...}, ...]\n",
+      "description": "Explica qué es el CAT y por qué es mayor que la tasa de interés.\n\nDesglosa los componentes del costo total del crédito y calcula un CAT\naproximado, devolviendo la serie de flujos para visualizar de dónde\nsale cada peso.\n\nArgs:\n    monto: principal del crédito.\n    plazo_meses: número de pagos.\n    tasa_anual: tasa nominal anual.\n    comision_apertura: proporción cobrada al inicio (ej. 0.01 = 1%).\n    seguro_mensual: costo del seguro mensual asociado al crédito.\n\nForma de la serie:\n    [{\"mes\": 1, \"pago_base\": ..., \"interes\": ..., \"capital\": ...,\n      \"seguro\": ..., \"pago_total\": ..., \"saldo\": ...}, ...]",
       "name": "educacion_financiera__explicar_cat",
       "server": "educacion_financiera"
     },
     {
-      "description": "Muestra cómo la inflación reduce el poder adquisitivo del dinero.\n\nDevuelve serie anual del poder de compra real.\n\nArgs:\n    monto: cantidad actual.\n    anios: horizonte en años.\n    inflacion_anual: tasa de inflación anual estimada.\n\nForma de la serie:\n    [{\"anio\": 1, \"valor_nominal\": ..., \"poder_compra_real\": ...}, ...]\n",
+      "description": "Muestra cómo la inflación reduce el poder adquisitivo del dinero.\n\nDevuelve serie anual del poder de compra real.\n\nArgs:\n    monto: cantidad actual.\n    anios: horizonte en años.\n    inflacion_anual: tasa de inflación anual estimada.\n\nForma de la serie:\n    [{\"anio\": 1, \"valor_nominal\": ..., \"poder_compra_real\": ...}, ...]",
       "name": "educacion_financiera__visualizar_inflacion",
       "server": "educacion_financiera"
     },
     {
-      "description": "Aplica la regla 50/30/20 al ingreso del cliente y compara con su gasto real.\n\nDevuelve el presupuesto ideal y la comparación categoría por categoría\ncon el gasto actual, para mostrar dónde ajustar.\n\nArgs:\n    ingreso_mensual: ingreso del cliente. Si se omite, se toma del perfil.\n\nForma de la comparación:\n    [{\"grupo\": \"necesidades\", \"ideal\": ..., \"real\": ..., \"diferencia\": ...}, ...]\n",
+      "description": "Aplica la regla 50/30/20 al ingreso del cliente y compara con su gasto real.\n\nDevuelve el presupuesto ideal y la comparación categoría por categoría\ncon el gasto actual, para mostrar dónde ajustar.\n\nArgs:\n    ingreso_mensual: ingreso del cliente. Si se omite, se toma del perfil.\n\nForma de la comparación:\n    [{\"grupo\": \"necesidades\", \"ideal\": ..., \"real\": ..., \"diferencia\": ...}, ...]",
       "name": "educacion_financiera__regla_50_30_20",
       "server": "educacion_financiera"
     }

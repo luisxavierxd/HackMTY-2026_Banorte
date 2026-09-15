@@ -39,18 +39,9 @@ jobs:
 
       - name: Instalar el harness (para regenerar el contrato)
         working-directory: legacy
-        # `mcp` va clavado a propósito. La `description` de cada tool que entra
-        # en tools.json es el docstring completo tal como lo extrae el SDK,
-        # incluida la sección Args: y su salto final — o sea, formato que cambia
-        # entre versiones. Con `mcp>=1.9` sin fijar, CI resuelve a lo último y
-        # el anti-drift marca diferencia contra un artefacto generado con otra
-        # versión: un falso positivo que no dice nada sobre Python vs TS, que es
-        # lo único que este check debería vigilar.
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e ".[dev]"
-          python -m pip install "mcp==2.2.0"
-          python -c "import importlib.metadata as m; print('mcp', m.version('mcp'))"
 
       - name: Anti-drift del contrato y los goldens
         # Si el contrato commiteado no coincide con lo que produce el Python,
