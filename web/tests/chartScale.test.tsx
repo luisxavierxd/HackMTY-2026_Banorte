@@ -16,15 +16,33 @@ import { render, cleanup } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { applyEnvelopes } from "../src/a2ui/surfaceReducer";
 import { renderSurface } from "../src/a2ui/registry";
+import { SurfaceRevealContext } from "../src/a2ui/surfaceRevealContext";
 import type { Envelope } from "../src/contract/a2ui";
 
 // ECharts necesita canvas; jsdom no lo trae. El alto lo fija ChartHost en el
 // style del contenedor ANTES de que ECharts dibuje, así que el stub no estorba.
+//
+// Los `resize` se cuentan POR INSTANCIA, no en un espía global: cuando aparece
+// una gráfica nueva, montarla ya llama a resize, y un espía global se daría por
+// satisfecho con eso sin que la gráfica que YA estaba se haya enterado del alto
+// nuevo — que es justo el bug.
+const resizesByElement = new Map<Element, number>();
+
 vi.mock("echarts/core", () => ({
   use: () => {},
-  init: () => ({ setOption() {}, dispose() {}, resize() {} }),
+  init: (el: Element) => ({
+    setOption() {},
+    dispose() {},
+    resize: () => resizesByElement.set(el, (resizesByElement.get(el) ?? 0) + 1),
+  }),
   registerTheme: () => {},
 }));
+
+/** Cuántas veces se redibujó la gráfica de este tipo. */
+function resizesFor(container: HTMLElement, component: string): number {
+  const canvas = container.querySelector(`[data-bn-component="${component}"] .bn-chart__canvas`);
+  return canvas ? (resizesByElement.get(canvas) ?? 0) : 0;
+}
 
 // jsdom no implementa ninguna de las dos APIs de layout que usan las
 // gráficas: ResizeObserver (re-dibujar al cambiar de ancho) y matchMedia
@@ -123,6 +141,38 @@ describe("compactación de gráficas en el bento", () => {
     expect(heightOfType(container, "BarChart")).toBeGreaterThanOrEqual(150);
     // y el pastel, que no las lleva, sí cede por debajo de eso
     expect(heightOfType(container, "PieChart")).toBeLessThan(150);
+  });
+
+  it("redibuja cuando el alto cambia a media vida de la gráfica", () => {
+    // Bug real: las tarjetas se revelan una por una, así que la segunda fila
+    // aparece DESPUÉS de que la gráfica ya se dibujó. Al aparecer, el bento
+    // comprime y el alto baja — pero el efecto que dibuja solo dependía del
+    // ancho, así que ECharts se quedaba del tamaño viejo y `overflow: hidden`
+    // recortaba justo lo de abajo: las etiquetas del eje.
+    const surface = surfaceOf("cat.json");
+    const data = surface && typeof surface.data === "object" ? surface.data : {};
+    // `revealedCount` es el mecanismo real: la Column raíz recorta los hijos
+    // visibles y de ahí calcula cuántas filas llevan gráfica.
+    const tree = (revealed: number) => (
+      <SurfaceRevealContext.Provider value={revealed}>
+        {renderSurface(surface, data, { setLocal: () => {}, runAction: () => {} })}
+      </SurfaceRevealContext.Provider>
+    );
+
+    // Con 2 tarjetas (MetricCard + PieChart) todo cabe en una fila.
+    const { container, rerender } = render(tree(2));
+    const before = heightOfType(container, "PieChart");
+    expect(before, "el pastel debería estar a su alto natural").toBe(240);
+    const resizesBefore = resizesFor(container, "PieChart");
+
+    rerender(tree(99)); // aparece la de barras: segunda fila, el bento comprime
+
+    const after = heightOfType(container, "PieChart");
+    expect(after, "el alto tenía que bajar").toBeLessThan(before!);
+    expect(
+      resizesFor(container, "PieChart"),
+      "el pastel ya estaba montado y no se enteró de su alto nuevo",
+    ).toBeGreaterThan(resizesBefore);
   });
 
   it("todas las grabaciones renderizan sin tronar", () => {

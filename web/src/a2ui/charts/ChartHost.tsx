@@ -84,12 +84,35 @@ export default function ChartHost({ node, data }: ChartHostProps) {
   const props = resolveTopLevelProps(node.props, data);
   const isEmpty = adapter?.isEmpty?.(props, data) ?? false;
 
+  // La altura se calcula aquí arriba porque el efecto que dibuja la necesita
+  // en sus dependencias: cambia a media vida de la gráfica. La revelación
+  // progresiva va mostrando las tarjetas una por una, así que al aparecer la
+  // segunda fila el bento pasa a comprimir y este número baja. Sin
+  // redibujar, el canvas de ECharts se queda del tamaño viejo y `overflow:
+  // hidden` le corta justo lo de abajo — las etiquetas del eje.
+  const fullHeight = adapter
+    ? typeof adapter.height === "function"
+      ? adapter.height(props)
+      : adapter.height ?? 220
+    : 220;
+  // Cada tipo declara hasta dónde aguanta comprimirse (`minHeight`): la de
+  // barras necesita más porque abajo lleva las etiquetas de categoría. 130 es
+  // el piso de las que no lo declaran, puesto por la de línea — es la más
+  // baja de origen, así que el mismo porcentaje se la come más en absoluto.
+  const floor = adapter?.minHeight ?? 130;
+  const height = isEmpty ? 60 : Math.max(Math.round(fullHeight * chartScale), floor);
+
   useEffect(() => {
     const el = canvasRef.current;
     if (!el) return;
-    const ro = new ResizeObserver((entries) => {
-      const w = entries[0]?.contentRect.width;
-      if (w) setWidth(w);
+    // Se observan las dos dimensiones: el alto también cambia solo (media
+    // queries del bento, mobile), no únicamente por el factor de compresión
+    // que ya viaja por dependencias.
+    const ro = new ResizeObserver(() => {
+      const el2 = canvasRef.current;
+      if (!el2) return;
+      setWidth(el2.clientWidth);
+      chartRef.current?.resize();
     });
     ro.observe(el);
     return () => ro.disconnect();
@@ -124,7 +147,7 @@ export default function ChartHost({ node, data }: ChartHostProps) {
       console.warn(`[a2ui] fallo al graficar "${node.component}"`, err);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [adapter, node.component, JSON.stringify(props), data, width, isEmpty, cssTheme]);
+  }, [adapter, node.component, JSON.stringify(props), data, width, height, isEmpty, cssTheme]);
 
   useEffect(
     () => () => {
@@ -147,16 +170,6 @@ export default function ChartHost({ node, data }: ChartHostProps) {
     );
   }
 
-  const fullHeight = typeof adapter.height === "function" ? adapter.height(props) : adapter.height ?? 220;
-  // Con gráficas en las dos filas del bento la suma se pasa del alto fijo del
-  // dashboard; la Column raíz avisa y aquí se cede (ver ChartScaleContext).
-  //
-  // Cada tipo declara hasta dónde aguanta comprimirse (`minHeight`): la de
-  // barras necesita más porque abajo lleva las etiquetas de categoría. 130 es
-  // el piso de las que no lo declaran, puesto por la de línea — es la más
-  // baja de origen, así que el mismo porcentaje se la come más en absoluto.
-  const floor = adapter.minHeight ?? 130;
-  const height = isEmpty ? 60 : Math.max(Math.round(fullHeight * chartScale), floor);
   const title = (props.title as string | undefined) ?? undefined;
 
   return (
