@@ -96,7 +96,7 @@ describe("compactación de gráficas en el bento", () => {
   it("nunca deja una gráfica ilegible por aplastarla", () => {
     for (const file of ["cat.json", "inflacion.json", "meta_ahorro.json", "regla_50_30_20.json"]) {
       for (const h of mount(file)) {
-        expect(h, `${file} dejó una gráfica de ${h}px`).toBeGreaterThanOrEqual(110);
+        expect(h, `${file} dejó una gráfica de ${h}px`).toBeGreaterThanOrEqual(130);
       }
       cleanup();
     }
