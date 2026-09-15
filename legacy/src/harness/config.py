@@ -56,6 +56,16 @@ PROVIDER_PROFILES: dict[str, dict[str, Any]] = {
         "ui": {"provider": "antigravity", "model": ""},
         "needs": None,
     },
+    "cursor": {  # CLI de Cursor (`cursor-agent`), headless
+        "reasoning": {"provider": "cursor", "model": ""},
+        "ui": {"provider": "cursor", "model": ""},
+        "needs": "CURSOR_API_KEY",
+    },
+    "codex": {  # CLI de OpenAI (`codex exec`), headless
+        "reasoning": {"provider": "codex", "model": ""},
+        "ui": {"provider": "codex", "model": ""},
+        "needs": None,  # usa el login de ChatGPT en ~/.codex/auth.json
+    },
     "hybrid": {  # razona con API, compone con el CLI local (o al revés)
         "reasoning": {"provider": "gemini", "model": "gemini-2.5-flash"},
         "ui": {"provider": "claude_code", "model": ""},
@@ -80,6 +90,9 @@ class Settings:
     # --- credenciales ---
     google_api_key: str = field(default_factory=lambda: _env("GOOGLE_API_KEY"))
     anthropic_api_key: str = field(default_factory=lambda: _env("ANTHROPIC_API_KEY"))
+    # El CLI de Cursor la lee del entorno; el harness solo la valida para
+    # fallar temprano en vez de a media demo (ver validate()).
+    cursor_api_key: str = field(default_factory=lambda: _env("CURSOR_API_KEY"))
 
     # --- overrides puntuales de modelo (opcionales) ---
     reasoning_model: str = field(default_factory=lambda: _env("REASONING_MODEL"))

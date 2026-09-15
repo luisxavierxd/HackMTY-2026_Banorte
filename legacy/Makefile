@@ -1,4 +1,4 @@
-.PHONY: install dev demo demo-anthropic demo-code demo-agy test docker deploy-check reset providers railway-check web-install web-dev web-build web-test
+.PHONY: install dev demo demo-anthropic demo-code demo-agy demo-cursor demo-codex test docker deploy-check reset providers railway-check web-install web-dev web-build web-test
 UVICORN = PYTHONPATH=src .venv/bin/python -m uvicorn harness.app:app --port 8080
 
 install:         ; pip install -e ".[dev,redis]"
@@ -9,6 +9,8 @@ demo:            ; PYTHONPATH=src uvicorn harness.app:app --port 8080
 demo-anthropic:  ; LLM_PROVIDER=anthropic   PYTHONPATH=src uvicorn harness.app:app --port 8080
 demo-code:       ; LLM_PROVIDER=claude_code PYTHONPATH=src uvicorn harness.app:app --port 8080
 demo-agy:        ; LLM_PROVIDER=antigravity PYTHONPATH=src uvicorn harness.app:app --port 8080
+demo-cursor:     ; LLM_PROVIDER=cursor      PYTHONPATH=src uvicorn harness.app:app --port 8080
+demo-codex:      ; LLM_PROVIDER=codex       PYTHONPATH=src uvicorn harness.app:app --port 8080
 demo-offline:    ; LLM_PROVIDER=fake        PYTHONPATH=src uvicorn harness.app:app --port 8080
 
 test:            ; PYTHONPATH=src pytest -q

@@ -43,6 +43,41 @@
   box-shadow: var(--bn-glass-glow);
 }
 
+/* Selector de CLI dentro de la opción "CLI local". Son píldoras, no tarjetas:
+   la elección de arriba es la que importa, esta solo ajusta el comando que se
+   muestra — el WebSocket es el mismo para los cuatro. */
+.bn-picker__clis {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bn-space-1);
+}
+.bn-picker__cli {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 6px 12px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+  border-radius: var(--bn-radius-pill);
+  border: 1px solid var(--bn-border-soft);
+  background: var(--bn-hover-xs);
+  color: var(--bn-mute);
+  cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.bn-picker__cli:hover {
+  background: var(--bn-hover-sm);
+  color: var(--bn-ink-full);
+}
+.bn-picker__cli--active {
+  background: var(--bn-active-bg);
+  border-color: var(--bn-focus-border);
+  color: var(--bn-ink-full);
+}
+.bn-picker__hint--tight {
+  margin-top: calc(var(--bn-space-1) * -1);
+}
+
 .bn-picker__option-head {
   display: flex;
   align-items: center;

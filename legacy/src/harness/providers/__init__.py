@@ -102,7 +102,7 @@ def build_provider(settings, role: str = "reasoning") -> LLMProvider:
 
         return AnthropicProvider(settings.anthropic_api_key, model, settings.max_output_tokens)
 
-    if kind in ("claude_code", "antigravity"):
+    if kind in ("claude_code", "antigravity", "cursor", "codex"):
         from .cli_agent import CliAgentProvider
 
         provider = CliAgentProvider(

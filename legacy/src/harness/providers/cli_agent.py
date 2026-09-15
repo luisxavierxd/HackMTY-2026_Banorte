@@ -77,6 +77,45 @@ class CliAgentProvider:
             "extra": [],
             "text_keys": ["result", "response", "output", "text"],
         },
+        # ── presets agregados después del hackatón ─────────────────────────
+        # Flags tomados de la documentación oficial, NO verificados contra el
+        # binario (ninguno de los dos estaba instalado al escribirlos). Si uno
+        # falla, el mensaje de error trae el argv completo y se puede corregir
+        # sin tocar código con CLI_BINARY / CLI_EXTRA_ARGS.
+        "cursor": {
+            "binary": "cursor-agent",
+            "prompt_flag": "-p",
+            # El evento `result` de cursor tiene la misma forma que el de
+            # Claude Code, así que el parser de streaming sirve tal cual.
+            "json_flags": ["--output-format", "stream-json"],
+            "streaming": True,
+            "system_flag": None,  # no expone flag de system prompt
+            "model_flag": "--model",
+            "mcp_flag": None,  # no hay --mcp-config; solo --approve-mcps
+            # Sin estos dos se queda esperando aprobación y el turno se va a
+            # timeout: --force auto-aprueba, --trust confía en el workspace.
+            "extra": ["--force", "--trust"],
+            "text_keys": ["result"],
+            "needs": "CURSOR_API_KEY",
+        },
+        "codex": {
+            "binary": "codex",
+            # `codex exec "<prompt>"` usa subcomando en vez de flag, pero
+            # posicionalmente es idéntico a `claude -p "<prompt>"`, así que
+            # entra en la misma construcción de argv sin cambiarla.
+            "prompt_flag": "exec",
+            "json_flags": ["--json"],
+            "streaming": False,
+            "system_flag": None,
+            "model_flag": "--model",
+            "mcp_flag": None,  # MCP se configura en ~/.codex/config.toml
+            # El default es read-only y pide aprobación: sin esto no avanza.
+            "extra": ["--sandbox", "workspace-write"],
+            # El texto NO está en el objeto raíz: viaja en los eventos
+            # `item.completed`. Lo arma `_extract_ndjson_items`.
+            "text_keys": ["text"],
+            "ndjson_items": True,
+        },
     }
 
     def __init__(
@@ -147,11 +186,41 @@ class CliAgentProvider:
                 return json.dumps(value, ensure_ascii=False)
         return ""
 
+    def _extract_ndjson_items(self, stdout: str) -> str:
+        """Codex: el texto no está en el objeto raíz, sino repartido en los
+        eventos `item.completed` del NDJSON. Se concatenan en orden.
+
+        Se ignoran los eventos de andamiaje (`thread.started`, `turn.completed`)
+        y cualquier línea que no sea JSON: el CLI puede escribir avisos sueltos
+        y una línea rara no debe tirar el turno entero.
+        """
+        chunks: list[str] = []
+        for line in stdout.splitlines():
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                ev = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if not isinstance(ev, dict) or ev.get("type") != "item.completed":
+                continue
+            item = ev.get("item")
+            source = item if isinstance(item, dict) else ev
+            for key in self.cfg["text_keys"]:
+                value = source.get(key)
+                if isinstance(value, str) and value.strip():
+                    chunks.append(value)
+                    break
+        return "\n".join(chunks).strip()
+
     def _extract(self, stdout: str) -> str:
         """Modo NO streaming (antigravity): todo el stdout llega de golpe."""
         stdout = stdout.strip()
         if not stdout:
             return ""
+        if self.cfg.get("ndjson_items"):
+            return self._extract_ndjson_items(stdout)
         try:
             payload = json.loads(stdout)
         except json.JSONDecodeError:

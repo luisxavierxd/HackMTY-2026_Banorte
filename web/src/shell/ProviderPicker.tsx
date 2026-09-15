@@ -13,15 +13,16 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { PROVIDERS, type ProviderId } from "../provider";
 import { DEFAULT_REMOTE_URL } from "../engine/RemoteWsEngine";
 import {
+  DEFAULT_CLI,
+  LOCAL_CLIS,
   type ChoiceKind,
+  type LocalCli,
   type ProviderChoice,
   clearKey,
+  cliCommand,
   getKey,
   providerIdOf,
 } from "./providerChoice";
-
-const CLONE_SNIPPET = `git clone https://github.com/luisxavierxd/HackMTY-2026_Banorte
-cd HackMTY-2026_Banorte/legacy && make demo-code`;
 
 interface Option {
   kind: ChoiceKind;
@@ -53,9 +54,9 @@ const OPTIONS: Option[] = [
   },
   {
     kind: "remote",
-    label: "CLI local / Claude Code",
+    label: "CLI local",
     asks: "URL + código",
-    note: "Requiere clonar el repo y correr `make demo-code`.",
+    note: "Claude Code, Codex, Cursor o Antigravity corriendo en tu máquina.",
   },
 ];
 
@@ -119,6 +120,7 @@ export default function ProviderPicker({
   const [kind, setKind] = useState<ChoiceKind>(value.kind);
   const [url, setUrl] = useState(value.url || DEFAULT_REMOTE_URL);
   const [accessCode, setAccessCode] = useState(value.accessCode);
+  const [cli, setCli] = useState<LocalCli>(value.cli ?? DEFAULT_CLI);
   const [apiKey, setApiKey] = useState(() => {
     const id = providerIdOf(value.kind);
     return id ? getKey(id) : "";
@@ -139,7 +141,7 @@ export default function ProviderPicker({
     if (providerId && !apiKey.trim()) return;
     if (kind === "remote" && !url.trim()) return;
     onSubmit(
-      { kind, url: url.trim() || DEFAULT_REMOTE_URL, accessCode: accessCode.trim() },
+      { kind, url: url.trim() || DEFAULT_REMOTE_URL, accessCode: accessCode.trim(), cli },
       apiKey.trim(),
     );
   }
@@ -208,7 +210,27 @@ export default function ProviderPicker({
             <strong>El navegador no puede ejecutar el CLI.</strong> Corres el
             harness en tu máquina y esta página se conecta a él.
           </p>
-          <CopyBlock text={CLONE_SNIPPET} />
+
+          <div className="bn-picker__clis" role="radiogroup" aria-label="Qué CLI vas a correr">
+            {Object.values(LOCAL_CLIS).map((info) => (
+              <button
+                key={info.id}
+                type="button"
+                role="radio"
+                aria-checked={cli === info.id}
+                className={`bn-picker__cli${cli === info.id ? " bn-picker__cli--active" : ""}`}
+                onClick={() => setCli(info.id)}
+                title={info.note}
+              >
+                {info.label}
+              </button>
+            ))}
+          </div>
+          <p className="bn-picker__hint bn-picker__hint--tight">
+            {LOCAL_CLIS[cli].note} Necesitas <code>{LOCAL_CLIS[cli].binary}</code> en el PATH.
+          </p>
+
+          <CopyBlock text={cliCommand(cli)} />
           <label className="bn-glass-field">
             <span className="bn-glass-field__label">URL del harness</span>
             <input

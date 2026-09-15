@@ -22,19 +22,91 @@ import { DEFAULT_REMOTE_URL } from "../engine/RemoteWsEngine";
 /** Qué eligió la persona. `recorded` es el default: funciona sin escribir nada. */
 export type ChoiceKind = "recorded" | "anthropic" | "gemini" | "remote";
 
+/**
+ * Qué CLI corre del otro lado del WebSocket.
+ *
+ * Para el navegador los cuatro son idénticos — se conecta al mismo harness de
+ * la misma forma. Lo único que cambia es **qué comando le decimos a la persona
+ * que corra**, porque cada CLI es un perfil distinto del harness.
+ */
+export type LocalCli = "claude_code" | "codex" | "cursor" | "antigravity";
+
+export interface LocalCliInfo {
+  id: LocalCli;
+  label: string;
+  /** Binario que tiene que estar en el PATH. */
+  binary: string;
+  /** Target del Makefile de `legacy/`. */
+  target: string;
+  /** Qué credencial necesita, o null si usa la sesión local. */
+  needs: string | null;
+  note: string;
+}
+
+export const LOCAL_CLIS: Record<LocalCli, LocalCliInfo> = {
+  claude_code: {
+    id: "claude_code",
+    label: "Claude Code",
+    binary: "claude",
+    target: "demo-code",
+    needs: null,
+    note: "Usa tu suscripción ya logueada, sin API key.",
+  },
+  codex: {
+    id: "codex",
+    label: "Codex",
+    binary: "codex",
+    target: "demo-codex",
+    needs: null,
+    note: "Usa el login de ChatGPT de ~/.codex/auth.json.",
+  },
+  cursor: {
+    id: "cursor",
+    label: "Cursor",
+    binary: "cursor-agent",
+    target: "demo-cursor",
+    needs: "CURSOR_API_KEY",
+    note: "Requiere CURSOR_API_KEY en el entorno.",
+  },
+  antigravity: {
+    id: "antigravity",
+    label: "Antigravity",
+    binary: "agy",
+    target: "demo-agy",
+    needs: null,
+    note: "Usa tu cuenta de Google, sin API key.",
+  },
+};
+
+export const DEFAULT_CLI: LocalCli = "claude_code";
+
 export interface ProviderChoice {
   kind: ChoiceKind;
   /** Solo para `remote`. */
   url: string;
   /** Solo para `remote`. Protege un harness local, no es una credencial de nube. */
   accessCode: string;
+  /** Solo para `remote`: qué CLI corre del otro lado. No cambia la conexión,
+   *  solo las instrucciones que se muestran. */
+  cli: LocalCli;
 }
 
 export const DEFAULT_CHOICE: ProviderChoice = {
   kind: "recorded",
   url: DEFAULT_REMOTE_URL,
   accessCode: "",
+  cli: DEFAULT_CLI,
 };
+
+function isLocalCli(value: unknown): value is LocalCli {
+  return typeof value === "string" && value in LOCAL_CLIS;
+}
+
+/** Comando que la persona corre en su máquina para levantar el harness. */
+export function cliCommand(cli: LocalCli): string {
+  return `git clone https://github.com/luisxavierxd/HackMTY-2026_Banorte
+cd HackMTY-2026_Banorte/legacy && make ${LOCAL_CLIS[cli].target}`;
+}
 
 const CHOICE_KEY = "bn-provider-choice";
 /** Prefijo en sessionStorage. Una key por proveedor: cambiar de Anthropic a
@@ -69,6 +141,7 @@ export function getChoice(): ProviderChoice {
       kind: obj.kind,
       url: typeof obj.url === "string" && obj.url ? obj.url : DEFAULT_REMOTE_URL,
       accessCode: typeof obj.accessCode === "string" ? obj.accessCode : "",
+      cli: isLocalCli(obj.cli) ? obj.cli : DEFAULT_CLI,
     };
   } catch {
     return { ...DEFAULT_CHOICE };

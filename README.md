@@ -72,6 +72,19 @@ Al entrar eliges con qué correrla:
 | **Gemini** | API key | Igual; Google AI Studio tiene tier gratuito |
 | **CLI local** | URL + código | Se conecta al harness de `legacy/` corriendo en tu máquina |
 
+Para *CLI local* puedes usar cualquiera de los cuatro agentes; el gate te da el
+comando según cuál elijas:
+
+| CLI | Binario | Comando | Credencial |
+|---|---|---|---|
+| Claude Code | `claude` | `make demo-code` | tu suscripción |
+| Codex | `codex` | `make demo-codex` | login de ChatGPT |
+| Cursor | `cursor-agent` | `make demo-cursor` | `CURSOR_API_KEY` |
+| Antigravity | `agy` | `make demo-agy` | tu cuenta de Google |
+
+Para el navegador los cuatro son idénticos: se conecta al mismo WebSocket. Lo
+único que cambia es qué perfil corre el harness del otro lado.
+
 La sesión grabada va primero y preseleccionada: quien llega sin key tiene que
 ver algo funcionando en un clic. **Las API keys nunca se guardan** — viven en
 `sessionStorage` y se van al cerrar la pestaña. El proveedor elegido sí se
@@ -83,6 +96,11 @@ harness en tu máquina y esta página se conecta por WebSocket.
 ```bash
 cd legacy && make demo-code     # luego pon ws://127.0.0.1:8080 en el gate
 ```
+
+> Los perfiles `codex` y `cursor` se agregaron después del hackatón y sus flags
+> salieron de documentación oficial, no de correr los binarios. Si alguno falla,
+> el error trae el `argv` completo y se corrige con `CLI_BINARY` /
+> `CLI_EXTRA_ARGS` sin tocar código.
 
 > Usa `127.0.0.1`, no `localhost`: Chrome bloquea `ws://localhost` desde una
 > página HTTPS como mixed content, y la IP de loopback sí pasa.
