@@ -49,7 +49,14 @@ export default function ProviderChip({
   useEffect(() => {
     if (!open) return;
     function onPointerDown(event: PointerEvent) {
-      if (!wrapRef.current?.contains(event.target as Node)) onToggle(false);
+      // "Fuera" es fuera de CUALQUIER chip, no solo de este. El chip se monta
+      // dos veces —columna del sidebar y nav strip— y el que no toca ver está
+      // oculto por CSS, pero sigue en el DOM y sigue escuchando. Comparando
+      // solo contra su propio wrap, el chip oculto leía como "clic fuera"
+      // cualquier clic dentro del popover visible y lo cerraba: elegir otro
+      // proveedor a media conversación no hacía nada, solo cerraba el menú.
+      const target = event.target as Element | null;
+      if (!target?.closest?.(".bn-chip-wrap")) onToggle(false);
     }
     function onKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") onToggle(false);

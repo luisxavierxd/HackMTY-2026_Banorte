@@ -172,4 +172,38 @@ describe("popover del chip", () => {
     fireEvent.pointerDown(screen.getByRole("dialog"));
     expect(props.onToggle).not.toHaveBeenCalledWith(false);
   });
+
+  it("el chip oculto del nav strip no cierra el popover del sidebar", () => {
+    // El chip se monta DOS veces (columna del sidebar y nav strip) y el que no
+    // toca ver está oculto por CSS, pero sigue en el DOM y sigue escuchando.
+    // Comparando solo contra su propio wrap, el oculto leía como "clic fuera"
+    // cualquier clic dentro del popover visible: elegir otro proveedor a media
+    // conversación no hacía nada, solo cerraba el menú.
+    const onToggle = vi.fn();
+    const shared = {
+      choice: DEFAULT_CHOICE,
+      label: "Sesión grabada",
+      model: "",
+      status: "ready" as const,
+      open: true,
+      onToggle,
+      onSubmit: vi.fn(),
+      onClearKey: vi.fn(),
+    };
+    render(
+      <>
+        <ProviderChip {...shared} className="bn-chip-wrap--sidebar" />
+        <ProviderChip {...shared} className="bn-chip-wrap--strip" />
+      </>,
+    );
+
+    // Elegir un proveedor dentro del primer popover
+    const option = screen.getAllByRole("radio").find((o) => /Gemini/.test(o.textContent ?? ""));
+    fireEvent.pointerDown(option!);
+    fireEvent.click(option!);
+
+    expect(onToggle).not.toHaveBeenCalledWith(false);
+    // y el formulario reaccionó: pide la key de Gemini
+    expect(document.body.textContent).toMatch(/API key de Gemini/i);
+  });
 });
