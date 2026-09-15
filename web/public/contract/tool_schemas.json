@@ -1,0 +1,134 @@
+{
+  "schemas": {
+    "educacion_financiera__comparar_pago_minimo_vs_fijo": {
+      "properties": {
+        "pago_fijo": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pago Fijo"
+        }
+      },
+      "title": "comparar_pago_minimo_vs_fijoArguments",
+      "type": "object"
+    },
+    "educacion_financiera__explicar_cat": {
+      "properties": {
+        "comision_apertura": {
+          "default": 0.01,
+          "title": "Comision Apertura",
+          "type": "number"
+        },
+        "monto": {
+          "default": 100000.0,
+          "title": "Monto",
+          "type": "number"
+        },
+        "plazo_meses": {
+          "default": 12,
+          "title": "Plazo Meses",
+          "type": "integer"
+        },
+        "seguro_mensual": {
+          "default": 150.0,
+          "title": "Seguro Mensual",
+          "type": "number"
+        },
+        "tasa_anual": {
+          "default": 0.289,
+          "title": "Tasa Anual",
+          "type": "number"
+        }
+      },
+      "title": "explicar_catArguments",
+      "type": "object"
+    },
+    "educacion_financiera__explicar_interes_compuesto": {
+      "properties": {
+        "capital": {
+          "default": 10000.0,
+          "title": "Capital",
+          "type": "number"
+        },
+        "meses": {
+          "default": 24,
+          "title": "Meses",
+          "type": "integer"
+        },
+        "tasa_anual": {
+          "default": 0.3,
+          "title": "Tasa Anual",
+          "type": "number"
+        }
+      },
+      "title": "explicar_interes_compuestoArguments",
+      "type": "object"
+    },
+    "educacion_financiera__regla_50_30_20": {
+      "properties": {
+        "ingreso_mensual": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ingreso Mensual"
+        }
+      },
+      "title": "regla_50_30_20Arguments",
+      "type": "object"
+    },
+    "educacion_financiera__simular_meta_ahorro": {
+      "properties": {
+        "meta": {
+          "default": 50000.0,
+          "title": "Meta",
+          "type": "number"
+        },
+        "plazo_meses": {
+          "default": 12,
+          "title": "Plazo Meses",
+          "type": "integer"
+        },
+        "tasa_ahorro_anual": {
+          "default": 0.08,
+          "title": "Tasa Ahorro Anual",
+          "type": "number"
+        }
+      },
+      "title": "simular_meta_ahorroArguments",
+      "type": "object"
+    },
+    "educacion_financiera__visualizar_inflacion": {
+      "properties": {
+        "anios": {
+          "default": 5,
+          "title": "Anios",
+          "type": "integer"
+        },
+        "inflacion_anual": {
+          "default": 0.045,
+          "title": "Inflacion Anual",
+          "type": "number"
+        },
+        "monto": {
+          "default": 10000.0,
+          "title": "Monto",
+          "type": "number"
+        }
+      },
+      "title": "visualizar_inflacionArguments",
+      "type": "object"
+    }
+  }
+}

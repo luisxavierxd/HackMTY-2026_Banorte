@@ -1,0 +1,508 @@
+{
+  "cases": [
+    {
+      "args": {},
+      "expected": {
+        "concepto": "pago_minimo_vs_fijo",
+        "escenarios": {
+          "pago_fijo": {
+            "costo_total": 20413.03,
+            "meses_para_liquidar": 6,
+            "pago_mensual": 3680.0,
+            "serie": [
+              {
+                "mes": 1,
+                "pagado_acumulado": 3680.0,
+                "saldo": 15316.47
+              },
+              {
+                "mes": 2,
+                "pagado_acumulado": 7360.0,
+                "saldo": 12132.98
+              },
+              {
+                "mes": 3,
+                "pagado_acumulado": 11040.0,
+                "saldo": 8846.29
+              },
+              {
+                "mes": 4,
+                "pagado_acumulado": 14720.0,
+                "saldo": 5453.05
+              },
+              {
+                "mes": 5,
+                "pagado_acumulado": 18400.0,
+                "saldo": 1949.82
+              },
+              {
+                "mes": 6,
+                "pagado_acumulado": 20413.03,
+                "saldo": 0.0
+              }
+            ]
+          },
+          "pago_minimo": {
+            "costo_total": 22603.93,
+            "meses_para_liquidar": 13,
+            "pago_mensual": 1840.0,
+            "serie": [
+              {
+                "mes": 1,
+                "pagado_acumulado": 1840.0,
+                "saldo": 17156.47
+              },
+              {
+                "mes": 2,
+                "pagado_acumulado": 3680.0,
+                "saldo": 15872.62
+              },
+              {
+                "mes": 3,
+                "pagado_acumulado": 5520.0,
+                "saldo": 14547.16
+              },
+              {
+                "mes": 4,
+                "pagado_acumulado": 7360.0,
+                "saldo": 13178.73
+              },
+              {
+                "mes": 5,
+                "pagado_acumulado": 9200.0,
+                "saldo": 11765.94
+              },
+              {
+                "mes": 6,
+                "pagado_acumulado": 11040.0,
+                "saldo": 10307.35
+              },
+              {
+                "mes": 7,
+                "pagado_acumulado": 12880.0,
+                "saldo": 8801.48
+              },
+              {
+                "mes": 8,
+                "pagado_acumulado": 14720.0,
+                "saldo": 7246.8
+              },
+              {
+                "mes": 9,
+                "pagado_acumulado": 16560.0,
+                "saldo": 5641.71
+              },
+              {
+                "mes": 10,
+                "pagado_acumulado": 18400.0,
+                "saldo": 3984.6
+              },
+              {
+                "mes": 11,
+                "pagado_acumulado": 20240.0,
+                "saldo": 2273.77
+              },
+              {
+                "mes": 12,
+                "pagado_acumulado": 22080.0,
+                "saldo": 507.48
+              },
+              {
+                "mes": 13,
+                "pagado_acumulado": 22603.93,
+                "saldo": 0.0
+              }
+            ]
+          }
+        },
+        "explicacion": "Pagando $3,680/mes en vez de solo el mínimo ($1,840), liquidas 7 meses antes y ahorras $2,191 en intereses.",
+        "resumen": {
+          "ahorro": 2190.9,
+          "meses_menos": 7
+        },
+        "saldo_inicial": 18400.0
+      }
+    },
+    {
+      "args": {
+        "pago_fijo": 5000.0
+      },
+      "expected": {
+        "concepto": "pago_minimo_vs_fijo",
+        "escenarios": {
+          "pago_fijo": {
+            "costo_total": 19910.72,
+            "meses_para_liquidar": 4,
+            "pago_mensual": 5000.0,
+            "serie": [
+              {
+                "mes": 1,
+                "pagado_acumulado": 5000.0,
+                "saldo": 13996.47
+              },
+              {
+                "mes": 2,
+                "pagado_acumulado": 10000.0,
+                "saldo": 9450.19
+              },
+              {
+                "mes": 3,
+                "pagado_acumulado": 15000.0,
+                "saldo": 4756.53
+              },
+              {
+                "mes": 4,
+                "pagado_acumulado": 19910.72,
+                "saldo": 0.0
+              }
+            ]
+          },
+          "pago_minimo": {
+            "costo_total": 22603.93,
+            "meses_para_liquidar": 13,
+            "pago_mensual": 1840.0,
+            "serie": [
+              {
+                "mes": 1,
+                "pagado_acumulado": 1840.0,
+                "saldo": 17156.47
+              },
+              {
+                "mes": 2,
+                "pagado_acumulado": 3680.0,
+                "saldo": 15872.62
+              },
+              {
+                "mes": 3,
+                "pagado_acumulado": 5520.0,
+                "saldo": 14547.16
+              },
+              {
+                "mes": 4,
+                "pagado_acumulado": 7360.0,
+                "saldo": 13178.73
+              },
+              {
+                "mes": 5,
+                "pagado_acumulado": 9200.0,
+                "saldo": 11765.94
+              },
+              {
+                "mes": 6,
+                "pagado_acumulado": 11040.0,
+                "saldo": 10307.35
+              },
+              {
+                "mes": 7,
+                "pagado_acumulado": 12880.0,
+                "saldo": 8801.48
+              },
+              {
+                "mes": 8,
+                "pagado_acumulado": 14720.0,
+                "saldo": 7246.8
+              },
+              {
+                "mes": 9,
+                "pagado_acumulado": 16560.0,
+                "saldo": 5641.71
+              },
+              {
+                "mes": 10,
+                "pagado_acumulado": 18400.0,
+                "saldo": 3984.6
+              },
+              {
+                "mes": 11,
+                "pagado_acumulado": 20240.0,
+                "saldo": 2273.77
+              },
+              {
+                "mes": 12,
+                "pagado_acumulado": 22080.0,
+                "saldo": 507.48
+              },
+              {
+                "mes": 13,
+                "pagado_acumulado": 22603.93,
+                "saldo": 0.0
+              }
+            ]
+          }
+        },
+        "explicacion": "Pagando $5,000/mes en vez de solo el mínimo ($1,840), liquidas 9 meses antes y ahorras $2,693 en intereses.",
+        "resumen": {
+          "ahorro": 2693.21,
+          "meses_menos": 9
+        },
+        "saldo_inicial": 18400.0
+      }
+    },
+    {
+      "args": {
+        "pago_fijo": 1840.01
+      },
+      "expected": {
+        "concepto": "pago_minimo_vs_fijo",
+        "escenarios": {
+          "pago_fijo": {
+            "costo_total": 22603.9,
+            "meses_para_liquidar": 13,
+            "pago_mensual": 1840.01,
+            "serie": [
+              {
+                "mes": 1,
+                "pagado_acumulado": 1840.01,
+                "saldo": 17156.46
+              },
+              {
+                "mes": 2,
+                "pagado_acumulado": 3680.02,
+                "saldo": 15872.6
+              },
+              {
+                "mes": 3,
+                "pagado_acumulado": 5520.03,
+                "saldo": 14547.13
+              },
+              {
+                "mes": 4,
+                "pagado_acumulado": 7360.04,
+                "saldo": 13178.69
+              },
+              {
+                "mes": 5,
+                "pagado_acumulado": 9200.05,
+                "saldo": 11765.89
+              },
+              {
+                "mes": 6,
+                "pagado_acumulado": 11040.06,
+                "saldo": 10307.29
+              },
+              {
+                "mes": 7,
+                "pagado_acumulado": 12880.07,
+                "saldo": 8801.41
+              },
+              {
+                "mes": 8,
+                "pagado_acumulado": 14720.08,
+                "saldo": 7246.71
+              },
+              {
+                "mes": 9,
+                "pagado_acumulado": 16560.09,
+                "saldo": 5641.61
+              },
+              {
+                "mes": 10,
+                "pagado_acumulado": 18400.1,
+                "saldo": 3984.48
+              },
+              {
+                "mes": 11,
+                "pagado_acumulado": 20240.11,
+                "saldo": 2273.64
+              },
+              {
+                "mes": 12,
+                "pagado_acumulado": 22080.12,
+                "saldo": 507.33
+              },
+              {
+                "mes": 13,
+                "pagado_acumulado": 22603.9,
+                "saldo": 0.0
+              }
+            ]
+          },
+          "pago_minimo": {
+            "costo_total": 22603.93,
+            "meses_para_liquidar": 13,
+            "pago_mensual": 1840.0,
+            "serie": [
+              {
+                "mes": 1,
+                "pagado_acumulado": 1840.0,
+                "saldo": 17156.47
+              },
+              {
+                "mes": 2,
+                "pagado_acumulado": 3680.0,
+                "saldo": 15872.62
+              },
+              {
+                "mes": 3,
+                "pagado_acumulado": 5520.0,
+                "saldo": 14547.16
+              },
+              {
+                "mes": 4,
+                "pagado_acumulado": 7360.0,
+                "saldo": 13178.73
+              },
+              {
+                "mes": 5,
+                "pagado_acumulado": 9200.0,
+                "saldo": 11765.94
+              },
+              {
+                "mes": 6,
+                "pagado_acumulado": 11040.0,
+                "saldo": 10307.35
+              },
+              {
+                "mes": 7,
+                "pagado_acumulado": 12880.0,
+                "saldo": 8801.48
+              },
+              {
+                "mes": 8,
+                "pagado_acumulado": 14720.0,
+                "saldo": 7246.8
+              },
+              {
+                "mes": 9,
+                "pagado_acumulado": 16560.0,
+                "saldo": 5641.71
+              },
+              {
+                "mes": 10,
+                "pagado_acumulado": 18400.0,
+                "saldo": 3984.6
+              },
+              {
+                "mes": 11,
+                "pagado_acumulado": 20240.0,
+                "saldo": 2273.77
+              },
+              {
+                "mes": 12,
+                "pagado_acumulado": 22080.0,
+                "saldo": 507.48
+              },
+              {
+                "mes": 13,
+                "pagado_acumulado": 22603.93,
+                "saldo": 0.0
+              }
+            ]
+          }
+        },
+        "explicacion": "Pagando $1,840/mes en vez de solo el mínimo ($1,840), liquidas 0 meses antes y ahorras $0 en intereses.",
+        "resumen": {
+          "ahorro": 0.03,
+          "meses_menos": 0
+        },
+        "saldo_inicial": 18400.0
+      }
+    },
+    {
+      "args": {
+        "pago_fijo": 18400.0
+      },
+      "expected": {
+        "concepto": "pago_minimo_vs_fijo",
+        "escenarios": {
+          "pago_fijo": {
+            "costo_total": 19015.8,
+            "meses_para_liquidar": 2,
+            "pago_mensual": 18400.0,
+            "serie": [
+              {
+                "mes": 1,
+                "pagado_acumulado": 18400.0,
+                "saldo": 596.47
+              },
+              {
+                "mes": 2,
+                "pagado_acumulado": 19015.8,
+                "saldo": 0.0
+              }
+            ]
+          },
+          "pago_minimo": {
+            "costo_total": 22603.93,
+            "meses_para_liquidar": 13,
+            "pago_mensual": 1840.0,
+            "serie": [
+              {
+                "mes": 1,
+                "pagado_acumulado": 1840.0,
+                "saldo": 17156.47
+              },
+              {
+                "mes": 2,
+                "pagado_acumulado": 3680.0,
+                "saldo": 15872.62
+              },
+              {
+                "mes": 3,
+                "pagado_acumulado": 5520.0,
+                "saldo": 14547.16
+              },
+              {
+                "mes": 4,
+                "pagado_acumulado": 7360.0,
+                "saldo": 13178.73
+              },
+              {
+                "mes": 5,
+                "pagado_acumulado": 9200.0,
+                "saldo": 11765.94
+              },
+              {
+                "mes": 6,
+                "pagado_acumulado": 11040.0,
+                "saldo": 10307.35
+              },
+              {
+                "mes": 7,
+                "pagado_acumulado": 12880.0,
+                "saldo": 8801.48
+              },
+              {
+                "mes": 8,
+                "pagado_acumulado": 14720.0,
+                "saldo": 7246.8
+              },
+              {
+                "mes": 9,
+                "pagado_acumulado": 16560.0,
+                "saldo": 5641.71
+              },
+              {
+                "mes": 10,
+                "pagado_acumulado": 18400.0,
+                "saldo": 3984.6
+              },
+              {
+                "mes": 11,
+                "pagado_acumulado": 20240.0,
+                "saldo": 2273.77
+              },
+              {
+                "mes": 12,
+                "pagado_acumulado": 22080.0,
+                "saldo": 507.48
+              },
+              {
+                "mes": 13,
+                "pagado_acumulado": 22603.93,
+                "saldo": 0.0
+              }
+            ]
+          }
+        },
+        "explicacion": "Pagando $18,400/mes en vez de solo el mínimo ($1,840), liquidas 11 meses antes y ahorras $3,588 en intereses.",
+        "resumen": {
+          "ahorro": 3588.13,
+          "meses_menos": 11
+        },
+        "saldo_inicial": 18400.0
+      }
+    }
+  ],
+  "tool": "comparar_pago_minimo_vs_fijo"
+}

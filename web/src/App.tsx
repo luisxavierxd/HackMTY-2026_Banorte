@@ -11,9 +11,19 @@ import { applyEnvelopes, type SurfaceState } from "./a2ui/surfaceReducer";
 import { renderSurface } from "./a2ui/registry";
 import { CHART_ADAPTERS } from "./a2ui/charts/registry";
 import { pointerSet } from "./a2ui/pointer";
-import { useSocket, clearStoredSession, setActiveSessionId } from "./net/useSocket";
-import { sendAction, sendUserMessage, deleteSession } from "./net/client";
-import { getAccessKey, clearAccessKey } from "./net/accessKey";
+import { getSessionId, clearStoredSession, setActiveSessionId } from "./net/useSocket";
+import { useEngine } from "./engine/useEngine";
+import { PROVIDERS } from "./provider";
+import {
+  getChoice,
+  isChoiceReady,
+  labelOf,
+  needsApiKey,
+  providerIdOf,
+  setChoice,
+  setKey,
+  type ProviderChoice,
+} from "./shell/providerChoice";
 import { getProfile, clearProfile } from "./net/profile";
 import {
   ensureConversation,
@@ -26,7 +36,9 @@ import {
   type TranscriptEntry,
 } from "./net/conversations";
 
-import AccessGate from "./shell/AccessGate";
+import ProviderGate from "./shell/ProviderGate";
+import ProviderChip from "./shell/ProviderChip";
+import "./shell/provider.css";
 import ProfileGate from "./shell/ProfileGate";
 import ProfileSidebar from "./shell/ProfileSidebar";
 import Composer from "./shell/Composer";
@@ -287,6 +299,9 @@ export default function App() {
       }
       case "turn_end":
         setTrace({ kind: "done", latencyMs: event.latency_ms, provider: event.provider, model: event.model });
+        // Fuente de verdad del chip: lo que reportó el turno que acaba de
+        // correr, no lo que creemos tener configurado.
+        if (event.model) setLiveModel(event.model);
         setBusy(false);
         mascotResetPose();
         break;
@@ -306,19 +321,66 @@ export default function App() {
     }
   }, [addTranscript, mascotNarrate, mascotResetPose, humanizeToolName]);
 
-  // Código de acceso: gate a nivel de app (no HTTP Basic Auth, ver
-  // net/accessKey.ts) — si el harness rechaza la key (o no hay una puesta),
-  // el WS se cierra con el código 4401 y se muestra AccessGate en vez de
-  // reintentar la conexión en loop con la misma key mala.
-  const [needsAccessKey, setNeedsAccessKey] = useState(false);
-  const [hadWrongKey, setHadWrongKey] = useState(false);
-  const handleAuthError = useCallback(() => {
-    setHadWrongKey(Boolean(getAccessKey()));
-    clearAccessKey();
-    setNeedsAccessKey(true);
-  }, []);
+  // ------------------------------------------------------------------
+  // Proveedor: en el target navegador SÍ lo elige el usuario final (ADR
+  // 0006). La elección se recuerda; la API key no — por eso el gate puede
+  // volver pidiendo solo la key, sin re-preguntar el proveedor.
+  // ------------------------------------------------------------------
+  const [choice, setChoiceState] = useState<ProviderChoice>(() => getChoice());
+  // `null` hasta que la persona pasa el gate. Al recargar con proveedor
+  // recordado pero sin key, arranca en `false` y el gate sale en modo key.
+  const [entered, setEntered] = useState(() => isChoiceReady(getChoice()));
+  const [chipOpen, setChipOpen] = useState(false);
 
-  const { status, sessionId, send } = useSocket(handleEvent, !IS_LAB, handleAuthError);
+  const { engine, status: engineStatus, notice, dismissNotice, run, cancel, reset } =
+    useEngine(choice);
+
+  const sessionId = useRef(getSessionId()).current;
+
+  // Modelo que de verdad corrió el último turno, tal como lo reportó
+  // `turn_end`. Se pinta en el chip en vez de un estado paralelo que se
+  // pueda desincronizar de lo que la persona está viendo (§6).
+  const [liveModel, setLiveModel] = useState("");
+  useEffect(() => {
+    // al cambiar de motor, el modelo viejo deja de ser cierto
+    setLiveModel("");
+  }, [engine]);
+
+  const providerLabel = labelOf(choice, PROVIDERS);
+
+  /**
+   * Cambio de proveedor (§6). NO borra el historial: se inserta un separador
+   * visible y la traza sigue siendo legible — es el argumento central del
+   * proyecto. El turno en vuelo se cancela con AbortController (lo hace
+   * `useEngine`), nunca se deja huérfano.
+   */
+  const applyChoice = useCallback(
+    (next: ProviderChoice, apiKey: string) => {
+      const providerId = providerIdOf(next.kind);
+      if (providerId && apiKey) setKey(providerId, apiKey);
+      setChoice(next);
+
+      const changed = next.kind !== choice.kind;
+      if (changed && entered) {
+        cancel();
+        setBusy(false);
+        setTrace({ kind: "idle" });
+        setTranscript((prev) => [
+          ...prev,
+          {
+            role: "divider",
+            text: `Proveedor cambiado a ${labelOf(next, PROVIDERS)}`,
+            ts: Date.now(),
+          },
+        ]);
+      }
+
+      setChoiceState(next);
+      setEntered(true);
+      setChipOpen(false);
+    },
+    [choice.kind, entered, cancel]
+  );
 
   // Perfil que da contexto al agente (nombre/ingreso/ahorro/inversión) —
   // segundo paso del "login" de la demo, después del código de acceso. Vive
@@ -327,17 +389,19 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const logoutProfile = useCallback(() => {
-    // Mismo patrón que startNewConversation: recarga completa porque
-    // useSocket abre el WS una sola vez al montar. "Salir" borra perfil Y
-    // TODAS las conversaciones guardadas (pedido explícito: el logout es lo
-    // único que las borra, ver PrivacyNotice.tsx).
-    void deleteSession(sessionId).finally(() => {
+    // Recarga completa para que el motor se reconstruya limpio. "Salir" borra
+    // perfil Y TODAS las conversaciones guardadas (pedido explícito: el
+    // logout es lo único que las borra, ver PrivacyNotice.tsx).
+    //
+    // El estado del lado del servidor lo suelta el propio motor: solo
+    // `remote` tiene un harness al que pedirle un DELETE, y él sabe cuál.
+    void reset().finally(() => {
       clearProfile();
       clearStoredSession();
       clearConversations();
       location.reload();
     });
-  }, [sessionId]);
+  }, [reset]);
 
   // Índice de conversaciones (net/conversations.ts) para la lista del
   // sidebar. Se refresca cada vez que la conversación activa cambia (efecto
@@ -397,7 +461,10 @@ export default function App() {
 
   const deleteConversation = useCallback(
     (id: string) => {
-      void deleteSession(id).finally(() => {
+      // Solo la conversación ACTIVA vive en el motor; borrar otra de la lista
+      // es puro estado local.
+      const dropActive = id === sessionId ? reset() : Promise.resolve();
+      void dropActive.finally(() => {
         removeConversation(id);
         if (id === sessionId) {
           clearStoredSession();
@@ -407,7 +474,7 @@ export default function App() {
         }
       });
     },
-    [sessionId]
+    [sessionId, reset]
   );
 
   const runAction = useCallback(
@@ -416,23 +483,30 @@ export default function App() {
       setBusy(true);
       setError(null);
       addTranscript("user", label || action.event.name.replace(/_/g, " "));
-      sendAction(send, action, overrides);
+      void run(
+        {
+          kind: "action",
+          action: {
+            type: "action",
+            name: action.event.name,
+            params: action.event.params ?? {},
+            dataModel: overrides,
+          },
+        },
+        handleEvent
+      );
     },
-    [send, overrides, addTranscript]
+    [run, overrides, addTranscript, handleEvent]
   );
 
   const handleSend = useCallback(
     (text: string) => {
       setError(null);
       addTranscript("user", text);
-      const ok = sendUserMessage(send, text);
-      if (ok === false) {
-        setError("Conexión perdida. Intenta de nuevo en un momento.");
-        return;
-      }
       setBusy(true);
+      void run({ kind: "message", text }, handleEvent);
     },
-    [send, addTranscript]
+    [run, addTranscript, handleEvent]
   );
 
   // Navegar el historial: muestra una pantalla de un turno anterior y deja
@@ -490,7 +564,8 @@ export default function App() {
 
   const TUTORIAL: Record<ScreenId, TutorialStep[]> = {
     access: [
-      { texto: "Hola, ingresa el código de acceso para entrar.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando", fullSound: true },
+      { texto: "Hola, ¿con qué quieres correr la demo?", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando", fullSound: true },
+      { texto: "Si no traes API key, dale a «Ver sesión grabada» — corre igual.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "apuntando", fullSound: true },
     ],
     profile: [
       { texto: "Hola, soy Banqui, tu asistente financiero de Banorte.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando", fullSound: true },
@@ -540,7 +615,7 @@ export default function App() {
 
   // Determina la pantalla actual para seleccionar los pasos del tutorial
   // (calculado aquí para usarlo tanto en la lógica como en el JSX)
-  const currentScreenForTutorial: ScreenId = needsAccessKey ? "access"
+  const currentScreenForTutorial: ScreenId = !entered ? "access"
     : !profile ? "profile"
     : error ? "error"
     : busy ? "busy"
@@ -642,7 +717,9 @@ export default function App() {
   }
 
   const hasSurface = !!surface && !!surface.root;
-  const showLanding = !hasSurface && status === "open";
+  // Sin socket que esperar: el motor está listo desde que se construye, así
+  // que la landing sale de inmediato en vez de tras un `Loading`.
+  const showLanding = !hasSurface;
 
   const chartCount = useMemo(() => {
     if (!surface?.components) return 0;
@@ -690,8 +767,11 @@ export default function App() {
     </div>
   );
 
-  if (needsAccessKey) {
+  if (!entered) {
     const isLight = theme === 'light';
+    // El proveedor se recordó pero su key no sobrevive la recarga: se pide
+    // solo la key, sin re-preguntar el proveedor (§5).
+    const keyOnly = needsApiKey(choice.kind) && !isChoiceReady(choice);
     return (
       <>
         <DotField
@@ -702,9 +782,10 @@ export default function App() {
           gradientTo={isLight ? "rgba(190,0,25,0.14)" : "rgba(180,0,20,0.18)"}
         />
         <ThemeToggle theme={theme} onToggle={toggleTheme} fixed />
-        <AccessGate
-          wrongKey={hadWrongKey}
-          onSubmit={() => location.reload()}
+        <ProviderGate
+          value={choice}
+          keyOnly={keyOnly}
+          onSubmit={applyChoice}
           mascot={
             <MascotAsistente
               ref={mascotRef}
@@ -761,6 +842,19 @@ export default function App() {
         onNewConversation={newConversationFromSidebar}
         onSelectConversation={switchConversation}
         onDeleteConversation={deleteConversation}
+        providerChip={
+          <ProviderChip
+            className="bn-chip-wrap--sidebar"
+            choice={choice}
+            label={providerLabel}
+            model={liveModel || engine.model}
+            status={engineStatus}
+            open={chipOpen}
+            onToggle={setChipOpen}
+            onSubmit={applyChoice}
+            onClearKey={() => setEntered(false)}
+          />
+        }
       />
       <div className={`bn-app${showLanding ? " bn-app--full" : ""}${hasSurface || busy ? " bn-app--many-charts" : ""}`}>
       {showLanding ? (
@@ -849,11 +943,27 @@ export default function App() {
         >
           <RefreshIcon /> Nueva
         </button>
+        {/* En móvil el chip vive aquí, no colapsado dentro del sidebar (§6) */}
+        <ProviderChip
+          className="bn-chip-wrap--strip"
+          choice={choice}
+          label={providerLabel}
+          model={liveModel || engine.model}
+          status={engineStatus}
+          open={chipOpen}
+          onToggle={setChipOpen}
+          onSubmit={applyChoice}
+          onClearKey={() => setEntered(false)}
+        />
 
         {transcriptOpen && transcript.length > 0 && (
           <div className="bn-transcript-overlay" role="log">
             {transcript.map((entry, i) =>
-              entry.surface ? (
+              entry.role === "divider" ? (
+                <p key={i} className="bn-transcript__divider">
+                  {entry.text}
+                </p>
+              ) : entry.surface ? (
                 <button
                   key={i}
                   type="button"
@@ -874,6 +984,16 @@ export default function App() {
             )}
           </div>
         )}
+      </div>
+    )}
+    {/* Degradación a sesión grabada: informa sin bloquear (§7). La demo
+        nunca queda en blanco, pero tampoco finge que corrió lo que no. */}
+    {notice && (
+      <div className="bn-engine-notice" role="status">
+        <span>{notice}</span>
+        <button type="button" className="bn-engine-notice__close" onClick={dismissNotice}>
+          Entendido
+        </button>
       </div>
     )}
     </>

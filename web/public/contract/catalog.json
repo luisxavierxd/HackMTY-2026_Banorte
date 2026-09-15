@@ -1,0 +1,507 @@
+{
+  "catalogId": "https://banorte-genui.local/catalogs/fin/v1.json",
+  "components": {
+    "ActionButton": {
+      "doc": "Dispara una acción de negocio. Es lo que cierra el ciclo hacia el agente — es, en sí mismo, la confirmación (ver la regla de OptionList/Slider/TextField). NO tiene 'confirm': un diálogo nativo de confirmación encima de un botón que ya ES la confirmación es redundante, y en apps móviles/WebViews `window.confirm()` puede no mostrarse o comportarse mal, bloqueando el botón por completo.",
+      "props": {
+        "action": {
+          "required": true,
+          "type": "action"
+        },
+        "text": {
+          "required": true,
+          "type": "string"
+        },
+        "variant": {
+          "default": "primary",
+          "type": "enum",
+          "values": [
+            "primary",
+            "secondary",
+            "ghost"
+          ]
+        }
+      }
+    },
+    "Badge": {
+      "doc": "Etiqueta corta de estado (ej. 'Preaprobado').",
+      "props": {
+        "text": {
+          "required": true,
+          "type": "binding"
+        },
+        "tone": {
+          "default": "neutral",
+          "type": "enum",
+          "values": [
+            "neutral",
+            "success",
+            "warning",
+            "danger"
+          ]
+        }
+      }
+    },
+    "BarChart": {
+      "doc": "Comparación simple de 2-8 valores.",
+      "props": {
+        "compare": {
+          "keys": [
+            "label",
+            "value"
+          ],
+          "type": "objectList"
+        },
+        "format": {
+          "default": "number",
+          "type": "enum",
+          "values": [
+            "currency",
+            "percent",
+            "number"
+          ]
+        },
+        "goal": {
+          "type": "number"
+        },
+        "highlight": {
+          "type": "string"
+        },
+        "hint": {
+          "type": "string"
+        },
+        "orientation": {
+          "default": "vertical",
+          "type": "enum",
+          "values": [
+            "vertical",
+            "horizontal"
+          ]
+        },
+        "series": {
+          "keys": [
+            "label",
+            "value"
+          ],
+          "required": true,
+          "type": "objectList"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "Callout": {
+      "doc": "Nota destacada corta (aclaración, advertencia, dato legal). Ej. 'el CAT es una aproximación' o 'esto no es asesoría financiera'.",
+      "props": {
+        "text": {
+          "required": true,
+          "type": "binding"
+        },
+        "tone": {
+          "default": "neutral",
+          "type": "enum",
+          "values": [
+            "neutral",
+            "success",
+            "warning",
+            "danger"
+          ]
+        }
+      }
+    },
+    "Card": {
+      "doc": "Contenedor con título opcional. Agrupa una idea por tarjeta.",
+      "props": {
+        "child": {
+          "required": true,
+          "type": "componentId"
+        },
+        "hint": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "variant": {
+          "default": "default",
+          "type": "enum",
+          "values": [
+            "default",
+            "highlight"
+          ]
+        }
+      }
+    },
+    "Column": {
+      "doc": "Apila hijos verticalmente. Es el root típico de una superficie.",
+      "props": {
+        "children": {
+          "required": true,
+          "type": "componentIds"
+        },
+        "gap": {
+          "default": "md",
+          "type": "enum",
+          "values": [
+            "none",
+            "sm",
+            "md",
+            "lg"
+          ]
+        }
+      }
+    },
+    "ComparisonBars": {
+      "doc": "Compara DOS escenarios lado a lado, categoría por categoría (ej. pago mínimo vs. pago fijo; gasto ideal vs. gasto real de la regla 50/30/20). Si solo hay un valor por categoría, usa BarChart. Para un solo valor avanzando hacia una meta, usa ProgressRing (ya existe).",
+      "props": {
+        "categories": {
+          "keys": [
+            "label",
+            "a",
+            "b"
+          ],
+          "required": true,
+          "type": "objectList"
+        },
+        "format": {
+          "default": "currency",
+          "type": "enum",
+          "values": [
+            "currency",
+            "percent",
+            "number"
+          ]
+        },
+        "hint": {
+          "type": "string"
+        },
+        "labelA": {
+          "default": "Escenario A",
+          "type": "string"
+        },
+        "labelB": {
+          "default": "Escenario B",
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "toneB": {
+          "default": "costo",
+          "type": "enum",
+          "values": [
+            "neutral",
+            "ahorro",
+            "costo"
+          ]
+        }
+      }
+    },
+    "DataTable": {
+      "doc": "Tabla. rows puede ser literal o binding a una lista del data model.",
+      "props": {
+        "columns": {
+          "keys": [
+            "key",
+            "label",
+            "format"
+          ],
+          "required": true,
+          "type": "objectList"
+        },
+        "hint": {
+          "type": "string"
+        },
+        "maxRows": {
+          "default": 12,
+          "type": "number"
+        },
+        "rows": {
+          "required": true,
+          "type": "binding"
+        }
+      }
+    },
+    "Divider": {
+      "doc": "Separador horizontal.",
+      "props": {}
+    },
+    "LineChart": {
+      "doc": "Serie en el tiempo (saldo mes a mes, poder de compra, amortización). NO copies los números: apunta con 'path' a la serie que ya está en /datos.",
+      "props": {
+        "annotateLast": {
+          "default": true,
+          "type": "boolean"
+        },
+        "area": {
+          "default": true,
+          "type": "boolean"
+        },
+        "format": {
+          "default": "currency",
+          "type": "enum",
+          "values": [
+            "currency",
+            "percent",
+            "number"
+          ]
+        },
+        "hint": {
+          "type": "string"
+        },
+        "series": {
+          "keys": [
+            "label",
+            "path",
+            "key",
+            "tone",
+            "emphasis"
+          ],
+          "required": true,
+          "type": "objectList"
+        },
+        "title": {
+          "type": "string"
+        },
+        "xKey": {
+          "type": "string"
+        },
+        "xLabel": {
+          "type": "string"
+        }
+      }
+    },
+    "MetricCard": {
+      "doc": "Un número que importa, con etiqueta, variación y texto explicativo. SIEMPRE incluye delta (frase corta de contexto, ej. '+25% sobre lo recomendado') y caption con 3-4 puntos breves separados por '. ' que expliquen qué significa el número, por qué importa y qué puede hacer el usuario al respecto. Ejemplo de caption: 'Cubre tus gastos fijos de 3 meses. Supera el mínimo recomendado por expertos. Puedes usarlo como base para invertir. Revísalo cada trimestre para ajustar.' Sin caption la tarjeta queda vacía y se ve mal.",
+      "props": {
+        "caption": {
+          "type": "binding"
+        },
+        "delta": {
+          "type": "binding"
+        },
+        "hint": {
+          "type": "string"
+        },
+        "label": {
+          "required": true,
+          "type": "string"
+        },
+        "tone": {
+          "default": "neutral",
+          "type": "enum",
+          "values": [
+            "neutral",
+            "success",
+            "warning",
+            "danger"
+          ]
+        },
+        "value": {
+          "required": true,
+          "type": "binding"
+        }
+      }
+    },
+    "OptionList": {
+      "doc": "Lista de opciones seleccionables (planes, plazos, portafolios). Escribe la opción elegida en value.path del data model. NUNCA dispara una acción por sí sola (no tiene prop 'action') — elegir una opción no es lo mismo que confirmarla. Acompáñala SIEMPRE de un ActionButton aparte.",
+      "props": {
+        "options": {
+          "keys": [
+            "id",
+            "label",
+            "caption",
+            "value",
+            "highlight"
+          ],
+          "required": true,
+          "type": "objectList"
+        },
+        "value": {
+          "required": true,
+          "type": "binding"
+        }
+      }
+    },
+    "PieChart": {
+      "doc": "Composición de un total en partes (ej. desglose del CAT: capital, intereses, comisión, seguros; o el reparto ideal 50/30/20). No la uses para series en el tiempo, para eso es LineChart.",
+      "props": {
+        "format": {
+          "default": "currency",
+          "type": "enum",
+          "values": [
+            "currency",
+            "percent",
+            "number"
+          ]
+        },
+        "hint": {
+          "type": "string"
+        },
+        "slices": {
+          "keys": [
+            "label",
+            "value"
+          ],
+          "required": true,
+          "type": "objectList"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "ProgressRing": {
+      "doc": "Avance hacia una meta (ahorro, liquidación de deuda). Un número con contexto, no una gráfica.",
+      "props": {
+        "caption": {
+          "type": "binding"
+        },
+        "hint": {
+          "type": "string"
+        },
+        "label": {
+          "required": true,
+          "type": "string"
+        },
+        "target": {
+          "required": true,
+          "type": "number"
+        },
+        "tone": {
+          "default": "ahorro",
+          "type": "enum",
+          "values": [
+            "neutral",
+            "ahorro",
+            "costo"
+          ]
+        },
+        "value": {
+          "required": true,
+          "type": "binding"
+        }
+      }
+    },
+    "Row": {
+      "doc": "Coloca hijos en línea. Úsalo para 2-3 métricas o botones.",
+      "props": {
+        "align": {
+          "default": "start",
+          "type": "enum",
+          "values": [
+            "start",
+            "center",
+            "between"
+          ]
+        },
+        "children": {
+          "required": true,
+          "type": "componentIds"
+        }
+      }
+    },
+    "Slider": {
+      "doc": "Entrada numérica continua (monto, plazo, aportación). NUNCA dispara una acción por sí solo (no tiene prop 'action') — soltar el mouse a medio ajustar no debe cerrar el ciclo.  Acompáñalo SIEMPRE de un ActionButton aparte para confirmar.",
+      "props": {
+        "format": {
+          "default": "number",
+          "type": "enum",
+          "values": [
+            "currency",
+            "percent",
+            "number"
+          ]
+        },
+        "label": {
+          "required": true,
+          "type": "string"
+        },
+        "max": {
+          "required": true,
+          "type": "number"
+        },
+        "min": {
+          "required": true,
+          "type": "number"
+        },
+        "step": {
+          "default": 1,
+          "type": "number"
+        },
+        "value": {
+          "required": true,
+          "type": "binding"
+        }
+      }
+    },
+    "Text": {
+      "doc": "Texto. variant=amount para cantidades grandes.",
+      "props": {
+        "text": {
+          "required": true,
+          "type": "binding"
+        },
+        "variant": {
+          "default": "body",
+          "type": "enum",
+          "values": [
+            "h1",
+            "h2",
+            "body",
+            "caption",
+            "amount"
+          ]
+        }
+      }
+    },
+    "TextField": {
+      "doc": "Entrada de texto o número corta. Tampoco tiene 'action' — mismo motivo que Slider: acompáñalo de un ActionButton aparte.",
+      "props": {
+        "inputType": {
+          "default": "text",
+          "type": "enum",
+          "values": [
+            "text",
+            "number",
+            "email"
+          ]
+        },
+        "label": {
+          "required": true,
+          "type": "string"
+        },
+        "placeholder": {
+          "type": "string"
+        },
+        "value": {
+          "required": true,
+          "type": "binding"
+        }
+      }
+    },
+    "Timeline": {
+      "doc": "Secuencia de pasos o hitos (ej. 'mes 12: llevas pagado X', 'mes 24: liquidas'). Úsalo para explicar un proceso paso a paso, no para graficar una curva continua (eso es LineChart).",
+      "props": {
+        "hint": {
+          "type": "string"
+        },
+        "steps": {
+          "keys": [
+            "label",
+            "detail",
+            "highlight"
+          ],
+          "required": true,
+          "type": "objectList"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "name": "fin-catalog",
+  "version": "1.0.0"
+}

@@ -1,0 +1,2941 @@
+{
+  "cases": [
+    {
+      "args": {},
+      "expected": {
+        "concepto": "meta_ahorro",
+        "escenarios": {
+          "con_rendimiento": {
+            "aporte_mensual": 4016.09,
+            "rendimiento_ganado": 1806.94,
+            "serie": [
+              {
+                "acumulado": 4016.09,
+                "aportacion_mes": 4016.09,
+                "mes": 1
+              },
+              {
+                "acumulado": 8058.95,
+                "aportacion_mes": 4016.09,
+                "mes": 2
+              },
+              {
+                "acumulado": 12128.76,
+                "aportacion_mes": 4016.09,
+                "mes": 3
+              },
+              {
+                "acumulado": 16225.71,
+                "aportacion_mes": 4016.09,
+                "mes": 4
+              },
+              {
+                "acumulado": 20349.97,
+                "aportacion_mes": 4016.09,
+                "mes": 5
+              },
+              {
+                "acumulado": 24501.73,
+                "aportacion_mes": 4016.09,
+                "mes": 6
+              },
+              {
+                "acumulado": 28681.16,
+                "aportacion_mes": 4016.09,
+                "mes": 7
+              },
+              {
+                "acumulado": 32888.45,
+                "aportacion_mes": 4016.09,
+                "mes": 8
+              },
+              {
+                "acumulado": 37123.8,
+                "aportacion_mes": 4016.09,
+                "mes": 9
+              },
+              {
+                "acumulado": 41387.38,
+                "aportacion_mes": 4016.09,
+                "mes": 10
+              },
+              {
+                "acumulado": 45679.38,
+                "aportacion_mes": 4016.09,
+                "mes": 11
+              },
+              {
+                "acumulado": 50000.0,
+                "aportacion_mes": 4016.09,
+                "mes": 12
+              }
+            ],
+            "total_aportado": 48193.06
+          },
+          "sin_rendimiento": {
+            "aporte_mensual": 4166.67,
+            "serie": [
+              {
+                "acumulado": 4166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 1
+              },
+              {
+                "acumulado": 8333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 2
+              },
+              {
+                "acumulado": 12500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 3
+              },
+              {
+                "acumulado": 16666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 4
+              },
+              {
+                "acumulado": 20833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 5
+              },
+              {
+                "acumulado": 25000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 6
+              },
+              {
+                "acumulado": 29166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 7
+              },
+              {
+                "acumulado": 33333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 8
+              },
+              {
+                "acumulado": 37500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 9
+              },
+              {
+                "acumulado": 41666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 10
+              },
+              {
+                "acumulado": 45833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 11
+              },
+              {
+                "acumulado": 50000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 12
+              }
+            ],
+            "total_aportado": 50000.0
+          }
+        },
+        "explicacion": "Para juntar $50,000 en 12 meses, necesitas $4,167/mes sin rendimiento, o $4,016/mes con rendimiento al 8% anual — te ahorras $151 por mes.",
+        "parametros": {
+          "meta": 50000.0,
+          "plazo_meses": 12,
+          "tasa_ahorro_anual": 0.08
+        },
+        "resumen": {
+          "ahorro_mensual_gracias_a_rendimiento": 150.58
+        }
+      }
+    },
+    {
+      "args": {
+        "meta": 50000,
+        "plazo_meses": 12,
+        "tasa_ahorro_anual": 0.08
+      },
+      "expected": {
+        "concepto": "meta_ahorro",
+        "escenarios": {
+          "con_rendimiento": {
+            "aporte_mensual": 4016.09,
+            "rendimiento_ganado": 1806.94,
+            "serie": [
+              {
+                "acumulado": 4016.09,
+                "aportacion_mes": 4016.09,
+                "mes": 1
+              },
+              {
+                "acumulado": 8058.95,
+                "aportacion_mes": 4016.09,
+                "mes": 2
+              },
+              {
+                "acumulado": 12128.76,
+                "aportacion_mes": 4016.09,
+                "mes": 3
+              },
+              {
+                "acumulado": 16225.71,
+                "aportacion_mes": 4016.09,
+                "mes": 4
+              },
+              {
+                "acumulado": 20349.97,
+                "aportacion_mes": 4016.09,
+                "mes": 5
+              },
+              {
+                "acumulado": 24501.73,
+                "aportacion_mes": 4016.09,
+                "mes": 6
+              },
+              {
+                "acumulado": 28681.16,
+                "aportacion_mes": 4016.09,
+                "mes": 7
+              },
+              {
+                "acumulado": 32888.45,
+                "aportacion_mes": 4016.09,
+                "mes": 8
+              },
+              {
+                "acumulado": 37123.8,
+                "aportacion_mes": 4016.09,
+                "mes": 9
+              },
+              {
+                "acumulado": 41387.38,
+                "aportacion_mes": 4016.09,
+                "mes": 10
+              },
+              {
+                "acumulado": 45679.38,
+                "aportacion_mes": 4016.09,
+                "mes": 11
+              },
+              {
+                "acumulado": 50000.0,
+                "aportacion_mes": 4016.09,
+                "mes": 12
+              }
+            ],
+            "total_aportado": 48193.06
+          },
+          "sin_rendimiento": {
+            "aporte_mensual": 4166.67,
+            "serie": [
+              {
+                "acumulado": 4166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 1
+              },
+              {
+                "acumulado": 8333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 2
+              },
+              {
+                "acumulado": 12500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 3
+              },
+              {
+                "acumulado": 16666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 4
+              },
+              {
+                "acumulado": 20833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 5
+              },
+              {
+                "acumulado": 25000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 6
+              },
+              {
+                "acumulado": 29166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 7
+              },
+              {
+                "acumulado": 33333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 8
+              },
+              {
+                "acumulado": 37500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 9
+              },
+              {
+                "acumulado": 41666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 10
+              },
+              {
+                "acumulado": 45833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 11
+              },
+              {
+                "acumulado": 50000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 12
+              }
+            ],
+            "total_aportado": 50000.0
+          }
+        },
+        "explicacion": "Para juntar $50,000 en 12 meses, necesitas $4,167/mes sin rendimiento, o $4,016/mes con rendimiento al 8% anual — te ahorras $151 por mes.",
+        "parametros": {
+          "meta": 50000,
+          "plazo_meses": 12,
+          "tasa_ahorro_anual": 0.08
+        },
+        "resumen": {
+          "ahorro_mensual_gracias_a_rendimiento": 150.58
+        }
+      }
+    },
+    {
+      "args": {
+        "meta": 12000,
+        "plazo_meses": 12,
+        "tasa_ahorro_anual": 0.0
+      },
+      "expected": {
+        "concepto": "meta_ahorro",
+        "escenarios": {
+          "con_rendimiento": {
+            "aporte_mensual": 1000.0,
+            "rendimiento_ganado": 0.0,
+            "serie": [
+              {
+                "acumulado": 1000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 1
+              },
+              {
+                "acumulado": 2000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 2
+              },
+              {
+                "acumulado": 3000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 3
+              },
+              {
+                "acumulado": 4000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 4
+              },
+              {
+                "acumulado": 5000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 5
+              },
+              {
+                "acumulado": 6000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 6
+              },
+              {
+                "acumulado": 7000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 7
+              },
+              {
+                "acumulado": 8000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 8
+              },
+              {
+                "acumulado": 9000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 9
+              },
+              {
+                "acumulado": 10000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 10
+              },
+              {
+                "acumulado": 11000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 11
+              },
+              {
+                "acumulado": 12000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 12
+              }
+            ],
+            "total_aportado": 12000.0
+          },
+          "sin_rendimiento": {
+            "aporte_mensual": 1000.0,
+            "serie": [
+              {
+                "acumulado": 1000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 1
+              },
+              {
+                "acumulado": 2000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 2
+              },
+              {
+                "acumulado": 3000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 3
+              },
+              {
+                "acumulado": 4000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 4
+              },
+              {
+                "acumulado": 5000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 5
+              },
+              {
+                "acumulado": 6000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 6
+              },
+              {
+                "acumulado": 7000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 7
+              },
+              {
+                "acumulado": 8000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 8
+              },
+              {
+                "acumulado": 9000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 9
+              },
+              {
+                "acumulado": 10000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 10
+              },
+              {
+                "acumulado": 11000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 11
+              },
+              {
+                "acumulado": 12000.0,
+                "aportacion_mes": 1000.0,
+                "mes": 12
+              }
+            ],
+            "total_aportado": 12000.0
+          }
+        },
+        "explicacion": "Para juntar $12,000 en 12 meses, necesitas $1,000/mes sin rendimiento, o $1,000/mes con rendimiento al 0% anual — te ahorras $0 por mes.",
+        "parametros": {
+          "meta": 12000,
+          "plazo_meses": 12,
+          "tasa_ahorro_anual": 0.0
+        },
+        "resumen": {
+          "ahorro_mensual_gracias_a_rendimiento": 0.0
+        }
+      }
+    },
+    {
+      "args": {
+        "meta": 1000000,
+        "plazo_meses": 240,
+        "tasa_ahorro_anual": 0.12
+      },
+      "expected": {
+        "concepto": "meta_ahorro",
+        "escenarios": {
+          "con_rendimiento": {
+            "aporte_mensual": 1010.86,
+            "rendimiento_ganado": 757393.28,
+            "serie": [
+              {
+                "acumulado": 1010.86,
+                "aportacion_mes": 1010.86,
+                "mes": 1
+              },
+              {
+                "acumulado": 2031.83,
+                "aportacion_mes": 1010.86,
+                "mes": 2
+              },
+              {
+                "acumulado": 3063.01,
+                "aportacion_mes": 1010.86,
+                "mes": 3
+              },
+              {
+                "acumulado": 4104.5,
+                "aportacion_mes": 1010.86,
+                "mes": 4
+              },
+              {
+                "acumulado": 5156.41,
+                "aportacion_mes": 1010.86,
+                "mes": 5
+              },
+              {
+                "acumulado": 6218.83,
+                "aportacion_mes": 1010.86,
+                "mes": 6
+              },
+              {
+                "acumulado": 7291.88,
+                "aportacion_mes": 1010.86,
+                "mes": 7
+              },
+              {
+                "acumulado": 8375.66,
+                "aportacion_mes": 1010.86,
+                "mes": 8
+              },
+              {
+                "acumulado": 9470.28,
+                "aportacion_mes": 1010.86,
+                "mes": 9
+              },
+              {
+                "acumulado": 10575.85,
+                "aportacion_mes": 1010.86,
+                "mes": 10
+              },
+              {
+                "acumulado": 11692.47,
+                "aportacion_mes": 1010.86,
+                "mes": 11
+              },
+              {
+                "acumulado": 12820.25,
+                "aportacion_mes": 1010.86,
+                "mes": 12
+              },
+              {
+                "acumulado": 13959.32,
+                "aportacion_mes": 1010.86,
+                "mes": 13
+              },
+              {
+                "acumulado": 15109.77,
+                "aportacion_mes": 1010.86,
+                "mes": 14
+              },
+              {
+                "acumulado": 16271.73,
+                "aportacion_mes": 1010.86,
+                "mes": 15
+              },
+              {
+                "acumulado": 17445.31,
+                "aportacion_mes": 1010.86,
+                "mes": 16
+              },
+              {
+                "acumulado": 18630.62,
+                "aportacion_mes": 1010.86,
+                "mes": 17
+              },
+              {
+                "acumulado": 19827.79,
+                "aportacion_mes": 1010.86,
+                "mes": 18
+              },
+              {
+                "acumulado": 21036.93,
+                "aportacion_mes": 1010.86,
+                "mes": 19
+              },
+              {
+                "acumulado": 22258.16,
+                "aportacion_mes": 1010.86,
+                "mes": 20
+              },
+              {
+                "acumulado": 23491.6,
+                "aportacion_mes": 1010.86,
+                "mes": 21
+              },
+              {
+                "acumulado": 24737.38,
+                "aportacion_mes": 1010.86,
+                "mes": 22
+              },
+              {
+                "acumulado": 25995.62,
+                "aportacion_mes": 1010.86,
+                "mes": 23
+              },
+              {
+                "acumulado": 27266.43,
+                "aportacion_mes": 1010.86,
+                "mes": 24
+              },
+              {
+                "acumulado": 28549.96,
+                "aportacion_mes": 1010.86,
+                "mes": 25
+              },
+              {
+                "acumulado": 29846.32,
+                "aportacion_mes": 1010.86,
+                "mes": 26
+              },
+              {
+                "acumulado": 31155.64,
+                "aportacion_mes": 1010.86,
+                "mes": 27
+              },
+              {
+                "acumulado": 32478.06,
+                "aportacion_mes": 1010.86,
+                "mes": 28
+              },
+              {
+                "acumulado": 33813.7,
+                "aportacion_mes": 1010.86,
+                "mes": 29
+              },
+              {
+                "acumulado": 35162.7,
+                "aportacion_mes": 1010.86,
+                "mes": 30
+              },
+              {
+                "acumulado": 36525.19,
+                "aportacion_mes": 1010.86,
+                "mes": 31
+              },
+              {
+                "acumulado": 37901.3,
+                "aportacion_mes": 1010.86,
+                "mes": 32
+              },
+              {
+                "acumulado": 39291.18,
+                "aportacion_mes": 1010.86,
+                "mes": 33
+              },
+              {
+                "acumulado": 40694.95,
+                "aportacion_mes": 1010.86,
+                "mes": 34
+              },
+              {
+                "acumulado": 42112.76,
+                "aportacion_mes": 1010.86,
+                "mes": 35
+              },
+              {
+                "acumulado": 43544.75,
+                "aportacion_mes": 1010.86,
+                "mes": 36
+              },
+              {
+                "acumulado": 44991.06,
+                "aportacion_mes": 1010.86,
+                "mes": 37
+              },
+              {
+                "acumulado": 46451.83,
+                "aportacion_mes": 1010.86,
+                "mes": 38
+              },
+              {
+                "acumulado": 47927.21,
+                "aportacion_mes": 1010.86,
+                "mes": 39
+              },
+              {
+                "acumulado": 49417.34,
+                "aportacion_mes": 1010.86,
+                "mes": 40
+              },
+              {
+                "acumulado": 50922.38,
+                "aportacion_mes": 1010.86,
+                "mes": 41
+              },
+              {
+                "acumulado": 52442.46,
+                "aportacion_mes": 1010.86,
+                "mes": 42
+              },
+              {
+                "acumulado": 53977.75,
+                "aportacion_mes": 1010.86,
+                "mes": 43
+              },
+              {
+                "acumulado": 55528.39,
+                "aportacion_mes": 1010.86,
+                "mes": 44
+              },
+              {
+                "acumulado": 57094.53,
+                "aportacion_mes": 1010.86,
+                "mes": 45
+              },
+              {
+                "acumulado": 58676.34,
+                "aportacion_mes": 1010.86,
+                "mes": 46
+              },
+              {
+                "acumulado": 60273.97,
+                "aportacion_mes": 1010.86,
+                "mes": 47
+              },
+              {
+                "acumulado": 61887.57,
+                "aportacion_mes": 1010.86,
+                "mes": 48
+              },
+              {
+                "acumulado": 63517.3,
+                "aportacion_mes": 1010.86,
+                "mes": 49
+              },
+              {
+                "acumulado": 65163.34,
+                "aportacion_mes": 1010.86,
+                "mes": 50
+              },
+              {
+                "acumulado": 66825.83,
+                "aportacion_mes": 1010.86,
+                "mes": 51
+              },
+              {
+                "acumulado": 68504.95,
+                "aportacion_mes": 1010.86,
+                "mes": 52
+              },
+              {
+                "acumulado": 70200.86,
+                "aportacion_mes": 1010.86,
+                "mes": 53
+              },
+              {
+                "acumulado": 71913.73,
+                "aportacion_mes": 1010.86,
+                "mes": 54
+              },
+              {
+                "acumulado": 73643.73,
+                "aportacion_mes": 1010.86,
+                "mes": 55
+              },
+              {
+                "acumulado": 75391.03,
+                "aportacion_mes": 1010.86,
+                "mes": 56
+              },
+              {
+                "acumulado": 77155.8,
+                "aportacion_mes": 1010.86,
+                "mes": 57
+              },
+              {
+                "acumulado": 78938.22,
+                "aportacion_mes": 1010.86,
+                "mes": 58
+              },
+              {
+                "acumulado": 80738.47,
+                "aportacion_mes": 1010.86,
+                "mes": 59
+              },
+              {
+                "acumulado": 82556.71,
+                "aportacion_mes": 1010.86,
+                "mes": 60
+              },
+              {
+                "acumulado": 84393.14,
+                "aportacion_mes": 1010.86,
+                "mes": 61
+              },
+              {
+                "acumulado": 86247.93,
+                "aportacion_mes": 1010.86,
+                "mes": 62
+              },
+              {
+                "acumulado": 88121.27,
+                "aportacion_mes": 1010.86,
+                "mes": 63
+              },
+              {
+                "acumulado": 90013.35,
+                "aportacion_mes": 1010.86,
+                "mes": 64
+              },
+              {
+                "acumulado": 91924.34,
+                "aportacion_mes": 1010.86,
+                "mes": 65
+              },
+              {
+                "acumulado": 93854.45,
+                "aportacion_mes": 1010.86,
+                "mes": 66
+              },
+              {
+                "acumulado": 95803.85,
+                "aportacion_mes": 1010.86,
+                "mes": 67
+              },
+              {
+                "acumulado": 97772.75,
+                "aportacion_mes": 1010.86,
+                "mes": 68
+              },
+              {
+                "acumulado": 99761.34,
+                "aportacion_mes": 1010.86,
+                "mes": 69
+              },
+              {
+                "acumulado": 101769.82,
+                "aportacion_mes": 1010.86,
+                "mes": 70
+              },
+              {
+                "acumulado": 103798.38,
+                "aportacion_mes": 1010.86,
+                "mes": 71
+              },
+              {
+                "acumulado": 105847.22,
+                "aportacion_mes": 1010.86,
+                "mes": 72
+              },
+              {
+                "acumulado": 107916.55,
+                "aportacion_mes": 1010.86,
+                "mes": 73
+              },
+              {
+                "acumulado": 110006.58,
+                "aportacion_mes": 1010.86,
+                "mes": 74
+              },
+              {
+                "acumulado": 112117.51,
+                "aportacion_mes": 1010.86,
+                "mes": 75
+              },
+              {
+                "acumulado": 114249.54,
+                "aportacion_mes": 1010.86,
+                "mes": 76
+              },
+              {
+                "acumulado": 116402.9,
+                "aportacion_mes": 1010.86,
+                "mes": 77
+              },
+              {
+                "acumulado": 118577.79,
+                "aportacion_mes": 1010.86,
+                "mes": 78
+              },
+              {
+                "acumulado": 120774.43,
+                "aportacion_mes": 1010.86,
+                "mes": 79
+              },
+              {
+                "acumulado": 122993.04,
+                "aportacion_mes": 1010.86,
+                "mes": 80
+              },
+              {
+                "acumulado": 125233.83,
+                "aportacion_mes": 1010.86,
+                "mes": 81
+              },
+              {
+                "acumulado": 127497.03,
+                "aportacion_mes": 1010.86,
+                "mes": 82
+              },
+              {
+                "acumulado": 129782.86,
+                "aportacion_mes": 1010.86,
+                "mes": 83
+              },
+              {
+                "acumulado": 132091.55,
+                "aportacion_mes": 1010.86,
+                "mes": 84
+              },
+              {
+                "acumulado": 134423.33,
+                "aportacion_mes": 1010.86,
+                "mes": 85
+              },
+              {
+                "acumulado": 136778.42,
+                "aportacion_mes": 1010.86,
+                "mes": 86
+              },
+              {
+                "acumulado": 139157.07,
+                "aportacion_mes": 1010.86,
+                "mes": 87
+              },
+              {
+                "acumulado": 141559.5,
+                "aportacion_mes": 1010.86,
+                "mes": 88
+              },
+              {
+                "acumulado": 143985.96,
+                "aportacion_mes": 1010.86,
+                "mes": 89
+              },
+              {
+                "acumulado": 146436.68,
+                "aportacion_mes": 1010.86,
+                "mes": 90
+              },
+              {
+                "acumulado": 148911.9,
+                "aportacion_mes": 1010.86,
+                "mes": 91
+              },
+              {
+                "acumulado": 151411.88,
+                "aportacion_mes": 1010.86,
+                "mes": 92
+              },
+              {
+                "acumulado": 153936.86,
+                "aportacion_mes": 1010.86,
+                "mes": 93
+              },
+              {
+                "acumulado": 156487.09,
+                "aportacion_mes": 1010.86,
+                "mes": 94
+              },
+              {
+                "acumulado": 159062.83,
+                "aportacion_mes": 1010.86,
+                "mes": 95
+              },
+              {
+                "acumulado": 161664.32,
+                "aportacion_mes": 1010.86,
+                "mes": 96
+              },
+              {
+                "acumulado": 164291.82,
+                "aportacion_mes": 1010.86,
+                "mes": 97
+              },
+              {
+                "acumulado": 166945.6,
+                "aportacion_mes": 1010.86,
+                "mes": 98
+              },
+              {
+                "acumulado": 169625.92,
+                "aportacion_mes": 1010.86,
+                "mes": 99
+              },
+              {
+                "acumulado": 172333.04,
+                "aportacion_mes": 1010.86,
+                "mes": 100
+              },
+              {
+                "acumulado": 175067.23,
+                "aportacion_mes": 1010.86,
+                "mes": 101
+              },
+              {
+                "acumulado": 177828.76,
+                "aportacion_mes": 1010.86,
+                "mes": 102
+              },
+              {
+                "acumulado": 180617.91,
+                "aportacion_mes": 1010.86,
+                "mes": 103
+              },
+              {
+                "acumulado": 183434.95,
+                "aportacion_mes": 1010.86,
+                "mes": 104
+              },
+              {
+                "acumulado": 186280.16,
+                "aportacion_mes": 1010.86,
+                "mes": 105
+              },
+              {
+                "acumulado": 189153.83,
+                "aportacion_mes": 1010.86,
+                "mes": 106
+              },
+              {
+                "acumulado": 192056.23,
+                "aportacion_mes": 1010.86,
+                "mes": 107
+              },
+              {
+                "acumulado": 194987.65,
+                "aportacion_mes": 1010.86,
+                "mes": 108
+              },
+              {
+                "acumulado": 197948.39,
+                "aportacion_mes": 1010.86,
+                "mes": 109
+              },
+              {
+                "acumulado": 200938.73,
+                "aportacion_mes": 1010.86,
+                "mes": 110
+              },
+              {
+                "acumulado": 203958.98,
+                "aportacion_mes": 1010.86,
+                "mes": 111
+              },
+              {
+                "acumulado": 207009.43,
+                "aportacion_mes": 1010.86,
+                "mes": 112
+              },
+              {
+                "acumulado": 210090.39,
+                "aportacion_mes": 1010.86,
+                "mes": 113
+              },
+              {
+                "acumulado": 213202.15,
+                "aportacion_mes": 1010.86,
+                "mes": 114
+              },
+              {
+                "acumulado": 216345.04,
+                "aportacion_mes": 1010.86,
+                "mes": 115
+              },
+              {
+                "acumulado": 219519.35,
+                "aportacion_mes": 1010.86,
+                "mes": 116
+              },
+              {
+                "acumulado": 222725.4,
+                "aportacion_mes": 1010.86,
+                "mes": 117
+              },
+              {
+                "acumulado": 225963.52,
+                "aportacion_mes": 1010.86,
+                "mes": 118
+              },
+              {
+                "acumulado": 229234.02,
+                "aportacion_mes": 1010.86,
+                "mes": 119
+              },
+              {
+                "acumulado": 232537.22,
+                "aportacion_mes": 1010.86,
+                "mes": 120
+              },
+              {
+                "acumulado": 235873.45,
+                "aportacion_mes": 1010.86,
+                "mes": 121
+              },
+              {
+                "acumulado": 239243.05,
+                "aportacion_mes": 1010.86,
+                "mes": 122
+              },
+              {
+                "acumulado": 242646.34,
+                "aportacion_mes": 1010.86,
+                "mes": 123
+              },
+              {
+                "acumulado": 246083.66,
+                "aportacion_mes": 1010.86,
+                "mes": 124
+              },
+              {
+                "acumulado": 249555.36,
+                "aportacion_mes": 1010.86,
+                "mes": 125
+              },
+              {
+                "acumulado": 253061.78,
+                "aportacion_mes": 1010.86,
+                "mes": 126
+              },
+              {
+                "acumulado": 256603.25,
+                "aportacion_mes": 1010.86,
+                "mes": 127
+              },
+              {
+                "acumulado": 260180.15,
+                "aportacion_mes": 1010.86,
+                "mes": 128
+              },
+              {
+                "acumulado": 263792.81,
+                "aportacion_mes": 1010.86,
+                "mes": 129
+              },
+              {
+                "acumulado": 267441.6,
+                "aportacion_mes": 1010.86,
+                "mes": 130
+              },
+              {
+                "acumulado": 271126.88,
+                "aportacion_mes": 1010.86,
+                "mes": 131
+              },
+              {
+                "acumulado": 274849.01,
+                "aportacion_mes": 1010.86,
+                "mes": 132
+              },
+              {
+                "acumulado": 278608.36,
+                "aportacion_mes": 1010.86,
+                "mes": 133
+              },
+              {
+                "acumulado": 282405.3,
+                "aportacion_mes": 1010.86,
+                "mes": 134
+              },
+              {
+                "acumulado": 286240.22,
+                "aportacion_mes": 1010.86,
+                "mes": 135
+              },
+              {
+                "acumulado": 290113.48,
+                "aportacion_mes": 1010.86,
+                "mes": 136
+              },
+              {
+                "acumulado": 294025.48,
+                "aportacion_mes": 1010.86,
+                "mes": 137
+              },
+              {
+                "acumulado": 297976.59,
+                "aportacion_mes": 1010.86,
+                "mes": 138
+              },
+              {
+                "acumulado": 301967.22,
+                "aportacion_mes": 1010.86,
+                "mes": 139
+              },
+              {
+                "acumulado": 305997.76,
+                "aportacion_mes": 1010.86,
+                "mes": 140
+              },
+              {
+                "acumulado": 310068.59,
+                "aportacion_mes": 1010.86,
+                "mes": 141
+              },
+              {
+                "acumulado": 314180.14,
+                "aportacion_mes": 1010.86,
+                "mes": 142
+              },
+              {
+                "acumulado": 318332.8,
+                "aportacion_mes": 1010.86,
+                "mes": 143
+              },
+              {
+                "acumulado": 322526.99,
+                "aportacion_mes": 1010.86,
+                "mes": 144
+              },
+              {
+                "acumulado": 326763.13,
+                "aportacion_mes": 1010.86,
+                "mes": 145
+              },
+              {
+                "acumulado": 331041.62,
+                "aportacion_mes": 1010.86,
+                "mes": 146
+              },
+              {
+                "acumulado": 335362.9,
+                "aportacion_mes": 1010.86,
+                "mes": 147
+              },
+              {
+                "acumulado": 339727.39,
+                "aportacion_mes": 1010.86,
+                "mes": 148
+              },
+              {
+                "acumulado": 344135.52,
+                "aportacion_mes": 1010.86,
+                "mes": 149
+              },
+              {
+                "acumulado": 348587.74,
+                "aportacion_mes": 1010.86,
+                "mes": 150
+              },
+              {
+                "acumulado": 353084.48,
+                "aportacion_mes": 1010.86,
+                "mes": 151
+              },
+              {
+                "acumulado": 357626.18,
+                "aportacion_mes": 1010.86,
+                "mes": 152
+              },
+              {
+                "acumulado": 362213.31,
+                "aportacion_mes": 1010.86,
+                "mes": 153
+              },
+              {
+                "acumulado": 366846.3,
+                "aportacion_mes": 1010.86,
+                "mes": 154
+              },
+              {
+                "acumulado": 371525.62,
+                "aportacion_mes": 1010.86,
+                "mes": 155
+              },
+              {
+                "acumulado": 376251.74,
+                "aportacion_mes": 1010.86,
+                "mes": 156
+              },
+              {
+                "acumulado": 381025.12,
+                "aportacion_mes": 1010.86,
+                "mes": 157
+              },
+              {
+                "acumulado": 385846.23,
+                "aportacion_mes": 1010.86,
+                "mes": 158
+              },
+              {
+                "acumulado": 390715.56,
+                "aportacion_mes": 1010.86,
+                "mes": 159
+              },
+              {
+                "acumulado": 395633.57,
+                "aportacion_mes": 1010.86,
+                "mes": 160
+              },
+              {
+                "acumulado": 400600.77,
+                "aportacion_mes": 1010.86,
+                "mes": 161
+              },
+              {
+                "acumulado": 405617.64,
+                "aportacion_mes": 1010.86,
+                "mes": 162
+              },
+              {
+                "acumulado": 410684.68,
+                "aportacion_mes": 1010.86,
+                "mes": 163
+              },
+              {
+                "acumulado": 415802.39,
+                "aportacion_mes": 1010.86,
+                "mes": 164
+              },
+              {
+                "acumulado": 420971.27,
+                "aportacion_mes": 1010.86,
+                "mes": 165
+              },
+              {
+                "acumulado": 426191.84,
+                "aportacion_mes": 1010.86,
+                "mes": 166
+              },
+              {
+                "acumulado": 431464.62,
+                "aportacion_mes": 1010.86,
+                "mes": 167
+              },
+              {
+                "acumulado": 436790.13,
+                "aportacion_mes": 1010.86,
+                "mes": 168
+              },
+              {
+                "acumulado": 442168.89,
+                "aportacion_mes": 1010.86,
+                "mes": 169
+              },
+              {
+                "acumulado": 447601.45,
+                "aportacion_mes": 1010.86,
+                "mes": 170
+              },
+              {
+                "acumulado": 453088.32,
+                "aportacion_mes": 1010.86,
+                "mes": 171
+              },
+              {
+                "acumulado": 458630.07,
+                "aportacion_mes": 1010.86,
+                "mes": 172
+              },
+              {
+                "acumulado": 464227.23,
+                "aportacion_mes": 1010.86,
+                "mes": 173
+              },
+              {
+                "acumulado": 469880.36,
+                "aportacion_mes": 1010.86,
+                "mes": 174
+              },
+              {
+                "acumulado": 475590.03,
+                "aportacion_mes": 1010.86,
+                "mes": 175
+              },
+              {
+                "acumulado": 481356.79,
+                "aportacion_mes": 1010.86,
+                "mes": 176
+              },
+              {
+                "acumulado": 487181.22,
+                "aportacion_mes": 1010.86,
+                "mes": 177
+              },
+              {
+                "acumulado": 493063.89,
+                "aportacion_mes": 1010.86,
+                "mes": 178
+              },
+              {
+                "acumulado": 499005.39,
+                "aportacion_mes": 1010.86,
+                "mes": 179
+              },
+              {
+                "acumulado": 505006.31,
+                "aportacion_mes": 1010.86,
+                "mes": 180
+              },
+              {
+                "acumulado": 511067.23,
+                "aportacion_mes": 1010.86,
+                "mes": 181
+              },
+              {
+                "acumulado": 517188.76,
+                "aportacion_mes": 1010.86,
+                "mes": 182
+              },
+              {
+                "acumulado": 523371.51,
+                "aportacion_mes": 1010.86,
+                "mes": 183
+              },
+              {
+                "acumulado": 529616.09,
+                "aportacion_mes": 1010.86,
+                "mes": 184
+              },
+              {
+                "acumulado": 535923.11,
+                "aportacion_mes": 1010.86,
+                "mes": 185
+              },
+              {
+                "acumulado": 542293.2,
+                "aportacion_mes": 1010.86,
+                "mes": 186
+              },
+              {
+                "acumulado": 548727.0,
+                "aportacion_mes": 1010.86,
+                "mes": 187
+              },
+              {
+                "acumulado": 555225.13,
+                "aportacion_mes": 1010.86,
+                "mes": 188
+              },
+              {
+                "acumulado": 561788.24,
+                "aportacion_mes": 1010.86,
+                "mes": 189
+              },
+              {
+                "acumulado": 568416.98,
+                "aportacion_mes": 1010.86,
+                "mes": 190
+              },
+              {
+                "acumulado": 575112.02,
+                "aportacion_mes": 1010.86,
+                "mes": 191
+              },
+              {
+                "acumulado": 581874.0,
+                "aportacion_mes": 1010.86,
+                "mes": 192
+              },
+              {
+                "acumulado": 588703.6,
+                "aportacion_mes": 1010.86,
+                "mes": 193
+              },
+              {
+                "acumulado": 595601.5,
+                "aportacion_mes": 1010.86,
+                "mes": 194
+              },
+              {
+                "acumulado": 602568.37,
+                "aportacion_mes": 1010.86,
+                "mes": 195
+              },
+              {
+                "acumulado": 609604.92,
+                "aportacion_mes": 1010.86,
+                "mes": 196
+              },
+              {
+                "acumulado": 616711.83,
+                "aportacion_mes": 1010.86,
+                "mes": 197
+              },
+              {
+                "acumulado": 623889.81,
+                "aportacion_mes": 1010.86,
+                "mes": 198
+              },
+              {
+                "acumulado": 631139.57,
+                "aportacion_mes": 1010.86,
+                "mes": 199
+              },
+              {
+                "acumulado": 638461.82,
+                "aportacion_mes": 1010.86,
+                "mes": 200
+              },
+              {
+                "acumulado": 645857.3,
+                "aportacion_mes": 1010.86,
+                "mes": 201
+              },
+              {
+                "acumulado": 653326.74,
+                "aportacion_mes": 1010.86,
+                "mes": 202
+              },
+              {
+                "acumulado": 660870.87,
+                "aportacion_mes": 1010.86,
+                "mes": 203
+              },
+              {
+                "acumulado": 668490.44,
+                "aportacion_mes": 1010.86,
+                "mes": 204
+              },
+              {
+                "acumulado": 676186.2,
+                "aportacion_mes": 1010.86,
+                "mes": 205
+              },
+              {
+                "acumulado": 683958.93,
+                "aportacion_mes": 1010.86,
+                "mes": 206
+              },
+              {
+                "acumulado": 691809.38,
+                "aportacion_mes": 1010.86,
+                "mes": 207
+              },
+              {
+                "acumulado": 699738.33,
+                "aportacion_mes": 1010.86,
+                "mes": 208
+              },
+              {
+                "acumulado": 707746.58,
+                "aportacion_mes": 1010.86,
+                "mes": 209
+              },
+              {
+                "acumulado": 715834.9,
+                "aportacion_mes": 1010.86,
+                "mes": 210
+              },
+              {
+                "acumulado": 724004.11,
+                "aportacion_mes": 1010.86,
+                "mes": 211
+              },
+              {
+                "acumulado": 732255.02,
+                "aportacion_mes": 1010.86,
+                "mes": 212
+              },
+              {
+                "acumulado": 740588.43,
+                "aportacion_mes": 1010.86,
+                "mes": 213
+              },
+              {
+                "acumulado": 749005.17,
+                "aportacion_mes": 1010.86,
+                "mes": 214
+              },
+              {
+                "acumulado": 757506.09,
+                "aportacion_mes": 1010.86,
+                "mes": 215
+              },
+              {
+                "acumulado": 766092.01,
+                "aportacion_mes": 1010.86,
+                "mes": 216
+              },
+              {
+                "acumulado": 774763.79,
+                "aportacion_mes": 1010.86,
+                "mes": 217
+              },
+              {
+                "acumulado": 783522.29,
+                "aportacion_mes": 1010.86,
+                "mes": 218
+              },
+              {
+                "acumulado": 792368.37,
+                "aportacion_mes": 1010.86,
+                "mes": 219
+              },
+              {
+                "acumulado": 801302.92,
+                "aportacion_mes": 1010.86,
+                "mes": 220
+              },
+              {
+                "acumulado": 810326.81,
+                "aportacion_mes": 1010.86,
+                "mes": 221
+              },
+              {
+                "acumulado": 819440.94,
+                "aportacion_mes": 1010.86,
+                "mes": 222
+              },
+              {
+                "acumulado": 828646.21,
+                "aportacion_mes": 1010.86,
+                "mes": 223
+              },
+              {
+                "acumulado": 837943.53,
+                "aportacion_mes": 1010.86,
+                "mes": 224
+              },
+              {
+                "acumulado": 847333.83,
+                "aportacion_mes": 1010.86,
+                "mes": 225
+              },
+              {
+                "acumulado": 856818.03,
+                "aportacion_mes": 1010.86,
+                "mes": 226
+              },
+              {
+                "acumulado": 866397.07,
+                "aportacion_mes": 1010.86,
+                "mes": 227
+              },
+              {
+                "acumulado": 876071.9,
+                "aportacion_mes": 1010.86,
+                "mes": 228
+              },
+              {
+                "acumulado": 885843.48,
+                "aportacion_mes": 1010.86,
+                "mes": 229
+              },
+              {
+                "acumulado": 895712.78,
+                "aportacion_mes": 1010.86,
+                "mes": 230
+              },
+              {
+                "acumulado": 905680.77,
+                "aportacion_mes": 1010.86,
+                "mes": 231
+              },
+              {
+                "acumulado": 915748.44,
+                "aportacion_mes": 1010.86,
+                "mes": 232
+              },
+              {
+                "acumulado": 925916.78,
+                "aportacion_mes": 1010.86,
+                "mes": 233
+              },
+              {
+                "acumulado": 936186.81,
+                "aportacion_mes": 1010.86,
+                "mes": 234
+              },
+              {
+                "acumulado": 946559.54,
+                "aportacion_mes": 1010.86,
+                "mes": 235
+              },
+              {
+                "acumulado": 957036.0,
+                "aportacion_mes": 1010.86,
+                "mes": 236
+              },
+              {
+                "acumulado": 967617.22,
+                "aportacion_mes": 1010.86,
+                "mes": 237
+              },
+              {
+                "acumulado": 978304.25,
+                "aportacion_mes": 1010.86,
+                "mes": 238
+              },
+              {
+                "acumulado": 989098.16,
+                "aportacion_mes": 1010.86,
+                "mes": 239
+              },
+              {
+                "acumulado": 1000000.0,
+                "aportacion_mes": 1010.86,
+                "mes": 240
+              }
+            ],
+            "total_aportado": 242606.72
+          },
+          "sin_rendimiento": {
+            "aporte_mensual": 4166.67,
+            "serie": [
+              {
+                "acumulado": 4166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 1
+              },
+              {
+                "acumulado": 8333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 2
+              },
+              {
+                "acumulado": 12500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 3
+              },
+              {
+                "acumulado": 16666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 4
+              },
+              {
+                "acumulado": 20833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 5
+              },
+              {
+                "acumulado": 25000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 6
+              },
+              {
+                "acumulado": 29166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 7
+              },
+              {
+                "acumulado": 33333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 8
+              },
+              {
+                "acumulado": 37500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 9
+              },
+              {
+                "acumulado": 41666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 10
+              },
+              {
+                "acumulado": 45833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 11
+              },
+              {
+                "acumulado": 50000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 12
+              },
+              {
+                "acumulado": 54166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 13
+              },
+              {
+                "acumulado": 58333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 14
+              },
+              {
+                "acumulado": 62500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 15
+              },
+              {
+                "acumulado": 66666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 16
+              },
+              {
+                "acumulado": 70833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 17
+              },
+              {
+                "acumulado": 75000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 18
+              },
+              {
+                "acumulado": 79166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 19
+              },
+              {
+                "acumulado": 83333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 20
+              },
+              {
+                "acumulado": 87500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 21
+              },
+              {
+                "acumulado": 91666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 22
+              },
+              {
+                "acumulado": 95833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 23
+              },
+              {
+                "acumulado": 100000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 24
+              },
+              {
+                "acumulado": 104166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 25
+              },
+              {
+                "acumulado": 108333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 26
+              },
+              {
+                "acumulado": 112500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 27
+              },
+              {
+                "acumulado": 116666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 28
+              },
+              {
+                "acumulado": 120833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 29
+              },
+              {
+                "acumulado": 125000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 30
+              },
+              {
+                "acumulado": 129166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 31
+              },
+              {
+                "acumulado": 133333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 32
+              },
+              {
+                "acumulado": 137500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 33
+              },
+              {
+                "acumulado": 141666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 34
+              },
+              {
+                "acumulado": 145833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 35
+              },
+              {
+                "acumulado": 150000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 36
+              },
+              {
+                "acumulado": 154166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 37
+              },
+              {
+                "acumulado": 158333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 38
+              },
+              {
+                "acumulado": 162500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 39
+              },
+              {
+                "acumulado": 166666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 40
+              },
+              {
+                "acumulado": 170833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 41
+              },
+              {
+                "acumulado": 175000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 42
+              },
+              {
+                "acumulado": 179166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 43
+              },
+              {
+                "acumulado": 183333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 44
+              },
+              {
+                "acumulado": 187500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 45
+              },
+              {
+                "acumulado": 191666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 46
+              },
+              {
+                "acumulado": 195833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 47
+              },
+              {
+                "acumulado": 200000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 48
+              },
+              {
+                "acumulado": 204166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 49
+              },
+              {
+                "acumulado": 208333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 50
+              },
+              {
+                "acumulado": 212500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 51
+              },
+              {
+                "acumulado": 216666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 52
+              },
+              {
+                "acumulado": 220833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 53
+              },
+              {
+                "acumulado": 225000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 54
+              },
+              {
+                "acumulado": 229166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 55
+              },
+              {
+                "acumulado": 233333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 56
+              },
+              {
+                "acumulado": 237500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 57
+              },
+              {
+                "acumulado": 241666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 58
+              },
+              {
+                "acumulado": 245833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 59
+              },
+              {
+                "acumulado": 250000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 60
+              },
+              {
+                "acumulado": 254166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 61
+              },
+              {
+                "acumulado": 258333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 62
+              },
+              {
+                "acumulado": 262500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 63
+              },
+              {
+                "acumulado": 266666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 64
+              },
+              {
+                "acumulado": 270833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 65
+              },
+              {
+                "acumulado": 275000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 66
+              },
+              {
+                "acumulado": 279166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 67
+              },
+              {
+                "acumulado": 283333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 68
+              },
+              {
+                "acumulado": 287500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 69
+              },
+              {
+                "acumulado": 291666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 70
+              },
+              {
+                "acumulado": 295833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 71
+              },
+              {
+                "acumulado": 300000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 72
+              },
+              {
+                "acumulado": 304166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 73
+              },
+              {
+                "acumulado": 308333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 74
+              },
+              {
+                "acumulado": 312500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 75
+              },
+              {
+                "acumulado": 316666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 76
+              },
+              {
+                "acumulado": 320833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 77
+              },
+              {
+                "acumulado": 325000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 78
+              },
+              {
+                "acumulado": 329166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 79
+              },
+              {
+                "acumulado": 333333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 80
+              },
+              {
+                "acumulado": 337500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 81
+              },
+              {
+                "acumulado": 341666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 82
+              },
+              {
+                "acumulado": 345833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 83
+              },
+              {
+                "acumulado": 350000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 84
+              },
+              {
+                "acumulado": 354166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 85
+              },
+              {
+                "acumulado": 358333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 86
+              },
+              {
+                "acumulado": 362500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 87
+              },
+              {
+                "acumulado": 366666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 88
+              },
+              {
+                "acumulado": 370833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 89
+              },
+              {
+                "acumulado": 375000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 90
+              },
+              {
+                "acumulado": 379166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 91
+              },
+              {
+                "acumulado": 383333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 92
+              },
+              {
+                "acumulado": 387500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 93
+              },
+              {
+                "acumulado": 391666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 94
+              },
+              {
+                "acumulado": 395833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 95
+              },
+              {
+                "acumulado": 400000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 96
+              },
+              {
+                "acumulado": 404166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 97
+              },
+              {
+                "acumulado": 408333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 98
+              },
+              {
+                "acumulado": 412500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 99
+              },
+              {
+                "acumulado": 416666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 100
+              },
+              {
+                "acumulado": 420833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 101
+              },
+              {
+                "acumulado": 425000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 102
+              },
+              {
+                "acumulado": 429166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 103
+              },
+              {
+                "acumulado": 433333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 104
+              },
+              {
+                "acumulado": 437500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 105
+              },
+              {
+                "acumulado": 441666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 106
+              },
+              {
+                "acumulado": 445833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 107
+              },
+              {
+                "acumulado": 450000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 108
+              },
+              {
+                "acumulado": 454166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 109
+              },
+              {
+                "acumulado": 458333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 110
+              },
+              {
+                "acumulado": 462500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 111
+              },
+              {
+                "acumulado": 466666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 112
+              },
+              {
+                "acumulado": 470833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 113
+              },
+              {
+                "acumulado": 475000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 114
+              },
+              {
+                "acumulado": 479166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 115
+              },
+              {
+                "acumulado": 483333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 116
+              },
+              {
+                "acumulado": 487500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 117
+              },
+              {
+                "acumulado": 491666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 118
+              },
+              {
+                "acumulado": 495833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 119
+              },
+              {
+                "acumulado": 500000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 120
+              },
+              {
+                "acumulado": 504166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 121
+              },
+              {
+                "acumulado": 508333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 122
+              },
+              {
+                "acumulado": 512500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 123
+              },
+              {
+                "acumulado": 516666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 124
+              },
+              {
+                "acumulado": 520833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 125
+              },
+              {
+                "acumulado": 525000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 126
+              },
+              {
+                "acumulado": 529166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 127
+              },
+              {
+                "acumulado": 533333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 128
+              },
+              {
+                "acumulado": 537500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 129
+              },
+              {
+                "acumulado": 541666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 130
+              },
+              {
+                "acumulado": 545833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 131
+              },
+              {
+                "acumulado": 550000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 132
+              },
+              {
+                "acumulado": 554166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 133
+              },
+              {
+                "acumulado": 558333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 134
+              },
+              {
+                "acumulado": 562500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 135
+              },
+              {
+                "acumulado": 566666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 136
+              },
+              {
+                "acumulado": 570833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 137
+              },
+              {
+                "acumulado": 575000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 138
+              },
+              {
+                "acumulado": 579166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 139
+              },
+              {
+                "acumulado": 583333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 140
+              },
+              {
+                "acumulado": 587500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 141
+              },
+              {
+                "acumulado": 591666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 142
+              },
+              {
+                "acumulado": 595833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 143
+              },
+              {
+                "acumulado": 600000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 144
+              },
+              {
+                "acumulado": 604166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 145
+              },
+              {
+                "acumulado": 608333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 146
+              },
+              {
+                "acumulado": 612500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 147
+              },
+              {
+                "acumulado": 616666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 148
+              },
+              {
+                "acumulado": 620833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 149
+              },
+              {
+                "acumulado": 625000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 150
+              },
+              {
+                "acumulado": 629166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 151
+              },
+              {
+                "acumulado": 633333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 152
+              },
+              {
+                "acumulado": 637500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 153
+              },
+              {
+                "acumulado": 641666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 154
+              },
+              {
+                "acumulado": 645833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 155
+              },
+              {
+                "acumulado": 650000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 156
+              },
+              {
+                "acumulado": 654166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 157
+              },
+              {
+                "acumulado": 658333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 158
+              },
+              {
+                "acumulado": 662500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 159
+              },
+              {
+                "acumulado": 666666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 160
+              },
+              {
+                "acumulado": 670833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 161
+              },
+              {
+                "acumulado": 675000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 162
+              },
+              {
+                "acumulado": 679166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 163
+              },
+              {
+                "acumulado": 683333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 164
+              },
+              {
+                "acumulado": 687500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 165
+              },
+              {
+                "acumulado": 691666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 166
+              },
+              {
+                "acumulado": 695833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 167
+              },
+              {
+                "acumulado": 700000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 168
+              },
+              {
+                "acumulado": 704166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 169
+              },
+              {
+                "acumulado": 708333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 170
+              },
+              {
+                "acumulado": 712500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 171
+              },
+              {
+                "acumulado": 716666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 172
+              },
+              {
+                "acumulado": 720833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 173
+              },
+              {
+                "acumulado": 725000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 174
+              },
+              {
+                "acumulado": 729166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 175
+              },
+              {
+                "acumulado": 733333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 176
+              },
+              {
+                "acumulado": 737500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 177
+              },
+              {
+                "acumulado": 741666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 178
+              },
+              {
+                "acumulado": 745833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 179
+              },
+              {
+                "acumulado": 750000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 180
+              },
+              {
+                "acumulado": 754166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 181
+              },
+              {
+                "acumulado": 758333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 182
+              },
+              {
+                "acumulado": 762500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 183
+              },
+              {
+                "acumulado": 766666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 184
+              },
+              {
+                "acumulado": 770833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 185
+              },
+              {
+                "acumulado": 775000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 186
+              },
+              {
+                "acumulado": 779166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 187
+              },
+              {
+                "acumulado": 783333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 188
+              },
+              {
+                "acumulado": 787500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 189
+              },
+              {
+                "acumulado": 791666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 190
+              },
+              {
+                "acumulado": 795833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 191
+              },
+              {
+                "acumulado": 800000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 192
+              },
+              {
+                "acumulado": 804166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 193
+              },
+              {
+                "acumulado": 808333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 194
+              },
+              {
+                "acumulado": 812500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 195
+              },
+              {
+                "acumulado": 816666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 196
+              },
+              {
+                "acumulado": 820833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 197
+              },
+              {
+                "acumulado": 825000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 198
+              },
+              {
+                "acumulado": 829166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 199
+              },
+              {
+                "acumulado": 833333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 200
+              },
+              {
+                "acumulado": 837500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 201
+              },
+              {
+                "acumulado": 841666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 202
+              },
+              {
+                "acumulado": 845833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 203
+              },
+              {
+                "acumulado": 850000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 204
+              },
+              {
+                "acumulado": 854166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 205
+              },
+              {
+                "acumulado": 858333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 206
+              },
+              {
+                "acumulado": 862500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 207
+              },
+              {
+                "acumulado": 866666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 208
+              },
+              {
+                "acumulado": 870833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 209
+              },
+              {
+                "acumulado": 875000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 210
+              },
+              {
+                "acumulado": 879166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 211
+              },
+              {
+                "acumulado": 883333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 212
+              },
+              {
+                "acumulado": 887500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 213
+              },
+              {
+                "acumulado": 891666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 214
+              },
+              {
+                "acumulado": 895833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 215
+              },
+              {
+                "acumulado": 900000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 216
+              },
+              {
+                "acumulado": 904166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 217
+              },
+              {
+                "acumulado": 908333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 218
+              },
+              {
+                "acumulado": 912500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 219
+              },
+              {
+                "acumulado": 916666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 220
+              },
+              {
+                "acumulado": 920833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 221
+              },
+              {
+                "acumulado": 925000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 222
+              },
+              {
+                "acumulado": 929166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 223
+              },
+              {
+                "acumulado": 933333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 224
+              },
+              {
+                "acumulado": 937500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 225
+              },
+              {
+                "acumulado": 941666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 226
+              },
+              {
+                "acumulado": 945833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 227
+              },
+              {
+                "acumulado": 950000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 228
+              },
+              {
+                "acumulado": 954166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 229
+              },
+              {
+                "acumulado": 958333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 230
+              },
+              {
+                "acumulado": 962500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 231
+              },
+              {
+                "acumulado": 966666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 232
+              },
+              {
+                "acumulado": 970833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 233
+              },
+              {
+                "acumulado": 975000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 234
+              },
+              {
+                "acumulado": 979166.67,
+                "aportacion_mes": 4166.67,
+                "mes": 235
+              },
+              {
+                "acumulado": 983333.33,
+                "aportacion_mes": 4166.67,
+                "mes": 236
+              },
+              {
+                "acumulado": 987500.0,
+                "aportacion_mes": 4166.67,
+                "mes": 237
+              },
+              {
+                "acumulado": 991666.67,
+                "aportacion_mes": 4166.67,
+                "mes": 238
+              },
+              {
+                "acumulado": 995833.33,
+                "aportacion_mes": 4166.67,
+                "mes": 239
+              },
+              {
+                "acumulado": 1000000.0,
+                "aportacion_mes": 4166.67,
+                "mes": 240
+              }
+            ],
+            "total_aportado": 1000000.0
+          }
+        },
+        "explicacion": "Para juntar $1,000,000 en 240 meses, necesitas $4,167/mes sin rendimiento, o $1,011/mes con rendimiento al 12% anual — te ahorras $3,156 por mes.",
+        "parametros": {
+          "meta": 1000000,
+          "plazo_meses": 240,
+          "tasa_ahorro_anual": 0.12
+        },
+        "resumen": {
+          "ahorro_mensual_gracias_a_rendimiento": 3155.81
+        }
+      }
+    },
+    {
+      "args": {
+        "meta": 100,
+        "plazo_meses": 1,
+        "tasa_ahorro_anual": 0.5
+      },
+      "expected": {
+        "concepto": "meta_ahorro",
+        "escenarios": {
+          "con_rendimiento": {
+            "aporte_mensual": 100.0,
+            "rendimiento_ganado": 0.0,
+            "serie": [
+              {
+                "acumulado": 100.0,
+                "aportacion_mes": 100.0,
+                "mes": 1
+              }
+            ],
+            "total_aportado": 100.0
+          },
+          "sin_rendimiento": {
+            "aporte_mensual": 100.0,
+            "serie": [
+              {
+                "acumulado": 100.0,
+                "aportacion_mes": 100.0,
+                "mes": 1
+              }
+            ],
+            "total_aportado": 100.0
+          }
+        },
+        "explicacion": "Para juntar $100 en 1 meses, necesitas $100/mes sin rendimiento, o $100/mes con rendimiento al 50% anual — te ahorras $0 por mes.",
+        "parametros": {
+          "meta": 100,
+          "plazo_meses": 1,
+          "tasa_ahorro_anual": 0.5
+        },
+        "resumen": {
+          "ahorro_mensual_gracias_a_rendimiento": 0.0
+        }
+      }
+    }
+  ],
+  "tool": "simular_meta_ahorro"
+}

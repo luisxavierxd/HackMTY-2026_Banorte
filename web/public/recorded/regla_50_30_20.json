@@ -1,0 +1,271 @@
+{
+  "id": "regla_50_30_20",
+  "prompt": "¿Cómo voy con mis gastos este mes?",
+  "title": "Tu mes en la regla 50/30/20",
+  "kind": "message",
+  "provider": "claude_code",
+  "model": "",
+  "recordedAt": "2026-09-15T14:49:00+00:00",
+  "events": [
+    {
+      "deltaMs": 3575,
+      "event": {
+        "type": "thinking",
+        "text": "Conectando con el modelo…"
+      }
+    },
+    {
+      "deltaMs": 2043,
+      "event": {
+        "type": "thinking",
+        "text": "Generando la respuesta…"
+      }
+    },
+    {
+      "deltaMs": 512,
+      "event": {
+        "type": "tool_call",
+        "name": "educacion_financiera__regla_50_30_20",
+        "args": {},
+        "step": 0
+      }
+    },
+    {
+      "deltaMs": 4,
+      "event": {
+        "type": "tool_result",
+        "name": "educacion_financiera__regla_50_30_20",
+        "ok": true
+      }
+    },
+    {
+      "deltaMs": 3502,
+      "event": {
+        "type": "thinking",
+        "text": "Conectando con el modelo…"
+      }
+    },
+    {
+      "deltaMs": 3653,
+      "event": {
+        "type": "thinking",
+        "text": "Generando la respuesta…"
+      }
+    },
+    {
+      "deltaMs": 515,
+      "event": {
+        "type": "thinking",
+        "text": "Diseñando la interfaz…"
+      }
+    },
+    {
+      "deltaMs": 3549,
+      "event": {
+        "type": "thinking",
+        "text": "Conectando con el modelo…"
+      }
+    },
+    {
+      "deltaMs": 16768,
+      "event": {
+        "type": "thinking",
+        "text": "Generando la respuesta…"
+      }
+    },
+    {
+      "deltaMs": 502,
+      "event": {
+        "type": "surface",
+        "title": "Tu mes en la regla 50/30/20",
+        "summary": "Vas muy bien: ahorras 43% de tu ingreso, más del doble de lo que sugiere la regla, y tus necesidades están dentro del límite.",
+        "a2ui": [
+          {
+            "version": "v0.9.1",
+            "createSurface": {
+              "surfaceId": "main",
+              "catalogId": "https://banorte-genui.local/catalogs/fin/v1.json",
+              "sendDataModel": true
+            }
+          },
+          {
+            "version": "v0.9.1",
+            "updateDataModel": {
+              "surfaceId": "main",
+              "path": "/",
+              "value": {
+                "accion": {
+                  "confirmado": false
+                },
+                "datos": {
+                  "regla_50_30_20": {
+                    "concepto": "regla_50_30_20",
+                    "ingreso_mensual": 28500.0,
+                    "comparacion": [
+                      {
+                        "grupo": "necesidades",
+                        "porcentaje_ideal": 50,
+                        "ideal": 14250.0,
+                        "real": 13310.1,
+                        "diferencia": 939.9,
+                        "status": "ok"
+                      },
+                      {
+                        "grupo": "deseos",
+                        "porcentaje_ideal": 30,
+                        "ideal": 8550.0,
+                        "real": 1210.5,
+                        "diferencia": 7339.5,
+                        "status": "ok"
+                      },
+                      {
+                        "grupo": "ahorro_e_inversión",
+                        "porcentaje_ideal": 20,
+                        "ideal": 5700.0,
+                        "real": 12139.4,
+                        "diferencia": 6439.4,
+                        "status": "ok"
+                      }
+                    ],
+                    "resumen": {
+                      "gasto_total": 16360.6,
+                      "ahorro_real": 12139.4,
+                      "ahorro_como_porcentaje": 42.59
+                    },
+                    "explicacion": "De tu ingreso de $28,500, la regla dice destinar $14,250 a necesidades, $8,550 a deseos y $5,700 a ahorro. Hoy ahorras $12,139 (43% de tu ingreso)."
+                  }
+                }
+              }
+            }
+          },
+          {
+            "version": "v0.9.1",
+            "updateComponents": {
+              "surfaceId": "main",
+              "components": [
+                {
+                  "id": "root",
+                  "component": "Column",
+                  "children": [
+                    "m_ahorro",
+                    "m_gasto",
+                    "chart_comparacion",
+                    "pie_reparto",
+                    "nota",
+                    "btn"
+                  ],
+                  "gap": "md"
+                },
+                {
+                  "id": "m_ahorro",
+                  "component": "MetricCard",
+                  "label": "Ahorro del mes",
+                  "value": "$12,139",
+                  "delta": "43% de tu ingreso, vs. 20% recomendado",
+                  "caption": "Estás guardando más del doble de lo que sugiere la regla 50/30/20. Son $6,439 por encima del mínimo de $5,700. Ese excedente ya no necesita quedarse parado en la cuenta. Puedes destinar una parte a un fondo de emergencia o a inversión.",
+                  "hint": "Es cuánto te quedó sin gastar este mes y qué tan arriba estás del 20% que recomienda la regla 50/30/20.",
+                  "tone": "success"
+                },
+                {
+                  "id": "m_gasto",
+                  "component": "MetricCard",
+                  "label": "Gasto total del mes",
+                  "value": "$16,361",
+                  "delta": "57% de tus $28,500 de ingreso",
+                  "caption": "Incluye $13,310 de necesidades y $1,211 de deseos. Te quedaste $940 abajo del límite de necesidades. En deseos casi no tocaste tu presupuesto de $8,550. Tienes holgura real si algo imprevisto se atraviesa.",
+                  "hint": "Es todo lo que salió de tu bolsillo este mes, sumando lo indispensable y lo opcional, para ver cuánto de tu ingreso realmente usaste.",
+                  "tone": "neutral"
+                },
+                {
+                  "id": "chart_comparacion",
+                  "component": "ComparisonBars",
+                  "title": "Lo ideal vs. lo que gastaste",
+                  "hint": "Compara, categoría por categoría, cuánto te tocaría según la regla y cuánto usaste de verdad, para ver dónde te sobra o te falta margen.",
+                  "labelA": "Ideal",
+                  "labelB": "Real",
+                  "categories": [
+                    {
+                      "label": "Necesidades",
+                      "a": 14250,
+                      "b": 13310.1
+                    },
+                    {
+                      "label": "Deseos",
+                      "a": 8550,
+                      "b": 1210.5
+                    },
+                    {
+                      "label": "Ahorro",
+                      "a": 5700,
+                      "b": 12139.4
+                    }
+                  ],
+                  "toneB": "ahorro",
+                  "format": "currency"
+                },
+                {
+                  "id": "pie_reparto",
+                  "component": "PieChart",
+                  "title": "Cómo repartiste tus $28,500",
+                  "hint": "Muestra en qué se convirtió cada peso que entró este mes, para que veas de un vistazo qué tan grande es tu rebanada de ahorro.",
+                  "slices": [
+                    {
+                      "label": "Necesidades",
+                      "value": 13310.1
+                    },
+                    {
+                      "label": "Deseos",
+                      "value": 1210.5
+                    },
+                    {
+                      "label": "Ahorro",
+                      "value": 12139.4
+                    }
+                  ],
+                  "format": "currency"
+                },
+                {
+                  "id": "nota",
+                  "component": "Callout",
+                  "text": "Gastar tan poco en deseos ($1,211 de $8,550) es señal de disciplina, pero también puede indicar gastos que no están registrados. Vale la pena revisar que todo tu movimiento esté capturado.",
+                  "tone": "warning"
+                },
+                {
+                  "id": "btn",
+                  "component": "ActionButton",
+                  "text": "Poner a trabajar mi excedente de $6,439",
+                  "action": {
+                    "event": {
+                      "name": "asignar_excedente_ahorro",
+                      "params": {
+                        "monto": 6439.4,
+                        "origen": "regla_50_30_20"
+                      }
+                    }
+                  },
+                  "variant": "primary"
+                }
+              ]
+            }
+          }
+        ],
+        "warnings": []
+      }
+    },
+    {
+      "deltaMs": 0,
+      "event": {
+        "type": "turn_end",
+        "latency_ms": 34609,
+        "tools_used": [
+          "educacion_financiera__regla_50_30_20"
+        ],
+        "provider": "claude_code",
+        "model": "",
+        "usage": {
+          "transport": "cli"
+        }
+      }
+    }
+  ]
+}

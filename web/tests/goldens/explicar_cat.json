@@ -1,0 +1,1254 @@
+{
+  "cases": [
+    {
+      "args": {},
+      "expected": {
+        "concepto": "cat",
+        "desglose_costo": {
+          "capital": 100000.0,
+          "comision_apertura": 1000.0,
+          "costo_total": 119136.22,
+          "intereses": 16336.22,
+          "seguros": 1800.0
+        },
+        "explicacion": "La tasa es 28.9%, pero el CAT es 39.8% porque incluye la comisión de apertura ($1,000) y el seguro ($150/mes = $1,800 total). El CAT es el costo REAL anualizado de todo junto.",
+        "parametros": {
+          "comision_apertura": 0.01,
+          "monto": 100000.0,
+          "plazo_meses": 12,
+          "seguro_mensual": 150.0,
+          "tasa_anual": 0.289
+        },
+        "resumen": {
+          "cat_aproximado": 0.3977,
+          "diferencia": 0.1087,
+          "neto_recibido": 99000.0,
+          "tasa_anual": 0.289
+        },
+        "serie": [
+          {
+            "capital": 7286.35,
+            "interes": 2408.33,
+            "mes": 1,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 92713.65,
+            "seguro": 150.0
+          },
+          {
+            "capital": 7461.83,
+            "interes": 2232.85,
+            "mes": 2,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 85251.82,
+            "seguro": 150.0
+          },
+          {
+            "capital": 7641.54,
+            "interes": 2053.15,
+            "mes": 3,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 77610.28,
+            "seguro": 150.0
+          },
+          {
+            "capital": 7825.57,
+            "interes": 1869.11,
+            "mes": 4,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 69784.71,
+            "seguro": 150.0
+          },
+          {
+            "capital": 8014.04,
+            "interes": 1680.65,
+            "mes": 5,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 61770.67,
+            "seguro": 150.0
+          },
+          {
+            "capital": 8207.04,
+            "interes": 1487.64,
+            "mes": 6,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 53563.63,
+            "seguro": 150.0
+          },
+          {
+            "capital": 8404.69,
+            "interes": 1289.99,
+            "mes": 7,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 45158.94,
+            "seguro": 150.0
+          },
+          {
+            "capital": 8607.11,
+            "interes": 1087.58,
+            "mes": 8,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 36551.83,
+            "seguro": 150.0
+          },
+          {
+            "capital": 8814.39,
+            "interes": 880.29,
+            "mes": 9,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 27737.44,
+            "seguro": 150.0
+          },
+          {
+            "capital": 9026.67,
+            "interes": 668.01,
+            "mes": 10,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 18710.76,
+            "seguro": 150.0
+          },
+          {
+            "capital": 9244.07,
+            "interes": 450.62,
+            "mes": 11,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 9466.7,
+            "seguro": 150.0
+          },
+          {
+            "capital": 9466.7,
+            "interes": 227.99,
+            "mes": 12,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 0,
+            "seguro": 150.0
+          }
+        ]
+      }
+    },
+    {
+      "args": {
+        "comision_apertura": 0.01,
+        "monto": 100000,
+        "plazo_meses": 12,
+        "seguro_mensual": 150.0,
+        "tasa_anual": 0.289
+      },
+      "expected": {
+        "concepto": "cat",
+        "desglose_costo": {
+          "capital": 100000,
+          "comision_apertura": 1000.0,
+          "costo_total": 119136.22,
+          "intereses": 16336.22,
+          "seguros": 1800.0
+        },
+        "explicacion": "La tasa es 28.9%, pero el CAT es 39.8% porque incluye la comisión de apertura ($1,000) y el seguro ($150/mes = $1,800 total). El CAT es el costo REAL anualizado de todo junto.",
+        "parametros": {
+          "comision_apertura": 0.01,
+          "monto": 100000,
+          "plazo_meses": 12,
+          "seguro_mensual": 150.0,
+          "tasa_anual": 0.289
+        },
+        "resumen": {
+          "cat_aproximado": 0.3977,
+          "diferencia": 0.1087,
+          "neto_recibido": 99000.0,
+          "tasa_anual": 0.289
+        },
+        "serie": [
+          {
+            "capital": 7286.35,
+            "interes": 2408.33,
+            "mes": 1,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 92713.65,
+            "seguro": 150.0
+          },
+          {
+            "capital": 7461.83,
+            "interes": 2232.85,
+            "mes": 2,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 85251.82,
+            "seguro": 150.0
+          },
+          {
+            "capital": 7641.54,
+            "interes": 2053.15,
+            "mes": 3,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 77610.28,
+            "seguro": 150.0
+          },
+          {
+            "capital": 7825.57,
+            "interes": 1869.11,
+            "mes": 4,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 69784.71,
+            "seguro": 150.0
+          },
+          {
+            "capital": 8014.04,
+            "interes": 1680.65,
+            "mes": 5,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 61770.67,
+            "seguro": 150.0
+          },
+          {
+            "capital": 8207.04,
+            "interes": 1487.64,
+            "mes": 6,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 53563.63,
+            "seguro": 150.0
+          },
+          {
+            "capital": 8404.69,
+            "interes": 1289.99,
+            "mes": 7,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 45158.94,
+            "seguro": 150.0
+          },
+          {
+            "capital": 8607.11,
+            "interes": 1087.58,
+            "mes": 8,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 36551.83,
+            "seguro": 150.0
+          },
+          {
+            "capital": 8814.39,
+            "interes": 880.29,
+            "mes": 9,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 27737.44,
+            "seguro": 150.0
+          },
+          {
+            "capital": 9026.67,
+            "interes": 668.01,
+            "mes": 10,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 18710.76,
+            "seguro": 150.0
+          },
+          {
+            "capital": 9244.07,
+            "interes": 450.62,
+            "mes": 11,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 9466.7,
+            "seguro": 150.0
+          },
+          {
+            "capital": 9466.7,
+            "interes": 227.99,
+            "mes": 12,
+            "pago_base": 9694.68,
+            "pago_total": 9844.68,
+            "saldo": 0,
+            "seguro": 150.0
+          }
+        ]
+      }
+    },
+    {
+      "args": {
+        "comision_apertura": 0.0,
+        "monto": 100000,
+        "plazo_meses": 12,
+        "seguro_mensual": 0.0,
+        "tasa_anual": 0.2
+      },
+      "expected": {
+        "concepto": "cat",
+        "desglose_costo": {
+          "capital": 100000,
+          "comision_apertura": 0.0,
+          "costo_total": 111161.41,
+          "intereses": 11161.41,
+          "seguros": 0.0
+        },
+        "explicacion": "La tasa es 20.0%, pero el CAT es 21.9% porque incluye la comisión de apertura ($0) y el seguro ($0/mes = $0 total). El CAT es el costo REAL anualizado de todo junto.",
+        "parametros": {
+          "comision_apertura": 0.0,
+          "monto": 100000,
+          "plazo_meses": 12,
+          "seguro_mensual": 0.0,
+          "tasa_anual": 0.2
+        },
+        "resumen": {
+          "cat_aproximado": 0.2194,
+          "diferencia": 0.0194,
+          "neto_recibido": 100000.0,
+          "tasa_anual": 0.2
+        },
+        "serie": [
+          {
+            "capital": 7596.78,
+            "interes": 1666.67,
+            "mes": 1,
+            "pago_base": 9263.45,
+            "pago_total": 9263.45,
+            "saldo": 92403.22,
+            "seguro": 0.0
+          },
+          {
+            "capital": 7723.4,
+            "interes": 1540.05,
+            "mes": 2,
+            "pago_base": 9263.45,
+            "pago_total": 9263.45,
+            "saldo": 84679.82,
+            "seguro": 0.0
+          },
+          {
+            "capital": 7852.12,
+            "interes": 1411.33,
+            "mes": 3,
+            "pago_base": 9263.45,
+            "pago_total": 9263.45,
+            "saldo": 76827.7,
+            "seguro": 0.0
+          },
+          {
+            "capital": 7982.99,
+            "interes": 1280.46,
+            "mes": 4,
+            "pago_base": 9263.45,
+            "pago_total": 9263.45,
+            "saldo": 68844.71,
+            "seguro": 0.0
+          },
+          {
+            "capital": 8116.04,
+            "interes": 1147.41,
+            "mes": 5,
+            "pago_base": 9263.45,
+            "pago_total": 9263.45,
+            "saldo": 60728.67,
+            "seguro": 0.0
+          },
+          {
+            "capital": 8251.31,
+            "interes": 1012.14,
+            "mes": 6,
+            "pago_base": 9263.45,
+            "pago_total": 9263.45,
+            "saldo": 52477.37,
+            "seguro": 0.0
+          },
+          {
+            "capital": 8388.83,
+            "interes": 874.62,
+            "mes": 7,
+            "pago_base": 9263.45,
+            "pago_total": 9263.45,
+            "saldo": 44088.54,
+            "seguro": 0.0
+          },
+          {
+            "capital": 8528.64,
+            "interes": 734.81,
+            "mes": 8,
+            "pago_base": 9263.45,
+            "pago_total": 9263.45,
+            "saldo": 35559.9,
+            "seguro": 0.0
+          },
+          {
+            "capital": 8670.79,
+            "interes": 592.66,
+            "mes": 9,
+            "pago_base": 9263.45,
+            "pago_total": 9263.45,
+            "saldo": 26889.11,
+            "seguro": 0.0
+          },
+          {
+            "capital": 8815.3,
+            "interes": 448.15,
+            "mes": 10,
+            "pago_base": 9263.45,
+            "pago_total": 9263.45,
+            "saldo": 18073.81,
+            "seguro": 0.0
+          },
+          {
+            "capital": 8962.22,
+            "interes": 301.23,
+            "mes": 11,
+            "pago_base": 9263.45,
+            "pago_total": 9263.45,
+            "saldo": 9111.59,
+            "seguro": 0.0
+          },
+          {
+            "capital": 9111.59,
+            "interes": 151.86,
+            "mes": 12,
+            "pago_base": 9263.45,
+            "pago_total": 9263.45,
+            "saldo": 0,
+            "seguro": 0.0
+          }
+        ]
+      }
+    },
+    {
+      "args": {
+        "comision_apertura": 0.05,
+        "monto": 50000,
+        "plazo_meses": 60,
+        "seguro_mensual": 400.0,
+        "tasa_anual": 0.45
+      },
+      "expected": {
+        "concepto": "cat",
+        "desglose_costo": {
+          "capital": 50000,
+          "comision_apertura": 2500.0,
+          "costo_total": 152880.09,
+          "intereses": 76380.09,
+          "seguros": 24000.0
+        },
+        "explicacion": "La tasa es 45.0%, pero el CAT es 79.4% porque incluye la comisión de apertura ($2,500) y el seguro ($400/mes = $24,000 total). El CAT es el costo REAL anualizado de todo junto.",
+        "parametros": {
+          "comision_apertura": 0.05,
+          "monto": 50000,
+          "plazo_meses": 60,
+          "seguro_mensual": 400.0,
+          "tasa_anual": 0.45
+        },
+        "resumen": {
+          "cat_aproximado": 0.7944,
+          "diferencia": 0.3444,
+          "neto_recibido": 47500.0,
+          "tasa_anual": 0.45
+        },
+        "serie": [
+          {
+            "capital": 231.33,
+            "interes": 1875.0,
+            "mes": 1,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 49768.67,
+            "seguro": 400.0
+          },
+          {
+            "capital": 240.01,
+            "interes": 1866.32,
+            "mes": 2,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 49528.66,
+            "seguro": 400.0
+          },
+          {
+            "capital": 249.01,
+            "interes": 1857.32,
+            "mes": 3,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 49279.64,
+            "seguro": 400.0
+          },
+          {
+            "capital": 258.35,
+            "interes": 1847.99,
+            "mes": 4,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 49021.3,
+            "seguro": 400.0
+          },
+          {
+            "capital": 268.04,
+            "interes": 1838.3,
+            "mes": 5,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 48753.26,
+            "seguro": 400.0
+          },
+          {
+            "capital": 278.09,
+            "interes": 1828.25,
+            "mes": 6,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 48475.17,
+            "seguro": 400.0
+          },
+          {
+            "capital": 288.52,
+            "interes": 1817.82,
+            "mes": 7,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 48186.66,
+            "seguro": 400.0
+          },
+          {
+            "capital": 299.34,
+            "interes": 1807.0,
+            "mes": 8,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 47887.32,
+            "seguro": 400.0
+          },
+          {
+            "capital": 310.56,
+            "interes": 1795.77,
+            "mes": 9,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 47576.76,
+            "seguro": 400.0
+          },
+          {
+            "capital": 322.21,
+            "interes": 1784.13,
+            "mes": 10,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 47254.56,
+            "seguro": 400.0
+          },
+          {
+            "capital": 334.29,
+            "interes": 1772.05,
+            "mes": 11,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 46920.27,
+            "seguro": 400.0
+          },
+          {
+            "capital": 346.82,
+            "interes": 1759.51,
+            "mes": 12,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 46573.44,
+            "seguro": 400.0
+          },
+          {
+            "capital": 359.83,
+            "interes": 1746.5,
+            "mes": 13,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 46213.61,
+            "seguro": 400.0
+          },
+          {
+            "capital": 373.32,
+            "interes": 1733.01,
+            "mes": 14,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 45840.29,
+            "seguro": 400.0
+          },
+          {
+            "capital": 387.32,
+            "interes": 1719.01,
+            "mes": 15,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 45452.96,
+            "seguro": 400.0
+          },
+          {
+            "capital": 401.85,
+            "interes": 1704.49,
+            "mes": 16,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 45051.11,
+            "seguro": 400.0
+          },
+          {
+            "capital": 416.92,
+            "interes": 1689.42,
+            "mes": 17,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 44634.19,
+            "seguro": 400.0
+          },
+          {
+            "capital": 432.55,
+            "interes": 1673.78,
+            "mes": 18,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 44201.64,
+            "seguro": 400.0
+          },
+          {
+            "capital": 448.77,
+            "interes": 1657.56,
+            "mes": 19,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 43752.87,
+            "seguro": 400.0
+          },
+          {
+            "capital": 465.6,
+            "interes": 1640.73,
+            "mes": 20,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 43287.27,
+            "seguro": 400.0
+          },
+          {
+            "capital": 483.06,
+            "interes": 1623.27,
+            "mes": 21,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 42804.2,
+            "seguro": 400.0
+          },
+          {
+            "capital": 501.18,
+            "interes": 1605.16,
+            "mes": 22,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 42303.03,
+            "seguro": 400.0
+          },
+          {
+            "capital": 519.97,
+            "interes": 1586.36,
+            "mes": 23,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 41783.06,
+            "seguro": 400.0
+          },
+          {
+            "capital": 539.47,
+            "interes": 1566.86,
+            "mes": 24,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 41243.59,
+            "seguro": 400.0
+          },
+          {
+            "capital": 559.7,
+            "interes": 1546.63,
+            "mes": 25,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 40683.89,
+            "seguro": 400.0
+          },
+          {
+            "capital": 580.69,
+            "interes": 1525.65,
+            "mes": 26,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 40103.2,
+            "seguro": 400.0
+          },
+          {
+            "capital": 602.47,
+            "interes": 1503.87,
+            "mes": 27,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 39500.73,
+            "seguro": 400.0
+          },
+          {
+            "capital": 625.06,
+            "interes": 1481.28,
+            "mes": 28,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 38875.67,
+            "seguro": 400.0
+          },
+          {
+            "capital": 648.5,
+            "interes": 1457.84,
+            "mes": 29,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 38227.18,
+            "seguro": 400.0
+          },
+          {
+            "capital": 672.82,
+            "interes": 1433.52,
+            "mes": 30,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 37554.36,
+            "seguro": 400.0
+          },
+          {
+            "capital": 698.05,
+            "interes": 1408.29,
+            "mes": 31,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 36856.31,
+            "seguro": 400.0
+          },
+          {
+            "capital": 724.22,
+            "interes": 1382.11,
+            "mes": 32,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 36132.09,
+            "seguro": 400.0
+          },
+          {
+            "capital": 751.38,
+            "interes": 1354.95,
+            "mes": 33,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 35380.71,
+            "seguro": 400.0
+          },
+          {
+            "capital": 779.56,
+            "interes": 1326.78,
+            "mes": 34,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 34601.15,
+            "seguro": 400.0
+          },
+          {
+            "capital": 808.79,
+            "interes": 1297.54,
+            "mes": 35,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 33792.36,
+            "seguro": 400.0
+          },
+          {
+            "capital": 839.12,
+            "interes": 1267.21,
+            "mes": 36,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 32953.24,
+            "seguro": 400.0
+          },
+          {
+            "capital": 870.59,
+            "interes": 1235.75,
+            "mes": 37,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 32082.65,
+            "seguro": 400.0
+          },
+          {
+            "capital": 903.24,
+            "interes": 1203.1,
+            "mes": 38,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 31179.41,
+            "seguro": 400.0
+          },
+          {
+            "capital": 937.11,
+            "interes": 1169.23,
+            "mes": 39,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 30242.31,
+            "seguro": 400.0
+          },
+          {
+            "capital": 972.25,
+            "interes": 1134.09,
+            "mes": 40,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 29270.06,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1008.71,
+            "interes": 1097.63,
+            "mes": 41,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 28261.35,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1046.53,
+            "interes": 1059.8,
+            "mes": 42,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 27214.82,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1085.78,
+            "interes": 1020.56,
+            "mes": 43,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 26129.04,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1126.5,
+            "interes": 979.84,
+            "mes": 44,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 25002.54,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1168.74,
+            "interes": 937.6,
+            "mes": 45,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 23833.8,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1212.57,
+            "interes": 893.77,
+            "mes": 46,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 22621.24,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1258.04,
+            "interes": 848.3,
+            "mes": 47,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 21363.2,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1305.21,
+            "interes": 801.12,
+            "mes": 48,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 20057.98,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1354.16,
+            "interes": 752.17,
+            "mes": 49,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 18703.82,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1404.94,
+            "interes": 701.39,
+            "mes": 50,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 17298.88,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1457.63,
+            "interes": 648.71,
+            "mes": 51,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 15841.25,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1512.29,
+            "interes": 594.05,
+            "mes": 52,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 14328.97,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1569.0,
+            "interes": 537.34,
+            "mes": 53,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 12759.97,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1627.84,
+            "interes": 478.5,
+            "mes": 54,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 11132.13,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1688.88,
+            "interes": 417.45,
+            "mes": 55,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 9443.25,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1752.21,
+            "interes": 354.12,
+            "mes": 56,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 7691.04,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1817.92,
+            "interes": 288.41,
+            "mes": 57,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 5873.12,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1886.09,
+            "interes": 220.24,
+            "mes": 58,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 3987.02,
+            "seguro": 400.0
+          },
+          {
+            "capital": 1956.82,
+            "interes": 149.51,
+            "mes": 59,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 2030.2,
+            "seguro": 400.0
+          },
+          {
+            "capital": 2030.2,
+            "interes": 76.13,
+            "mes": 60,
+            "pago_base": 2106.33,
+            "pago_total": 2506.33,
+            "saldo": 0.0,
+            "seguro": 400.0
+          }
+        ]
+      }
+    },
+    {
+      "args": {
+        "comision_apertura": 0.0,
+        "monto": 100000,
+        "plazo_meses": 24,
+        "seguro_mensual": 0.0,
+        "tasa_anual": 0.0
+      },
+      "expected": {
+        "concepto": "cat",
+        "desglose_costo": {
+          "capital": 100000,
+          "comision_apertura": 0.0,
+          "costo_total": 100000.0,
+          "intereses": 0.0,
+          "seguros": 0.0
+        },
+        "explicacion": "La tasa es 0.0%, pero el CAT es 0.0% porque incluye la comisión de apertura ($0) y el seguro ($0/mes = $0 total). El CAT es el costo REAL anualizado de todo junto.",
+        "parametros": {
+          "comision_apertura": 0.0,
+          "monto": 100000,
+          "plazo_meses": 24,
+          "seguro_mensual": 0.0,
+          "tasa_anual": 0.0
+        },
+        "resumen": {
+          "cat_aproximado": 0.0,
+          "diferencia": 0.0,
+          "neto_recibido": 100000.0,
+          "tasa_anual": 0.0
+        },
+        "serie": [
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 1,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 95833.33,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 2,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 91666.67,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 3,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 87500.0,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 4,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 83333.33,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 5,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 79166.67,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 6,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 75000.0,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 7,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 70833.33,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 8,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 66666.67,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 9,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 62500.0,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 10,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 58333.33,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 11,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 54166.67,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 12,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 50000.0,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 13,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 45833.33,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 14,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 41666.67,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 15,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 37500.0,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 16,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 33333.33,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 17,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 29166.67,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 18,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 25000.0,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 19,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 20833.33,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 20,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 16666.67,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 21,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 12500.0,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 22,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 8333.33,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 23,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 4166.67,
+            "seguro": 0.0
+          },
+          {
+            "capital": 4166.67,
+            "interes": 0.0,
+            "mes": 24,
+            "pago_base": 4166.67,
+            "pago_total": 4166.67,
+            "saldo": 0,
+            "seguro": 0.0
+          }
+        ]
+      }
+    }
+  ],
+  "tool": "explicar_cat"
+}

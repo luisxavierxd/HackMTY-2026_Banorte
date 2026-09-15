@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { UserProfile } from "../net/profile";
 import { relativeDate, type ConversationRecord } from "../net/conversations";
 
@@ -38,6 +39,8 @@ interface ProfileSidebarProps {
   onNewConversation: () => void;
   onSelectConversation: (id: string) => void;
   onDeleteConversation: (id: string) => void;
+  /** Chip de proveedor. Va hasta arriba, antes del perfil (§6 de la spec). */
+  providerChip?: ReactNode;
 }
 
 /** Card en escritorio, barra lateral deslizable en móvil (ver App.css
@@ -55,12 +58,14 @@ export default function ProfileSidebar({
   onNewConversation,
   onSelectConversation,
   onDeleteConversation,
+  providerChip,
 }: ProfileSidebarProps) {
   return (
     <>
       {open && <div className="bn-sidebar__scrim" onClick={onClose} aria-hidden="true" />}
       <aside className={`bn-sidebar${open ? " bn-sidebar--open" : ""}`}>
         <div className="bn-sidebar__card">
+          {providerChip}
           <span className="bn-sidebar__eyebrow">Tu contexto</span>
           <h2 className="bn-sidebar__name">{profile.nombre}</h2>
           <dl className="bn-sidebar__stats">

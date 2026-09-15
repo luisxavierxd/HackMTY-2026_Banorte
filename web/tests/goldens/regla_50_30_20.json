@@ -1,0 +1,167 @@
+{
+  "cases": [
+    {
+      "args": {},
+      "expected": {
+        "comparacion": [
+          {
+            "diferencia": 939.9,
+            "grupo": "necesidades",
+            "ideal": 14250.0,
+            "porcentaje_ideal": 50,
+            "real": 13310.1,
+            "status": "ok"
+          },
+          {
+            "diferencia": 7339.5,
+            "grupo": "deseos",
+            "ideal": 8550.0,
+            "porcentaje_ideal": 30,
+            "real": 1210.5,
+            "status": "ok"
+          },
+          {
+            "diferencia": 6439.4,
+            "grupo": "ahorro_e_inversión",
+            "ideal": 5700.0,
+            "porcentaje_ideal": 20,
+            "real": 12139.4,
+            "status": "ok"
+          }
+        ],
+        "concepto": "regla_50_30_20",
+        "explicacion": "De tu ingreso de $28,500, la regla dice destinar $14,250 a necesidades, $8,550 a deseos y $5,700 a ahorro. Hoy ahorras $12,139 (43% de tu ingreso).",
+        "ingreso_mensual": 28500.0,
+        "resumen": {
+          "ahorro_como_porcentaje": 42.59,
+          "ahorro_real": 12139.4,
+          "gasto_total": 16360.6
+        }
+      }
+    },
+    {
+      "args": {
+        "ingreso_mensual": 100000.0
+      },
+      "expected": {
+        "comparacion": [
+          {
+            "diferencia": 36689.9,
+            "grupo": "necesidades",
+            "ideal": 50000.0,
+            "porcentaje_ideal": 50,
+            "real": 13310.1,
+            "status": "ok"
+          },
+          {
+            "diferencia": 28789.5,
+            "grupo": "deseos",
+            "ideal": 30000.0,
+            "porcentaje_ideal": 30,
+            "real": 1210.5,
+            "status": "ok"
+          },
+          {
+            "diferencia": 63639.4,
+            "grupo": "ahorro_e_inversión",
+            "ideal": 20000.0,
+            "porcentaje_ideal": 20,
+            "real": 83639.4,
+            "status": "ok"
+          }
+        ],
+        "concepto": "regla_50_30_20",
+        "explicacion": "De tu ingreso de $100,000, la regla dice destinar $50,000 a necesidades, $30,000 a deseos y $20,000 a ahorro. Hoy ahorras $83,639 (84% de tu ingreso).",
+        "ingreso_mensual": 100000.0,
+        "resumen": {
+          "ahorro_como_porcentaje": 83.64,
+          "ahorro_real": 83639.4,
+          "gasto_total": 16360.6
+        }
+      }
+    },
+    {
+      "args": {
+        "ingreso_mensual": 1.0
+      },
+      "expected": {
+        "comparacion": [
+          {
+            "diferencia": -13309.6,
+            "grupo": "necesidades",
+            "ideal": 0.5,
+            "porcentaje_ideal": 50,
+            "real": 13310.1,
+            "status": "excedido"
+          },
+          {
+            "diferencia": -1210.2,
+            "grupo": "deseos",
+            "ideal": 0.3,
+            "porcentaje_ideal": 30,
+            "real": 1210.5,
+            "status": "excedido"
+          },
+          {
+            "diferencia": -16359.8,
+            "grupo": "ahorro_e_inversión",
+            "ideal": 0.2,
+            "porcentaje_ideal": 20,
+            "real": -16359.6,
+            "status": "insuficiente"
+          }
+        ],
+        "concepto": "regla_50_30_20",
+        "explicacion": "De tu ingreso de $1, la regla dice destinar $0 a necesidades, $0 a deseos y $0 a ahorro. Hoy ahorras $-16,360 (-1635960% de tu ingreso).",
+        "ingreso_mensual": 1.0,
+        "resumen": {
+          "ahorro_como_porcentaje": -1635960.0,
+          "ahorro_real": -16359.6,
+          "gasto_total": 16360.6
+        }
+      }
+    },
+    {
+      "args": {
+        "ingreso_mensual": 28500.0
+      },
+      "expected": {
+        "comparacion": [
+          {
+            "diferencia": 939.9,
+            "grupo": "necesidades",
+            "ideal": 14250.0,
+            "porcentaje_ideal": 50,
+            "real": 13310.1,
+            "status": "ok"
+          },
+          {
+            "diferencia": 7339.5,
+            "grupo": "deseos",
+            "ideal": 8550.0,
+            "porcentaje_ideal": 30,
+            "real": 1210.5,
+            "status": "ok"
+          },
+          {
+            "diferencia": 6439.4,
+            "grupo": "ahorro_e_inversión",
+            "ideal": 5700.0,
+            "porcentaje_ideal": 20,
+            "real": 12139.4,
+            "status": "ok"
+          }
+        ],
+        "concepto": "regla_50_30_20",
+        "explicacion": "De tu ingreso de $28,500, la regla dice destinar $14,250 a necesidades, $8,550 a deseos y $5,700 a ahorro. Hoy ahorras $12,139 (43% de tu ingreso).",
+        "ingreso_mensual": 28500.0,
+        "resumen": {
+          "ahorro_como_porcentaje": 42.59,
+          "ahorro_real": 12139.4,
+          "gasto_total": 16360.6
+        }
+      }
+    }
+  ],
+  "tool": "regla_50_30_20"
+}

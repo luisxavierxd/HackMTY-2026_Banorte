@@ -1,0 +1,80 @@
+name: Deploy web/ a GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    # legacy/ está congelado: tocarlo no re-despliega la demo.
+    paths:
+      - "web/**"
+      - "scripts/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Una sola publicación a la vez; no cancela la que ya está corriendo para no
+# dejar Pages a medio publicar.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Instalar el harness (para regenerar el contrato)
+        working-directory: legacy
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[dev]"
+
+      - name: Anti-drift del contrato y los goldens
+        # Si el contrato commiteado no coincide con lo que produce el Python,
+        # el build falla aquí — es lo que evita que las dos implementaciones
+        # del dominio se separen sin que nadie se entere (§3 de la spec).
+        run: |
+          python scripts/export_contract.py --check
+          python scripts/export_tool_goldens.py --check
+
+      - name: Instalar dependencias del front
+        working-directory: web
+        run: npm ci
+
+      - name: Goldens TS vs Python
+        working-directory: web
+        run: npm run test
+
+      - name: Build
+        working-directory: web
+        # Sin VITE_BASE porque el custom domain sirve el sitio desde la raíz.
+        # Cuando venza banky.mx: VITE_BASE=/HackMTY-2026_Banorte/ (ver README).
+        run: npm run build
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,7 +1,10 @@
 import type { SurfaceState } from "../a2ui/surfaceReducer";
 
 export interface TranscriptEntry {
-  role: "user" | "agent";
+  /** `divider` marca un cambio de proveedor a media conversación (§6 de la
+   *  spec): el historial NO se borra, se anota — la traza tiene que seguir
+   *  siendo legible. No es un mensaje de nadie, así que no se manda al modelo. */
+  role: "user" | "agent" | "divider";
   text: string;
   ts: number;
   surface?: SurfaceState;

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0c0c10" />
+    <title>Banky</title>
+    <style>
+      html { background: #0c0c10; }
+    </style>
+    <script>
+      // La app no tiene router: cualquier ruta desconocida vuelve a la raíz
+      // del sitio. El base se deriva en vivo para que esto funcione igual con
+      // el custom domain (banky.mx -> "/") que con el fallback de Pages
+      // (luisxavierxd.github.io/HackMTY-2026_Banorte/ -> "/HackMTY-2026_Banorte/"),
+      // sin tener que regenerar este archivo al cambiar VITE_BASE.
+      (function () {
+        var base = "/";
+        if (location.hostname.endsWith("github.io")) {
+          var first = location.pathname.split("/")[1];
+          if (first) base = "/" + first + "/";
+        }
+        location.replace(base);
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>

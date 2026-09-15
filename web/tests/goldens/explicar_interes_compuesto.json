@@ -1,0 +1,806 @@
+{
+  "cases": [
+    {
+      "args": {},
+      "expected": {
+        "concepto": "interes_compuesto",
+        "explicacion": "Con una tasa anual de 30%, una deuda de $10,000 se convierte en $18,087 en 24 meses si no se paga nada — el interés genera más interés.",
+        "parametros": {
+          "capital": 10000.0,
+          "meses": 24,
+          "tasa_anual": 0.3
+        },
+        "resumen": {
+          "factor_crecimiento": 1.8087,
+          "interes_total": 8087.26,
+          "saldo_final": 18087.26
+        },
+        "serie": [
+          {
+            "interes_acumulado": 250.0,
+            "mes": 1,
+            "saldo": 10250.0
+          },
+          {
+            "interes_acumulado": 506.25,
+            "mes": 2,
+            "saldo": 10506.25
+          },
+          {
+            "interes_acumulado": 768.91,
+            "mes": 3,
+            "saldo": 10768.91
+          },
+          {
+            "interes_acumulado": 1038.13,
+            "mes": 4,
+            "saldo": 11038.13
+          },
+          {
+            "interes_acumulado": 1314.08,
+            "mes": 5,
+            "saldo": 11314.08
+          },
+          {
+            "interes_acumulado": 1596.93,
+            "mes": 6,
+            "saldo": 11596.93
+          },
+          {
+            "interes_acumulado": 1886.86,
+            "mes": 7,
+            "saldo": 11886.86
+          },
+          {
+            "interes_acumulado": 2184.03,
+            "mes": 8,
+            "saldo": 12184.03
+          },
+          {
+            "interes_acumulado": 2488.63,
+            "mes": 9,
+            "saldo": 12488.63
+          },
+          {
+            "interes_acumulado": 2800.85,
+            "mes": 10,
+            "saldo": 12800.85
+          },
+          {
+            "interes_acumulado": 3120.87,
+            "mes": 11,
+            "saldo": 13120.87
+          },
+          {
+            "interes_acumulado": 3448.89,
+            "mes": 12,
+            "saldo": 13448.89
+          },
+          {
+            "interes_acumulado": 3785.11,
+            "mes": 13,
+            "saldo": 13785.11
+          },
+          {
+            "interes_acumulado": 4129.74,
+            "mes": 14,
+            "saldo": 14129.74
+          },
+          {
+            "interes_acumulado": 4482.98,
+            "mes": 15,
+            "saldo": 14482.98
+          },
+          {
+            "interes_acumulado": 4845.06,
+            "mes": 16,
+            "saldo": 14845.06
+          },
+          {
+            "interes_acumulado": 5216.18,
+            "mes": 17,
+            "saldo": 15216.18
+          },
+          {
+            "interes_acumulado": 5596.59,
+            "mes": 18,
+            "saldo": 15596.59
+          },
+          {
+            "interes_acumulado": 5986.5,
+            "mes": 19,
+            "saldo": 15986.5
+          },
+          {
+            "interes_acumulado": 6386.16,
+            "mes": 20,
+            "saldo": 16386.16
+          },
+          {
+            "interes_acumulado": 6795.82,
+            "mes": 21,
+            "saldo": 16795.82
+          },
+          {
+            "interes_acumulado": 7215.71,
+            "mes": 22,
+            "saldo": 17215.71
+          },
+          {
+            "interes_acumulado": 7646.11,
+            "mes": 23,
+            "saldo": 17646.11
+          },
+          {
+            "interes_acumulado": 8087.26,
+            "mes": 24,
+            "saldo": 18087.26
+          }
+        ]
+      }
+    },
+    {
+      "args": {
+        "capital": 10000,
+        "meses": 12,
+        "tasa_anual": 0.3
+      },
+      "expected": {
+        "concepto": "interes_compuesto",
+        "explicacion": "Con una tasa anual de 30%, una deuda de $10,000 se convierte en $13,449 en 12 meses si no se paga nada — el interés genera más interés.",
+        "parametros": {
+          "capital": 10000,
+          "meses": 12,
+          "tasa_anual": 0.3
+        },
+        "resumen": {
+          "factor_crecimiento": 1.3449,
+          "interes_total": 3448.89,
+          "saldo_final": 13448.89
+        },
+        "serie": [
+          {
+            "interes_acumulado": 250.0,
+            "mes": 1,
+            "saldo": 10250.0
+          },
+          {
+            "interes_acumulado": 506.25,
+            "mes": 2,
+            "saldo": 10506.25
+          },
+          {
+            "interes_acumulado": 768.91,
+            "mes": 3,
+            "saldo": 10768.91
+          },
+          {
+            "interes_acumulado": 1038.13,
+            "mes": 4,
+            "saldo": 11038.13
+          },
+          {
+            "interes_acumulado": 1314.08,
+            "mes": 5,
+            "saldo": 11314.08
+          },
+          {
+            "interes_acumulado": 1596.93,
+            "mes": 6,
+            "saldo": 11596.93
+          },
+          {
+            "interes_acumulado": 1886.86,
+            "mes": 7,
+            "saldo": 11886.86
+          },
+          {
+            "interes_acumulado": 2184.03,
+            "mes": 8,
+            "saldo": 12184.03
+          },
+          {
+            "interes_acumulado": 2488.63,
+            "mes": 9,
+            "saldo": 12488.63
+          },
+          {
+            "interes_acumulado": 2800.85,
+            "mes": 10,
+            "saldo": 12800.85
+          },
+          {
+            "interes_acumulado": 3120.87,
+            "mes": 11,
+            "saldo": 13120.87
+          },
+          {
+            "interes_acumulado": 3448.89,
+            "mes": 12,
+            "saldo": 13448.89
+          }
+        ]
+      }
+    },
+    {
+      "args": {
+        "capital": 10000,
+        "meses": 6,
+        "tasa_anual": 0.0
+      },
+      "expected": {
+        "concepto": "interes_compuesto",
+        "explicacion": "Con una tasa anual de 0%, una deuda de $10,000 se convierte en $10,000 en 6 meses si no se paga nada — el interés genera más interés.",
+        "parametros": {
+          "capital": 10000,
+          "meses": 6,
+          "tasa_anual": 0.0
+        },
+        "resumen": {
+          "factor_crecimiento": 1.0,
+          "interes_total": 0.0,
+          "saldo_final": 10000.0
+        },
+        "serie": [
+          {
+            "interes_acumulado": 0.0,
+            "mes": 1,
+            "saldo": 10000.0
+          },
+          {
+            "interes_acumulado": 0.0,
+            "mes": 2,
+            "saldo": 10000.0
+          },
+          {
+            "interes_acumulado": 0.0,
+            "mes": 3,
+            "saldo": 10000.0
+          },
+          {
+            "interes_acumulado": 0.0,
+            "mes": 4,
+            "saldo": 10000.0
+          },
+          {
+            "interes_acumulado": 0.0,
+            "mes": 5,
+            "saldo": 10000.0
+          },
+          {
+            "interes_acumulado": 0.0,
+            "mes": 6,
+            "saldo": 10000.0
+          }
+        ]
+      }
+    },
+    {
+      "args": {
+        "capital": 1,
+        "meses": 60,
+        "tasa_anual": 0.99
+      },
+      "expected": {
+        "concepto": "interes_compuesto",
+        "explicacion": "Con una tasa anual de 99%, una deuda de $1 se convierte en $116 en 60 meses si no se paga nada — el interés genera más interés.",
+        "parametros": {
+          "capital": 1,
+          "meses": 60,
+          "tasa_anual": 0.99
+        },
+        "resumen": {
+          "factor_crecimiento": 116.3253,
+          "interes_total": 115.33,
+          "saldo_final": 116.33
+        },
+        "serie": [
+          {
+            "interes_acumulado": 0.08,
+            "mes": 1,
+            "saldo": 1.08
+          },
+          {
+            "interes_acumulado": 0.17,
+            "mes": 2,
+            "saldo": 1.17
+          },
+          {
+            "interes_acumulado": 0.27,
+            "mes": 3,
+            "saldo": 1.27
+          },
+          {
+            "interes_acumulado": 0.37,
+            "mes": 4,
+            "saldo": 1.37
+          },
+          {
+            "interes_acumulado": 0.49,
+            "mes": 5,
+            "saldo": 1.49
+          },
+          {
+            "interes_acumulado": 0.61,
+            "mes": 6,
+            "saldo": 1.61
+          },
+          {
+            "interes_acumulado": 0.74,
+            "mes": 7,
+            "saldo": 1.74
+          },
+          {
+            "interes_acumulado": 0.89,
+            "mes": 8,
+            "saldo": 1.89
+          },
+          {
+            "interes_acumulado": 1.04,
+            "mes": 9,
+            "saldo": 2.04
+          },
+          {
+            "interes_acumulado": 1.21,
+            "mes": 10,
+            "saldo": 2.21
+          },
+          {
+            "interes_acumulado": 1.39,
+            "mes": 11,
+            "saldo": 2.39
+          },
+          {
+            "interes_acumulado": 1.59,
+            "mes": 12,
+            "saldo": 2.59
+          },
+          {
+            "interes_acumulado": 1.8,
+            "mes": 13,
+            "saldo": 2.8
+          },
+          {
+            "interes_acumulado": 2.03,
+            "mes": 14,
+            "saldo": 3.03
+          },
+          {
+            "interes_acumulado": 2.28,
+            "mes": 15,
+            "saldo": 3.28
+          },
+          {
+            "interes_acumulado": 2.56,
+            "mes": 16,
+            "saldo": 3.56
+          },
+          {
+            "interes_acumulado": 2.85,
+            "mes": 17,
+            "saldo": 3.85
+          },
+          {
+            "interes_acumulado": 3.17,
+            "mes": 18,
+            "saldo": 4.17
+          },
+          {
+            "interes_acumulado": 3.51,
+            "mes": 19,
+            "saldo": 4.51
+          },
+          {
+            "interes_acumulado": 3.88,
+            "mes": 20,
+            "saldo": 4.88
+          },
+          {
+            "interes_acumulado": 4.28,
+            "mes": 21,
+            "saldo": 5.28
+          },
+          {
+            "interes_acumulado": 4.72,
+            "mes": 22,
+            "saldo": 5.72
+          },
+          {
+            "interes_acumulado": 5.19,
+            "mes": 23,
+            "saldo": 6.19
+          },
+          {
+            "interes_acumulado": 5.7,
+            "mes": 24,
+            "saldo": 6.7
+          },
+          {
+            "interes_acumulado": 6.26,
+            "mes": 25,
+            "saldo": 7.26
+          },
+          {
+            "interes_acumulado": 6.85,
+            "mes": 26,
+            "saldo": 7.85
+          },
+          {
+            "interes_acumulado": 7.5,
+            "mes": 27,
+            "saldo": 8.5
+          },
+          {
+            "interes_acumulado": 8.2,
+            "mes": 28,
+            "saldo": 9.2
+          },
+          {
+            "interes_acumulado": 8.96,
+            "mes": 29,
+            "saldo": 9.96
+          },
+          {
+            "interes_acumulado": 9.79,
+            "mes": 30,
+            "saldo": 10.79
+          },
+          {
+            "interes_acumulado": 10.68,
+            "mes": 31,
+            "saldo": 11.68
+          },
+          {
+            "interes_acumulado": 11.64,
+            "mes": 32,
+            "saldo": 12.64
+          },
+          {
+            "interes_acumulado": 12.68,
+            "mes": 33,
+            "saldo": 13.68
+          },
+          {
+            "interes_acumulado": 13.81,
+            "mes": 34,
+            "saldo": 14.81
+          },
+          {
+            "interes_acumulado": 15.03,
+            "mes": 35,
+            "saldo": 16.03
+          },
+          {
+            "interes_acumulado": 16.35,
+            "mes": 36,
+            "saldo": 17.35
+          },
+          {
+            "interes_acumulado": 17.79,
+            "mes": 37,
+            "saldo": 18.79
+          },
+          {
+            "interes_acumulado": 19.34,
+            "mes": 38,
+            "saldo": 20.34
+          },
+          {
+            "interes_acumulado": 21.01,
+            "mes": 39,
+            "saldo": 22.01
+          },
+          {
+            "interes_acumulado": 22.83,
+            "mes": 40,
+            "saldo": 23.83
+          },
+          {
+            "interes_acumulado": 24.8,
+            "mes": 41,
+            "saldo": 25.8
+          },
+          {
+            "interes_acumulado": 26.92,
+            "mes": 42,
+            "saldo": 27.92
+          },
+          {
+            "interes_acumulado": 29.23,
+            "mes": 43,
+            "saldo": 30.23
+          },
+          {
+            "interes_acumulado": 31.72,
+            "mes": 44,
+            "saldo": 32.72
+          },
+          {
+            "interes_acumulado": 34.42,
+            "mes": 45,
+            "saldo": 35.42
+          },
+          {
+            "interes_acumulado": 37.34,
+            "mes": 46,
+            "saldo": 38.34
+          },
+          {
+            "interes_acumulado": 40.51,
+            "mes": 47,
+            "saldo": 41.51
+          },
+          {
+            "interes_acumulado": 43.93,
+            "mes": 48,
+            "saldo": 44.93
+          },
+          {
+            "interes_acumulado": 47.64,
+            "mes": 49,
+            "saldo": 48.64
+          },
+          {
+            "interes_acumulado": 51.65,
+            "mes": 50,
+            "saldo": 52.65
+          },
+          {
+            "interes_acumulado": 55.99,
+            "mes": 51,
+            "saldo": 56.99
+          },
+          {
+            "interes_acumulado": 60.7,
+            "mes": 52,
+            "saldo": 61.7
+          },
+          {
+            "interes_acumulado": 65.79,
+            "mes": 53,
+            "saldo": 66.79
+          },
+          {
+            "interes_acumulado": 71.29,
+            "mes": 54,
+            "saldo": 72.29
+          },
+          {
+            "interes_acumulado": 77.26,
+            "mes": 55,
+            "saldo": 78.26
+          },
+          {
+            "interes_acumulado": 83.72,
+            "mes": 56,
+            "saldo": 84.72
+          },
+          {
+            "interes_acumulado": 90.7,
+            "mes": 57,
+            "saldo": 91.7
+          },
+          {
+            "interes_acumulado": 98.27,
+            "mes": 58,
+            "saldo": 99.27
+          },
+          {
+            "interes_acumulado": 106.46,
+            "mes": 59,
+            "saldo": 107.46
+          },
+          {
+            "interes_acumulado": 115.33,
+            "mes": 60,
+            "saldo": 116.33
+          }
+        ]
+      }
+    },
+    {
+      "args": {
+        "capital": 250000,
+        "meses": 36,
+        "tasa_anual": 2.5
+      },
+      "expected": {
+        "concepto": "interes_compuesto",
+        "explicacion": "Con una tasa anual de 250%, una deuda de $250,000 se convierte en $227,333,392 en 36 meses si no se paga nada — el interés genera más interés.",
+        "parametros": {
+          "capital": 250000,
+          "meses": 36,
+          "tasa_anual": 2.5
+        },
+        "resumen": {
+          "factor_crecimiento": 909.3336,
+          "interes_total": 227083391.69,
+          "saldo_final": 227333391.69
+        },
+        "serie": [
+          {
+            "interes_acumulado": 52083.33,
+            "mes": 1,
+            "saldo": 302083.33
+          },
+          {
+            "interes_acumulado": 115017.36,
+            "mes": 2,
+            "saldo": 365017.36
+          },
+          {
+            "interes_acumulado": 191062.64,
+            "mes": 3,
+            "saldo": 441062.64
+          },
+          {
+            "interes_acumulado": 282950.7,
+            "mes": 4,
+            "saldo": 532950.7
+          },
+          {
+            "interes_acumulado": 393982.09,
+            "mes": 5,
+            "saldo": 643982.09
+          },
+          {
+            "interes_acumulado": 528145.03,
+            "mes": 6,
+            "saldo": 778145.03
+          },
+          {
+            "interes_acumulado": 690258.57,
+            "mes": 7,
+            "saldo": 940258.57
+          },
+          {
+            "interes_acumulado": 886145.78,
+            "mes": 8,
+            "saldo": 1136145.78
+          },
+          {
+            "interes_acumulado": 1122842.81,
+            "mes": 9,
+            "saldo": 1372842.81
+          },
+          {
+            "interes_acumulado": 1408851.73,
+            "mes": 10,
+            "saldo": 1658851.73
+          },
+          {
+            "interes_acumulado": 1754445.84,
+            "mes": 11,
+            "saldo": 2004445.84
+          },
+          {
+            "interes_acumulado": 2172038.73,
+            "mes": 12,
+            "saldo": 2422038.73
+          },
+          {
+            "interes_acumulado": 2676630.13,
+            "mes": 13,
+            "saldo": 2926630.13
+          },
+          {
+            "interes_acumulado": 3286344.74,
+            "mes": 14,
+            "saldo": 3536344.74
+          },
+          {
+            "interes_acumulado": 4023083.23,
+            "mes": 15,
+            "saldo": 4273083.23
+          },
+          {
+            "interes_acumulado": 4913308.9,
+            "mes": 16,
+            "saldo": 5163308.9
+          },
+          {
+            "interes_acumulado": 5988998.25,
+            "mes": 17,
+            "saldo": 6238998.25
+          },
+          {
+            "interes_acumulado": 7288789.55,
+            "mes": 18,
+            "saldo": 7538789.55
+          },
+          {
+            "interes_acumulado": 8859370.71,
+            "mes": 19,
+            "saldo": 9109370.71
+          },
+          {
+            "interes_acumulado": 10757156.27,
+            "mes": 20,
+            "saldo": 11007156.27
+          },
+          {
+            "interes_acumulado": 13050313.83,
+            "mes": 21,
+            "saldo": 13300313.83
+          },
+          {
+            "interes_acumulado": 15821212.55,
+            "mes": 22,
+            "saldo": 16071212.55
+          },
+          {
+            "interes_acumulado": 19169381.83,
+            "mes": 23,
+            "saldo": 19419381.83
+          },
+          {
+            "interes_acumulado": 23215086.37,
+            "mes": 24,
+            "saldo": 23465086.37
+          },
+          {
+            "interes_acumulado": 28103646.04,
+            "mes": 25,
+            "saldo": 28353646.04
+          },
+          {
+            "interes_acumulado": 34010655.63,
+            "mes": 26,
+            "saldo": 34260655.63
+          },
+          {
+            "interes_acumulado": 41148292.21,
+            "mes": 27,
+            "saldo": 41398292.21
+          },
+          {
+            "interes_acumulado": 49772936.43,
+            "mes": 28,
+            "saldo": 50022936.43
+          },
+          {
+            "interes_acumulado": 60194381.51,
+            "mes": 29,
+            "saldo": 60444381.51
+          },
+          {
+            "interes_acumulado": 72786961.0,
+            "mes": 30,
+            "saldo": 73036961.0
+          },
+          {
+            "interes_acumulado": 88002994.54,
+            "mes": 31,
+            "saldo": 88252994.54
+          },
+          {
+            "interes_acumulado": 106389035.07,
+            "mes": 32,
+            "saldo": 106639035.07
+          },
+          {
+            "interes_acumulado": 128605500.7,
+            "mes": 33,
+            "saldo": 128855500.7
+          },
+          {
+            "interes_acumulado": 155450396.69,
+            "mes": 34,
+            "saldo": 155700396.69
+          },
+          {
+            "interes_acumulado": 187887979.33,
+            "mes": 35,
+            "saldo": 188137979.33
+          },
+          {
+            "interes_acumulado": 227083391.69,
+            "mes": 36,
+            "saldo": 227333391.69
+          }
+        ]
+      }
+    }
+  ],
+  "tool": "explicar_interes_compuesto"
+}

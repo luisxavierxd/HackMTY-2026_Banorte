@@ -1,0 +1,399 @@
+{
+  "cases": [
+    {
+      "args": {},
+      "expected": {
+        "concepto": "inflacion",
+        "explicacion": "$10,000 de hoy equivalen a $8,025 en 5 años con inflación de 4.5%. Si no inviertes, pierdes poder de compra cada año.",
+        "parametros": {
+          "anios": 5,
+          "inflacion_anual": 0.045,
+          "monto": 10000.0
+        },
+        "resumen": {
+          "perdida_total": 1975.49,
+          "poder_compra_final": 8024.51
+        },
+        "serie": [
+          {
+            "anio": 1,
+            "perdida_porcentual": 4.31,
+            "poder_compra_real": 9569.38,
+            "valor_nominal": 10000.0
+          },
+          {
+            "anio": 2,
+            "perdida_porcentual": 8.43,
+            "poder_compra_real": 9157.3,
+            "valor_nominal": 10000.0
+          },
+          {
+            "anio": 3,
+            "perdida_porcentual": 12.37,
+            "poder_compra_real": 8762.97,
+            "valor_nominal": 10000.0
+          },
+          {
+            "anio": 4,
+            "perdida_porcentual": 16.14,
+            "poder_compra_real": 8385.61,
+            "valor_nominal": 10000.0
+          },
+          {
+            "anio": 5,
+            "perdida_porcentual": 19.75,
+            "poder_compra_real": 8024.51,
+            "valor_nominal": 10000.0
+          }
+        ]
+      }
+    },
+    {
+      "args": {
+        "anios": 5,
+        "inflacion_anual": 0.05,
+        "monto": 10000
+      },
+      "expected": {
+        "concepto": "inflacion",
+        "explicacion": "$10,000 de hoy equivalen a $7,835 en 5 años con inflación de 5.0%. Si no inviertes, pierdes poder de compra cada año.",
+        "parametros": {
+          "anios": 5,
+          "inflacion_anual": 0.05,
+          "monto": 10000
+        },
+        "resumen": {
+          "perdida_total": 2164.74,
+          "poder_compra_final": 7835.26
+        },
+        "serie": [
+          {
+            "anio": 1,
+            "perdida_porcentual": 4.76,
+            "poder_compra_real": 9523.81,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 2,
+            "perdida_porcentual": 9.3,
+            "poder_compra_real": 9070.29,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 3,
+            "perdida_porcentual": 13.62,
+            "poder_compra_real": 8638.38,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 4,
+            "perdida_porcentual": 17.73,
+            "poder_compra_real": 8227.02,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 5,
+            "perdida_porcentual": 21.65,
+            "poder_compra_real": 7835.26,
+            "valor_nominal": 10000
+          }
+        ]
+      }
+    },
+    {
+      "args": {
+        "anios": 3,
+        "inflacion_anual": 0.1,
+        "monto": 10000
+      },
+      "expected": {
+        "concepto": "inflacion",
+        "explicacion": "$10,000 de hoy equivalen a $7,513 en 3 años con inflación de 10.0%. Si no inviertes, pierdes poder de compra cada año.",
+        "parametros": {
+          "anios": 3,
+          "inflacion_anual": 0.1,
+          "monto": 10000
+        },
+        "resumen": {
+          "perdida_total": 2486.85,
+          "poder_compra_final": 7513.15
+        },
+        "serie": [
+          {
+            "anio": 1,
+            "perdida_porcentual": 9.09,
+            "poder_compra_real": 9090.91,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 2,
+            "perdida_porcentual": 17.36,
+            "poder_compra_real": 8264.46,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 3,
+            "perdida_porcentual": 24.87,
+            "poder_compra_real": 7513.15,
+            "valor_nominal": 10000
+          }
+        ]
+      }
+    },
+    {
+      "args": {
+        "anios": 30,
+        "inflacion_anual": 0.045,
+        "monto": 10000
+      },
+      "expected": {
+        "concepto": "inflacion",
+        "explicacion": "$10,000 de hoy equivalen a $2,670 en 30 años con inflación de 4.5%. Si no inviertes, pierdes poder de compra cada año.",
+        "parametros": {
+          "anios": 30,
+          "inflacion_anual": 0.045,
+          "monto": 10000
+        },
+        "resumen": {
+          "perdida_total": 7330.0,
+          "poder_compra_final": 2670.0
+        },
+        "serie": [
+          {
+            "anio": 1,
+            "perdida_porcentual": 4.31,
+            "poder_compra_real": 9569.38,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 2,
+            "perdida_porcentual": 8.43,
+            "poder_compra_real": 9157.3,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 3,
+            "perdida_porcentual": 12.37,
+            "poder_compra_real": 8762.97,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 4,
+            "perdida_porcentual": 16.14,
+            "poder_compra_real": 8385.61,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 5,
+            "perdida_porcentual": 19.75,
+            "poder_compra_real": 8024.51,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 6,
+            "perdida_porcentual": 23.21,
+            "poder_compra_real": 7678.96,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 7,
+            "perdida_porcentual": 26.52,
+            "poder_compra_real": 7348.28,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 8,
+            "perdida_porcentual": 29.68,
+            "poder_compra_real": 7031.85,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 9,
+            "perdida_porcentual": 32.71,
+            "poder_compra_real": 6729.04,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 10,
+            "perdida_porcentual": 35.61,
+            "poder_compra_real": 6439.28,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 11,
+            "perdida_porcentual": 38.38,
+            "poder_compra_real": 6161.99,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 12,
+            "perdida_porcentual": 41.03,
+            "poder_compra_real": 5896.64,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 13,
+            "perdida_porcentual": 43.57,
+            "poder_compra_real": 5642.72,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 14,
+            "perdida_porcentual": 46.0,
+            "poder_compra_real": 5399.73,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 15,
+            "perdida_porcentual": 48.33,
+            "poder_compra_real": 5167.2,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 16,
+            "perdida_porcentual": 50.55,
+            "poder_compra_real": 4944.69,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 17,
+            "perdida_porcentual": 52.68,
+            "poder_compra_real": 4731.76,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 18,
+            "perdida_porcentual": 54.72,
+            "poder_compra_real": 4528.0,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 19,
+            "perdida_porcentual": 56.67,
+            "poder_compra_real": 4333.02,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 20,
+            "perdida_porcentual": 58.54,
+            "poder_compra_real": 4146.43,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 21,
+            "perdida_porcentual": 60.32,
+            "poder_compra_real": 3967.87,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 22,
+            "perdida_porcentual": 62.03,
+            "poder_compra_real": 3797.01,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 23,
+            "perdida_porcentual": 63.66,
+            "poder_compra_real": 3633.5,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 24,
+            "perdida_porcentual": 65.23,
+            "poder_compra_real": 3477.03,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 25,
+            "perdida_porcentual": 66.73,
+            "poder_compra_real": 3327.31,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 26,
+            "perdida_porcentual": 68.16,
+            "poder_compra_real": 3184.02,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 27,
+            "perdida_porcentual": 69.53,
+            "poder_compra_real": 3046.91,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 28,
+            "perdida_porcentual": 70.84,
+            "poder_compra_real": 2915.71,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 29,
+            "perdida_porcentual": 72.1,
+            "poder_compra_real": 2790.15,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 30,
+            "perdida_porcentual": 73.3,
+            "poder_compra_real": 2670.0,
+            "valor_nominal": 10000
+          }
+        ]
+      }
+    },
+    {
+      "args": {
+        "anios": 5,
+        "inflacion_anual": 0.0,
+        "monto": 10000
+      },
+      "expected": {
+        "concepto": "inflacion",
+        "explicacion": "$10,000 de hoy equivalen a $10,000 en 5 años con inflación de 0.0%. Si no inviertes, pierdes poder de compra cada año.",
+        "parametros": {
+          "anios": 5,
+          "inflacion_anual": 0.0,
+          "monto": 10000
+        },
+        "resumen": {
+          "perdida_total": 0.0,
+          "poder_compra_final": 10000.0
+        },
+        "serie": [
+          {
+            "anio": 1,
+            "perdida_porcentual": 0.0,
+            "poder_compra_real": 10000.0,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 2,
+            "perdida_porcentual": 0.0,
+            "poder_compra_real": 10000.0,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 3,
+            "perdida_porcentual": 0.0,
+            "poder_compra_real": 10000.0,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 4,
+            "perdida_porcentual": 0.0,
+            "poder_compra_real": 10000.0,
+            "valor_nominal": 10000
+          },
+          {
+            "anio": 5,
+            "perdida_porcentual": 0.0,
+            "poder_compra_real": 10000.0,
+            "valor_nominal": 10000
+          }
+        ]
+      }
+    }
+  ],
+  "tool": "visualizar_inflacion"
+}
