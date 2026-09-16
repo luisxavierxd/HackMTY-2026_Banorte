@@ -33,12 +33,12 @@ Las herramientas las ejecuta el harness, no el modelo — así la traza de qué 
 consultó y con qué argumentos sigue siendo auditable, sin importar qué
 proveedor esté detrás.
 
-## Banqui, la mascota
+## Banky, la mascota
 
 <p align="center">
-  <img src="web/public/mascota/cara_normal.png" alt="Banqui normal" width="90">
-  <img src="web/public/mascota/cara_pensativo.png" alt="Banqui pensativo" width="90">
-  <img src="web/public/mascota/cara_preocupado.png" alt="Banqui preocupado" width="90">
+  <img src="web/public/mascota/cara_normal.png" alt="Banky normal" width="90">
+  <img src="web/public/mascota/cara_pensativo.png" alt="Banky pensativo" width="90">
+  <img src="web/public/mascota/cara_preocupado.png" alt="Banky preocupado" width="90">
 </p>
 
 Narra lo que está pasando mientras el agente trabaja — qué herramienta está
@@ -47,7 +47,7 @@ contexto: se pone pensativo mientras razona y preocupado si detecta números en
 rojo en tu pantalla. Es la cara visible de la traza.
 
 <p align="center">
-  <img src="web/public/screenshots/perfil.png" alt="Banqui pidiendo el perfil del usuario" width="80%">
+  <img src="web/public/screenshots/perfil.png" alt="Banky pidiendo el perfil del usuario" width="80%">
 </p>
 
 ---

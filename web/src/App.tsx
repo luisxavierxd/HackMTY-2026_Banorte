@@ -554,7 +554,7 @@ export default function App() {
   }, [surface, overrides]);
 
   // ------------------------------------------------------------------
-  // Banqui — sistema de tutorial guiado (paso a paso por pantalla)
+  // Banky — sistema de tutorial guiado (paso a paso por pantalla)
   // ------------------------------------------------------------------
 
   // Pasos del tutorial por estado de la app
@@ -569,7 +569,7 @@ export default function App() {
       { texto: "Si no traes API key, dale a «Ver sesión grabada» — corre igual.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "apuntando", fullSound: true },
     ],
     profile: [
-      { texto: "Hola, soy Banqui, tu asistente financiero de Banorte.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando", fullSound: true },
+      { texto: "Hola, soy Banky, tu asistente financiero de Banorte.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "enseñando", fullSound: true },
       { texto: "Cuéntame sobre ti — entre más sepa de ti, mejores consejos podré darte.", cara: "normal", bigote: "normal", manoI: "normal", manoD: "normal", fullSound: true },
       { texto: "Llena los campos y acepta el aviso de privacidad para comenzar.", cara: "normal", bigote: "normal", manoI: "enseñando", manoD: "enseñando", fullSound: true },
     ],
@@ -623,7 +623,7 @@ export default function App() {
     : !surface ? "landing"
     : "surface";
 
-  // Detectar cambio de pantalla principal para activar el squish de viaje de Banqui
+  // Detectar cambio de pantalla principal para activar el squish de viaje de Banky
   const prevMascotScreenRef = useRef<string>("");
   useEffect(() => {
     const screen = currentScreenForTutorial;
@@ -662,7 +662,7 @@ export default function App() {
     const steps = TUTORIAL[screen];
     const nextStep = tutorialStep + 1;
     if (nextStep >= steps.length) {
-      // Último paso: callar a Banqui
+      // Último paso: callar a Banky
       mascotRef.current?.callar();
       return;
     }

@@ -243,7 +243,7 @@ function SpeechBubble({
         </button>
       )}
 
-      {/* Cola de la burbuja apuntando hacia Banqui (abajo-izquierda) */}
+      {/* Cola de la burbuja apuntando hacia Banky (abajo-izquierda) */}
       <div
         style={{
           position: "absolute",
@@ -304,7 +304,7 @@ const Mascot = forwardRef<{ pulseSquish: () => void }, MascotProps>(
     const handRRef = useRef<HTMLImageElement>(null);
 
     const squishEnergy = useRef(0);
-    // Click en Banqui → spin del bigote durante ~1.2 s
+    // Click en Banky → spin del bigote durante ~1.2 s
     const clickSpinUntilRef = useRef(0);
     useEffect(() => {
       if (speechTick > 0) squishEnergy.current = 1;
@@ -445,7 +445,7 @@ const Mascot = forwardRef<{ pulseSquish: () => void }, MascotProps>(
           squishEnergy.current = 1.5;
         }}
         role="img"
-        aria-label="Banqui"
+        aria-label="Banky"
         style={{
           width: size, height: size, position: "relative", flexShrink: 0,
           cursor: "pointer",

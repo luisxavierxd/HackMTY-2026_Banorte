@@ -32,7 +32,7 @@ Usuario ──▶ Agente (LLM) ──▶ MCP (datos + acciones) ──▶ A2UI �
 
 Este repo contiene el **harness completo**: agente, servidor MCP de educación
 financiera, catálogo de 19 componentes A2UI, la capa de composición y el
-**frontend React** con la mascota Banqui. El frontend se conecta por WebSocket y
+**frontend React** con la mascota Banky. El frontend se conecta por WebSocket y
 renderiza; el contrato está en `GET /a2ui/catalog.json`.
 
 ---
@@ -145,7 +145,7 @@ frontend/
     a2ui/        renderer de componentes A2UI + gráficas ECharts (5 adapters)
     contract/    tipos TypeScript del protocolo (a2ui.ts, events.ts)
     design/      tokens CSS (dark/light), base.css
-    mascot/      Banqui — mascota animada con poses, bubble y tutorial guiado
+    mascot/      Banky — mascota animada con poses, bubble y tutorial guiado
     net/         WebSocket, perfil de usuario, conversaciones, código de acceso
     shell/       Home, Composer, Trace, ProfileGate, AccessGate, Sidebar, ThemeToggle
     lab/         galería offline de fixtures (?lab=1)
@@ -158,19 +158,19 @@ Column · Row · Card · MetricCard · Text · Badge · Divider · Callout ·
 ActionButton · OptionList · Slider · TextField · DataTable · Timeline ·
 LineChart · BarChart · PieChart · ComparisonBars · ProgressRing
 
-## Frontend — Banqui
+## Frontend — Banky
 
 SPA en React + Vite + TypeScript. Se conecta al harness por WebSocket con
 código de acceso y perfil de usuario (nombre, ingreso, ahorro, inversión).
 
 Características:
-- Mascota Banqui animada con poses, tutorial guiado paso a paso y narración
+- Mascota Banky animada con poses, tutorial guiado paso a paso y narración
 - Tema dark/light con tokens CSS y toggle
 - Layout bento grid adaptativo para gráficas
 - Gráficas interactivas ECharts con tema Banorte (se adaptan al tema dark/light)
 - Historial de conversaciones persistente en localStorage
 - Sidebar con perfil, conversaciones y logout
-- Responsive mobile: mini Banqui junto al composer, Banqui centrado visible
+- Responsive mobile: mini Banky junto al composer, Banky centrado visible
   durante estados de "pensando", nav strip bajo el sidebar
 
 ## Agregar un dominio (inversiones, pagos, seguros)

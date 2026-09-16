@@ -93,10 +93,10 @@ export default function ProfileGate({ onSubmit }: ProfileGateProps) {
   return (
     <div className="bn-pglass-outer">
       <form className="bn-pglass-card" onSubmit={handleSubmit}>
-        {/* Columna izquierda: título + espacio para Banqui overlay */}
+        {/* Columna izquierda: título + espacio para Banky overlay */}
         <div className="bn-pglass-left">
           <h1 className="bn-pglass-title">Cuéntanos de ti</h1>
-          {/* Espaciador — el overlay de Banqui flota aquí */}
+          {/* Espaciador — el overlay de Banky flota aquí */}
           <div className="bn-pglass-mascot" aria-hidden="true" />
         </div>
 

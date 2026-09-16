@@ -1,5 +1,5 @@
 /* ================================================================
-   Mascot Overlay — Banqui flota entre pantallas
+   Mascot Overlay — Banky flota entre pantallas
 
    Posiciones:
      default / --landing    → center-left, full size
@@ -60,7 +60,7 @@
 }
 
 /* ── Profile gate ──
-   Banqui en la columna izquierda de la tarjeta glass */
+   Banky en la columna izquierda de la tarjeta glass */
 .bn-mascot-overlay--profile {
   top: 50%;
   bottom: auto;
@@ -133,7 +133,7 @@
 }
 
 /* ── Surface guide / many charts ──
-   Banqui centrado en el 35% izquierdo */
+   Banky centrado en el 35% izquierdo */
 .bn-mascot-overlay--many-charts {
   top: 50%;
   bottom: auto;

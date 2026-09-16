@@ -27,7 +27,7 @@
   overflow: hidden;
 }
 
-/* ── Columna izquierda: espacio reservado para Banqui overlay ────────────── */
+/* ── Columna izquierda: espacio reservado para Banky overlay ────────────── */
 .bn-landing__left {
   flex-shrink: 0;
   display: flex;
@@ -35,10 +35,10 @@
   justify-content: center;
 }
 
-/* Espaciador que coincide con el tamaño del overlay de Banqui (240px) */
+/* Espaciador que coincide con el tamaño del overlay de Banky (240px) */
 .bn-landing__mascot-spacer {
   width: 240px;
-  height: 280px; /* alto de Banqui + burbuja de diálogo */
+  height: 280px; /* alto de Banky + burbuja de diálogo */
 }
 
 /* ── Columna derecha: título + chips + input ─────────────────────────────── */
@@ -50,7 +50,7 @@
   min-width: 0;
 }
 
-/* "Pregúntale a Banqui…" — Albert Sans SemiBold, ~52px */
+/* "Pregúntale a Banky…" — Albert Sans SemiBold, ~52px */
 .bn-landing__title {
   font-family: "Albert Sans", system-ui, sans-serif;
   font-size: clamp(32px, 5.5vw, 56px);
