@@ -166,6 +166,146 @@ cd legacy && make demo-code     # luego pon ws://127.0.0.1:8080 en el gate
 
 ---
 
+## Cómo funciona un turno
+
+Un turno tiene **dos fases**, y separarlas es la decisión de diseño central:
+razonar qué datos hacen falta, y después decidir qué forma tiene la pantalla.
+
+```
+                 ┌─────────────── FASE 1: razonar ───────────────┐
+tu mensaje ──▶ LLM ──▶ ¿qué herramienta? ──▶ el HARNESS la ejecuta
+                 ▲                                    │
+                 └──────── resultado como contexto ◀───┘   (hasta 6 vueltas)
+                                                      │
+                 ┌─────────────── FASE 2: componer ──┴────────────┐
+                 LLM ──▶ plan de UI ──▶ validador ──▶ envelopes A2UI ──▶ render
+                                           │
+                                    ¿no valida? ──▶ reparar (1 intento) ──▶ fallback
+```
+
+**Las herramientas las ejecuta el harness, nunca el modelo.** El modelo decide
+*cuál* llamar y con qué argumentos; ejecutarla es del harness, contra sus
+propios servidores MCP. Esa frontera es lo que mantiene la traza auditable y
+comparable entre proveedores — con un CLI agéntico sería fácil delegarle
+también la ejecución, y a propósito no se hace (`CLI_DELEGATE_MCP=0`).
+
+### El modelo no emite protocolo
+
+Emite un **plan compacto** en JSON:
+
+```json
+{
+  "title": "Por qué el CAT es más alto que la tasa",
+  "summary": "una línea para el chat",
+  "root": "root",
+  "components": [
+    {"id": "root", "component": "Column", "props": {"children": ["kpi", "desglose"]}},
+    {"id": "kpi",  "component": "MetricCard",
+     "props": {"label": "CAT", "value": {"path": "/datos/explicar_cat/resumen/cat_aproximado"}}}
+  ]
+}
+```
+
+Python lo valida contra el catálogo, resuelve los bindings y lo traduce a
+envelopes A2UI v0.9.1 (`createSurface` → `updateDataModel` → `updateComponents`).
+Eso compra tres cosas:
+
+- Una alucinación de componente **no rompe el render**: se poda y se reporta.
+- El protocolo puede migrar sin tocar el prompt.
+- El composer es determinista y se testea sin llamar al modelo.
+
+Si el plan no valida, se reintenta **una vez** pasándole los errores del
+validador; si aun así falla, cae a una pantalla de respaldo. **Nunca se
+renderiza HTML del modelo.**
+
+### Bindings, no números copiados
+
+Los componentes no traen los datos dentro: apuntan con JSON Pointer a un *data
+model* donde el harness ya inyectó los resultados reales de las herramientas
+(`{"path": "/datos/explicar_cat/serie"}`). Así una serie de 600 puntos viaja
+una sola vez y el modelo no puede "inventar" un número que contradiga a la
+herramienta que lo calculó.
+
+Cuando tocas un `Slider` o un `ActionButton`, ese estado regresa al agente como
+contexto (`[EVENTO_UI]`) y el ciclo vuelve a empezar. Eso es lo que cierra el
+lazo del diagrama de arriba.
+
+## El catálogo: una fuente, tres consumidores
+
+`a2ui/catalog.py` define 19 componentes con sus props tipadas, y es lo único
+que comparten:
+
+| Consumidor | Qué saca de ahí |
+|---|---|
+| El **prompt** del agente | qué puede pedir (versión compacta, para ahorrar tokens) |
+| El **validador** | qué se acepta, con qué tipos y defaults |
+| El **frontend** | qué sabe renderizar |
+
+Si los tres no salieran del mismo lugar, el modelo pediría componentes que el
+front no conoce. Por eso el catálogo viaja como artefacto generado al target
+navegador (ver *Contrato compartido*, abajo) en vez de copiarse a mano.
+
+## MCP: el harness es multi-servidor
+
+`mcpx/manager.py` mantiene N servidores MCP vivos durante toda la vida del
+proceso — no por request, que es la causa #1 de demos lentas. Soporta los dos
+transportes que importan: **stdio** para local y **streamable-http** para
+contenedores.
+
+Las herramientas se namespacean `servidor__herramienta`, así montar seis
+dominios a la vez no colisiona (`credito__simular_plan` vs
+`banca__simular_plan`). Un servidor caído **no tumba el harness**: se registra
+el fallo y el resto sigue.
+
+Agregar un dominio son dos pasos y cero cambios en el core:
+
+```bash
+# 1. mcp_servers/<dominio>/server.py con sus @mcp.tool()
+# 2. registrarlo en mcp_servers.json  (o dejar el stdio por defecto)
+```
+
+El dominio incluido, `educacion_financiera`, expone 6 herramientas de consulta
+—interés compuesto, pago mínimo vs. fijo, meta de ahorro, CAT, inflación,
+regla 50/30/20— y cada una devuelve **la serie completa**, no solo el número
+final, para que el front pueda animar la curva en vez de pintar un dato suelto.
+
+## El proveedor es una capa, no un `if`
+
+Todo el ciclo habla tipos neutrales (`ToolSpec`, `ToolCall`, `Completion`) y
+consulta **una sola capacidad**: `native_tools`.
+
+```
+native_tools = True   → el proveedor devuelve tool_calls estructurados
+native_tools = False  → el manifiesto va en el system prompt y el ciclo
+                        parsea {"tool_calls": [...]} del texto
+```
+
+En los dos casos las ejecuta el harness. Por eso los ocho perfiles producen
+trazas comparables: mismo MCP, mismo catálogo, mismo validador, mismos
+envelopes.
+
+| Perfil | Motor | Requiere |
+|---|---|---|
+| `gemini` | Gemini API | `GOOGLE_API_KEY` |
+| `anthropic` | Anthropic Messages API | `ANTHROPIC_API_KEY` |
+| `claude_code` | CLI `claude` headless | suscripción local |
+| `codex` | CLI `codex exec` headless | login de ChatGPT |
+| `cursor` | CLI `cursor-agent` headless | `CURSOR_API_KEY` |
+| `antigravity` | CLI `agy` headless | cuenta de Google |
+| `hybrid` | razona con API, **compone con el CLI** | la del razonador |
+| `fake` | sin modelo; MCP y A2UI reales | nada |
+
+`hybrid` existe porque las dos fases no tienen que correr en el mismo motor:
+se puede razonar con un modelo caro y componer la UI con uno barato, o al
+revés. `fake` corre el ciclo completo sin tocar la red — es lo que hace que
+los 107 tests pasen en CI sin credenciales.
+
+Los CLIs agénticos existen por una razón práctica de hackatón: quedarse sin
+cuota o sin red a media demo. Corren headless y el harness sigue ejecutando el
+MCP.
+
+---
+
 ## Contrato compartido
 
 El Python manda; el navegador consume artefactos generados. Nada se copia a
@@ -195,17 +335,50 @@ Son la razón por la que duplicar el ciclo es aceptable.
 ## Estructura
 
 ```
-web/                  demo permanente (GitHub Pages)
-  public/contract/      GENERADO — catálogo y herramientas
-  public/recorded/      GENERADO — sesiones grabadas
-  src/engine/           TurnEngine: recorded | browser | remote
-  src/provider/         adaptadores Anthropic y Gemini
-  src/agent/tools/      las 6 herramientas en TS
-  src/a2ui/             renderer A2UI + gráficas ECharts
-  tests/goldens/        GENERADO — paridad con el Python
-scripts/              exportadores del contrato (corren en build, no en runtime)
-legacy/               el proyecto del hackatón, congelado
+web/                      demo permanente (GitHub Pages)
+  public/contract/          GENERADO — catálogo, herramientas, esquemas, prompts
+  public/recorded/          GENERADO — sesiones grabadas del harness real
+  src/engine/               TurnEngine: recorded | browser | remote
+  src/provider/             adaptadores Anthropic y Gemini
+  src/agent/                ciclo, prompts, composer y las 6 tools en TS
+  src/a2ui/                 renderer de componentes + gráficas ECharts
+  src/shell/                gate de proveedor, sidebar, composer, mascota
+  tests/goldens/            GENERADO — paridad numérica con el Python
+
+scripts/                  exportadores del contrato (build, nunca runtime)
+
+legacy/                   el proyecto del hackatón, congelado
+  src/harness/
+    a2ui/                   catálogo (19 componentes), validador, composer,
+                            envelopes v0.9.1, JSON Pointer
+    agent/                  ciclo agnóstico de proveedor + prompts
+    providers/              gemini · anthropic · cli_agent · fake
+    mcpx/                   cliente multi-servidor MCP + sanitizador de esquemas
+    session/                estado por sesión (memoria | Redis)
+    auth.py                 código de acceso (protege cuota en demo pública)
+    app.py                  FastAPI: WS, SSE, catálogo, health
+  mcp_servers/
+    educacion_financiera/   6 herramientas de consulta, series completas
+    common/                 almacén sintético persistente
+  frontend/                 el front original del hackatón
+  tests/                    107 tests, sin red
 ```
+
+### La superficie HTTP del harness
+
+| Método | Ruta | Para qué |
+|---|---|---|
+| `GET` | `/healthz` · `/readyz` | liveness; `readyz` reporta cada MCP y el proveedor activo |
+| `GET` | `/a2ui/catalog.json` | el catálogo — el front lo lee al arrancar |
+| `GET` | `/a2ui/tools` | herramientas montadas, para la demo técnica |
+| `WS` | `/ws/{session_id}` | canal principal, bidireccional |
+| `POST` | `/v1/turn` | el mismo ciclo por SSE (curl, serverless) |
+| `DELETE` | `/v1/session/{id}` | reinicia la conversación |
+
+Los eventos que salen del turno son los mismos por WS y por SSE:
+`tool_call` · `tool_result` · `thinking` · `surface` · `turn_end` · `error`.
+Ese contrato es exactamente el que implementan los tres motores del navegador
+— por eso meter Pyodide después no tocaría una línea de UI.
 
 ## El diseño
 
