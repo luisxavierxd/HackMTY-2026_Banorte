@@ -27,6 +27,9 @@ node_modules/
 dist/
 .vite/
 
+# --- salida de extensiones del editor ---
+.VSCodeCounter/
+
 # --- restos del árbol viejo antes del split (ver legacy/) ---
 /frontend/
 /src/
