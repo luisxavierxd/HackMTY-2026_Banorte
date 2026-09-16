@@ -13,7 +13,7 @@ Usuario ──▶ Agente (LLM) ──▶ Herramientas (datos) ──▶ A2UI ─
    └──────────── la interacción regresa como contexto ─────────────┘
 ```
 
-**[Ver demo](https://banky.mx)** — corre entera en el navegador, sin backend.
+**[Ver demo](https://www.banky.mx)** — corre entera en el navegador, sin backend.
 
 ---
 
@@ -75,14 +75,34 @@ cruza son artefactos generados en build (ver *Contrato compartido*).
 
 | URL | Vigencia |
 |---|---|
-| `https://banky.mx` | **hasta ~sep-2027** — el dominio no se renueva |
+| `https://www.banky.mx` | **hasta ~sep-2027** — el dominio no se renueva |
 | `https://luisxavierxd.github.io/HackMTY-2026_Banorte/` | permanente |
 
-Mientras el custom domain esté activo, GitHub Pages **redirige** el link de
-`github.io` hacia `banky.mx`. O sea que hay un solo link vivo a la vez, y
+El canónico es **`www`**: es lo que dice `web/public/CNAME`, y GitHub Pages
+sirve desde ahí. El apex (`banky.mx` pelón) redirige a `www` siempre que sus
+registros `A` apunten a las IPs de Pages.
+
+Mientras el custom domain esté activo, Pages también **redirige** el link de
+`github.io` hacia el dominio. O sea que hay un solo link vivo a la vez, y
 cuando el dominio venza el de respaldo tampoco responde hasta quitar el CNAME
 a mano. Por eso el ancla visible en portafolio y Devpost dice "ver demo", no el
 dominio: cambiar el `href` no obliga a reescribir el texto.
+
+<details>
+<summary><b>DNS</b></summary>
+
+| Registro | Nombre | Valor |
+|---|---|---|
+| `CNAME` | `www` | `luisxavierxd.github.io` |
+| `A` | `@` | `185.199.108.153` |
+| `A` | `@` | `185.199.109.153` |
+| `A` | `@` | `185.199.110.153` |
+| `A` | `@` | `185.199.111.153` |
+
+Los cuatro `A` del apex son los que hacen que `banky.mx` sin `www` también
+resuelva y redirija. Sin ellos solo funciona `www`.
+
+</details>
 
 <details>
 <summary><b>Procedimiento cuando venza el dominio</b></summary>
