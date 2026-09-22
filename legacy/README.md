@@ -5,8 +5,9 @@
 >
 > - **No se borra, no se degrada, no se refactoriza.** Es el respaldo de la versión
 >   que sí corrió en la demo en vivo.
+> - Excepción: se agregaron los perfiles Codex y Cursor, sin tocar los existentes.
 > - Todo lo que está aquí funciona como el último día del hackatón: `make test`
->   (94 tests, sin red), `make demo`, `make demo-code`, `docker compose up`.
+>   (94 tests al cierre del hackatón; 107 con los perfiles Codex y Cursor), `make demo`, `make demo-code`, `docker compose up`.
 > - Los comandos de abajo se corren **desde esta carpeta** (`cd legacy`), no desde
 >   la raíz del repo.
 >
@@ -84,7 +85,7 @@ Verificar:
 ```bash
 curl localhost:8080/readyz                      # MCP + proveedor y modelo activos
 python scripts/smoke_turn.py "¿Qué es el interés compuesto?"
-make test                                       # 94 tests, sin red
+make test                                      # 107 tests, sin red
 ```
 
 ---
