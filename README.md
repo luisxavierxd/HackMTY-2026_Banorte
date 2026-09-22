@@ -60,10 +60,10 @@ rojo en tu pantalla. Es la cara visible de la traza.
 | Dónde corre | GitHub Pages (CDN) | Tu máquina o un contenedor |
 | Backend | Ninguno | FastAPI + MCP por stdio |
 | Proveedor | Lo elige quien visita | Flag de despliegue (`LLM_PROVIDER`) |
-| Estado | Activo | **Congelado** — no se toca |
+| Estado | Activo | **Congelado** — solo cambios aditivos |
 
 `legacy/` es el respaldo íntegro de lo que corrió en la demo en vivo: harness,
-servidor MCP, frontend, 94 tests, Docker. Tiene su propio README y su propio
+servidor MCP, frontend, 94 tests (107 hoy: +13 de los perfiles Codex y Cursor, agregados después), Docker. Tiene su propio README y su propio
 Makefile. No se borra ni se degrada.
 
 **Regla dura:** `web/` no importa nada de `legacy/` en runtime. Lo único que
@@ -347,7 +347,7 @@ web/                      demo permanente (GitHub Pages)
 
 scripts/                  exportadores del contrato (build, nunca runtime)
 
-legacy/                   el proyecto del hackatón, congelado
+legacy/                     el proyecto del hackatón (congelado salvo perfiles CLI nuevos)
   src/harness/
     a2ui/                   catálogo (19 componentes), validador, composer,
                             envelopes v0.9.1, JSON Pointer
