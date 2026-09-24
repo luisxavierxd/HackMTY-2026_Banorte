@@ -15,7 +15,7 @@ import {
   simularMetaAhorro,
   visualizarInflacion,
 } from "./educacionFinanciera";
-import { qualify, type ToolDefinition } from "./types";
+import { qualify, READ_ONLY_CALC, type ToolDefinition } from "./types";
 
 function obj(properties: Record<string, unknown>): Record<string, unknown> {
   // Ninguna tool tiene argumentos obligatorios: todas traen default.
@@ -36,6 +36,7 @@ export const TOOLS: ToolDefinition[] = [
       },
       meses: { type: "integer", default: 24, description: "horizonte de simulación." },
     }),
+    annotations: READ_ONLY_CALC,
     run: (args) => explicarInteresCompuesto(args as never),
   },
   {
@@ -50,6 +51,7 @@ export const TOOLS: ToolDefinition[] = [
         description: "pago mensual fijo a comparar. Si se omite, se usa 2× el mínimo.",
       },
     }),
+    annotations: READ_ONLY_CALC,
     run: (args) => compararPagoMinimoVsFijo(args as never),
   },
   {
@@ -70,6 +72,7 @@ export const TOOLS: ToolDefinition[] = [
         description: "tasa de rendimiento anual esperada.",
       },
     }),
+    annotations: READ_ONLY_CALC,
     run: (args) => simularMetaAhorro(args as never),
   },
   {
@@ -91,6 +94,7 @@ export const TOOLS: ToolDefinition[] = [
         description: "costo del seguro mensual asociado al crédito.",
       },
     }),
+    annotations: READ_ONLY_CALC,
     run: (args) => explicarCat(args as never),
   },
   {
@@ -106,6 +110,7 @@ export const TOOLS: ToolDefinition[] = [
         description: "tasa de inflación anual estimada.",
       },
     }),
+    annotations: READ_ONLY_CALC,
     run: (args) => visualizarInflacion(args as never),
   },
   {
@@ -120,6 +125,7 @@ export const TOOLS: ToolDefinition[] = [
         description: "ingreso del cliente. Si se omite, se toma del perfil.",
       },
     }),
+    annotations: READ_ONLY_CALC,
     run: (args) => regla503020(args as never),
   },
 ];

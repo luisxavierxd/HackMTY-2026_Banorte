@@ -25,6 +25,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from common import store
 from mcp.server.mcpserver import MCPServer
+from mcp.types import ToolAnnotations
 
 mcp = MCPServer("educacion_financiera", version="1.0.0")
 
@@ -32,11 +33,21 @@ mcp = MCPServer("educacion_financiera", version="1.0.0")
 
 INFLACION_ANUAL_MX = 0.045
 
+# Todas las tools son cálculos puros: no escriben estado, misma entrada da la
+# misma salida y no salen a la red. Leer GENUI_DB local no cuenta como mundo
+# abierto.
+READ_ONLY_CALC = ToolAnnotations(
+    readOnlyHint=True,
+    destructiveHint=False,
+    idempotentHint=True,
+    openWorldHint=False,
+)
+
 
 # ── Tools ──────────────────────────────────────────────────────────────
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY_CALC)
 def explicar_interes_compuesto(
     capital: float = 10000.0,
     tasa_anual: float = 0.30,
@@ -84,7 +95,7 @@ def explicar_interes_compuesto(
     }
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY_CALC)
 def comparar_pago_minimo_vs_fijo(
     pago_fijo: float | None = None,
 ) -> dict[str, Any]:
@@ -159,7 +170,7 @@ def comparar_pago_minimo_vs_fijo(
     }
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY_CALC)
 def simular_meta_ahorro(
     meta: float = 50000.0,
     plazo_meses: int = 12,
@@ -224,7 +235,7 @@ def simular_meta_ahorro(
     }
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY_CALC)
 def explicar_cat(
     monto: float = 100000.0,
     plazo_meses: int = 12,
@@ -312,7 +323,7 @@ def explicar_cat(
     }
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY_CALC)
 def visualizar_inflacion(
     monto: float = 10000.0,
     anios: int = 5,
@@ -356,7 +367,7 @@ def visualizar_inflacion(
     }
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY_CALC)
 def regla_50_30_20(ingreso_mensual: float | None = None) -> dict[str, Any]:
     """Aplica la regla 50/30/20 al ingreso del cliente y compara con su gasto real.
 

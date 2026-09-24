@@ -21,8 +21,29 @@ export interface ToolDefinition {
   description: string;
   /** JSON Schema de entrada, igual al que sirve GET /a2ui/tools. */
   schema: Record<string, unknown>;
+  /** Hints de `ToolAnnotations` del spec MCP, en paridad con el servidor Python. */
+  annotations: ToolAnnotations;
   run: ToolFn;
 }
+
+/** Los 4 hints de comportamiento de `ToolAnnotations` (spec MCP → Tools). */
+export interface ToolAnnotations {
+  readOnlyHint: boolean;
+  destructiveHint: boolean;
+  idempotentHint: boolean;
+  openWorldHint: boolean;
+}
+
+/**
+ * Todas las tools son cálculos puros: no escriben estado, misma entrada da la
+ * misma salida y no salen a la red. Igual que `READ_ONLY_CALC` en el Python.
+ */
+export const READ_ONLY_CALC: ToolAnnotations = {
+  readOnlyHint: true,
+  destructiveHint: false,
+  idempotentHint: true,
+  openWorldHint: false,
+};
 
 export const TOOL_NAMESPACE = "educacion_financiera";
 
