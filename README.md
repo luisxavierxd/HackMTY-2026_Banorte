@@ -63,7 +63,7 @@ rojo en tu pantalla. Es la cara visible de la traza.
 | Estado | Activo | **Congelado** — solo cambios aditivos |
 
 `legacy/` es el respaldo íntegro de lo que corrió en la demo en vivo: harness,
-servidor MCP, frontend, 94 tests (107 hoy: +13 de los perfiles Codex y Cursor, agregados después), Docker. Tiene su propio README y su propio
+servidor MCP, frontend, 94 tests (113 hoy: +13 de los perfiles Codex y Cursor y +6 de los tool annotation hints, agregados después), Docker. Tiene su propio README y su propio
 Makefile. No se borra ni se degrada.
 
 **Regla dura:** `web/` no importa nada de `legacy/` en runtime. Lo único que
@@ -315,7 +315,7 @@ envelopes.
 `hybrid` existe porque las dos fases no tienen que correr en el mismo motor:
 se puede razonar con un modelo caro y componer la UI con uno barato, o al
 revés. `fake` corre el ciclo completo sin tocar la red — es lo que hace que
-los 107 tests pasen en CI sin credenciales.
+los 113 tests pasen en CI sin credenciales.
 
 Los CLIs agénticos existen por una razón práctica de hackatón: quedarse sin
 cuota o sin red a media demo. Corren headless y el harness sigue ejecutando el
@@ -378,7 +378,7 @@ legacy/                     el proyecto del hackatón (congelado salvo perfiles 
     educacion_financiera/   6 herramientas de consulta, series completas
     common/                 almacén sintético persistente
   frontend/                 el front original del hackatón
-  tests/                    107 tests, sin red
+  tests/                    113 tests, sin red
 ```
 
 ### La superficie HTTP del harness
