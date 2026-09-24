@@ -269,6 +269,23 @@ El dominio incluido, `educacion_financiera`, expone 6 herramientas de consulta
 regla 50/30/20— y cada una devuelve **la serie completa**, no solo el número
 final, para que el front pueda animar la curva en vez de pintar un dato suelto.
 
+Las seis declaran los cuatro hints de `ToolAnnotations` del spec MCP, así un
+cliente sabe sin adivinar que puede llamarlas sin pedir confirmación:
+
+| Hint | Valor | Por qué |
+|---|---|---|
+| `readOnlyHint` | `true` | ningún handler escribe estado; dos solo leen el perfil sintético |
+| `destructiveHint` | `false` | no hay nada que destruir si no se escribe |
+| `idempotentHint` | `true` | misma entrada, misma salida, sin efectos acumulados |
+| `openWorldHint` | `false` | no salen a la red; leer `GENUI_DB` local no cuenta |
+
+Se definen una vez (`READ_ONLY_CALC`) en el servidor Python y se replican en
+las tools portadas a TS para mantener la paridad. Un test en cada target
+(`legacy/tests/test_tool_annotations.py`, `web/tests/toolAnnotations.test.ts`)
+verifica que ninguna tool se quede sin ellas. Un dominio nuevo con acciones
+reales —mover dinero, aplicar un plan— debe declarar las suyas con
+`readOnlyHint: false`.
+
 ## El proveedor es una capa, no un `if`
 
 Todo el ciclo habla tipos neutrales (`ToolSpec`, `ToolCall`, `Completion`) y
