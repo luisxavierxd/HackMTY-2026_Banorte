@@ -5,9 +5,10 @@
 >
 > - **No se borra, no se degrada, no se refactoriza.** Es el respaldo de la versión
 >   que sí corrió en la demo en vivo.
-> - Excepción: se agregaron los perfiles Codex y Cursor, sin tocar los existentes.
+> - Excepciones: se agregaron los perfiles Codex y Cursor, sin tocar los existentes,
+>   y los tool annotation hints del servidor MCP.
 > - Todo lo que está aquí funciona como el último día del hackatón: `make test`
->   (94 tests al cierre del hackatón; 107 con los perfiles Codex y Cursor), `make demo`, `make demo-code`, `docker compose up`.
+>   (94 tests al cierre del hackatón; 113 hoy, ver nota abajo), `make demo`, `make demo-code`, `docker compose up`.
 > - Los comandos de abajo se corren **desde esta carpeta** (`cd legacy`), no desde
 >   la raíz del repo.
 >
@@ -17,6 +18,12 @@
 > El despliegue de Railway se retiró a propósito en sep-2026 (`railway.toml` se
 > conserva aquí como referencia). Este target sigue siendo hospedable y corre local
 > sin cambios.
+>
+> La suite pasó de 94 a 113 tests después del hackatón, siempre con cambios
+> aditivos: +13 al agregar los perfiles `codex` y `cursor` del CLI local, y +6
+> en sep-2026 al declarar los hints de `ToolAnnotations` del spec MCP en las 6
+> tools de `educacion_financiera` (`tests/test_tool_annotations.py`). La lógica y
+> los schemas de las tools no cambiaron.
 
 ---
 
@@ -85,7 +92,7 @@ Verificar:
 ```bash
 curl localhost:8080/readyz                      # MCP + proveedor y modelo activos
 python scripts/smoke_turn.py "¿Qué es el interés compuesto?"
-make test                                      # 107 tests, sin red
+make test                                       # 113 tests, sin red
 ```
 
 ---
